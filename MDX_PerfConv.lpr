@@ -266,7 +266,7 @@ type
     writeln('');
     writeln('MDX_PerfConv 1.0 - Performance converter from TX7, DX7II, DX1 and DX5 to MiniDexed');
     writeln('Author: Boban Spasic');
-    //writeln('https://github.com/BobanSpasic/MDX_PerfConv');
+    writeln('https://github.com/BobanSpasic/MDX_PerfConv');
     writeln('');
     writeln('Usage: ', ExtractFileName(ExeName), ' -parameters');
     writeln('  Parameters (short and long form):');

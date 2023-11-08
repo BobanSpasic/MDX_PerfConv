@@ -30,8 +30,7 @@ type
     case boolean of
       True: (params: TTX7_PCED_Dump);
       False: (
-        A_VoiceNr: byte;
-        //       0-63 Undocumented: Voice Nr. (source: JSynthLib)
+        A_VoiceNr: byte;                  //       0-63 Undocumented: Voice Nr. (source: JSynthLib)
         A_Source_Select: byte;            //DX5    0-15 (MIDI channel)
         A_PolyMono: byte;                 //       0-1
         A_PitchBendRange: byte;           //       0-12
@@ -94,8 +93,7 @@ type
         B_PerfKeyShift: byte;             //DX5    0-48  center=24
 
         G_KeyAssignMode: byte;            //DX5    0-2   0,1,2 = single, dual, split
-        G_VoiceMemSelFlag: byte;
-        //       0-1   if KMOD=0: VMS=0 > Voice A plays; VMS=1 Voice B plays
+        G_VoiceMemSelFlag: byte;          //       0-1   if KMOD=0: VMS=0 > Voice A plays; VMS=1 Voice B plays
         G_DualModeDetune: byte;           //DX5    0-15
         G_SplitPoint: byte;               //DX5    0-99
         G_PerfName01: byte;               //       ASCII
@@ -135,12 +133,11 @@ type
     case boolean of
       True: (params: TTX7_PMEM_Dump);
       False: (
-        //     |    |    |    |    |    |    |    |
+                                          //     |    |    |    |    |    |    |    |
         A_PolyMono: byte;                 //     | PM |    Undocumented: Voice Nr.  |
         A_PBSlo_PBR: byte;                //     |    PBS Lo    |        PBR        |
         A_PortaTime: byte;                //     |  0-99                            |
-        A_PM_PGL: byte;
-        //     | 0  |              | PP | M  | GL |    PortamentoPedal, source JSynthLib
+        A_PM_PGL: byte;                   //     | 0  |              | PP | M  | GL |    PortamentoPedal, source JSynthLib
         A_MWA_MWS: byte;                  //     |     MWA      |        MWS        |
         A_FCA_FCS: byte;                  //     |     FCA      |        FCS        |
         A_ATA_ATS: byte;                  //     |     ATA      |        ATS        |
@@ -152,8 +149,7 @@ type
         A_NU12: byte;
         A_NU13: byte;
         A_ATN: byte;                      //     | 0 |               |    ATN       |
-        A_PBShi: byte;
-        //     | PS|                              |  PitchBendStep, Bit4
+        A_PBShi: byte;                    //     | PS|                              |  PitchBendStep, Bit4
 
         B_PolyMono: byte;                 //     | PM |    Undocumented: Voice Nr.  |
         B_PBSlo_PBR: byte;                //     |    PBS Lo    |        PBR        |
@@ -170,11 +166,9 @@ type
         B_NU12: byte;
         B_NU13: byte;
         B_ATN: byte;                      //     | 0 |               |    ATN       |
-        B_PBShi: byte;
-        //     | PS|                              |  PitchBendStep, Bit4
+        B_PBShi: byte;                    //     | PS|                              |  PitchBendStep, Bit4
 
-        G_VMS_KMOD: byte;
-        //     | 0 |      DMD     | VMS|   KMOD   |  DualModeDetune, source JSynthLib
+        G_VMS_KMOD: byte;                 //     | 0 |      DMD     | VMS|   KMOD   |  DualModeDetune, source JSynthLib
         G_SplitPoint: byte;               //       Just a blind guess
         G_PerfName01: byte;               //       ASCII
         G_PerfName02: byte;               //       ASCII

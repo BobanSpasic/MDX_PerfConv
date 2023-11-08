@@ -119,6 +119,7 @@ end;
 
 procedure TDX7IIPerformanceContainer.InitPerformance;
 const
+  //ToDo - implement it over untParConst
   a: array[0..50] of byte =
     (1, 0, 0, 0, 0, 0, 0, 60, 0, 3, 1, 3, 0, 24, 24, 0, 99, 0, 0, 0, 1, 0, 0, 99, 99, 99, 99, 50,
     50, 50, 50, 73, 78, 73, 84, 32, 80, 69, 82, 70, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32);

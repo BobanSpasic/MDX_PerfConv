@@ -20,10 +20,8 @@ uses
   Classes, SysUtils, untdxutils, untConverter;
 
 procedure DispatchCheck(ABank: string);  //TX7 and DX7II
-procedure DispatchCheck(ABankA, ABankB, APerf: string); overload;
-//DX7II with Performance
-procedure DispatchCheck(ABankA1, ABankB1, ABankA2, ABankB2, APerf: string);
-  overload; //DX1 and DX5
+procedure DispatchCheck(ABankA, ABankB, APerf: string); overload; //DX7II with Performance
+procedure DispatchCheck(ABankA1, ABankB1, ABankA2, ABankB2, APerf: string); overload; //DX1 and DX5
 
 implementation
 

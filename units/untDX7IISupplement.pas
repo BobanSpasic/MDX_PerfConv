@@ -45,8 +45,7 @@ type
         Pitch_EG_Range: byte;             //       0-3    8va/4va/1va/0.5va
         LFO_Key_Trigger: byte;            //       0-1    single/multi
         Pitch_EG_by_velocity: byte;       //       0-1    off/on
-        PMOD: byte;
-        //       0-3    bit0:poly/mono bit1:unison off/on
+        PMOD: byte;                       //       0-3    bit0:poly/mono bit1:unison off/on
         Pitch_Bend_Range: byte;           //       0-12
         Pitch_Bend_Step: byte;            //       0-12
         Pitch_Bend_Mode: byte;            //       0-2    low/high/k.on
@@ -92,7 +91,7 @@ type
         AM_Sensitivity5_6: byte;          //       0 |     OP5      |     OP6      |
         AM_Sensitivity3_4: byte;          //       0 |     OP3      |     OP4      |
         AM_Sensitivity1_2: byte;          //       0 |     OP1      |     OP2      |
-        RNDP_VPSW_LTRG_PEGR: byte;        //           RNDP    |VPSW|LTRG|  PEGR   |
+        RNDP_VPSW_LTRG_PEGR: byte;        //         | RNDP    |VPSW|LTRG|  PEGR   |
         PBR_PMOD: byte;                   //       0 |   PBR   |         |   PMOD  |
         PBM_PBS: byte;                    //       0 |   PBM   |        PBS        |
         PQNT_PORM: byte;                  //       0 |  0 |    PQNT           |PORM|
@@ -442,7 +441,7 @@ begin
   aStream.WriteByte($F0);
   aStream.WriteByte($43);
   aStream.WriteByte($00 + FCh); //MIDI channel
-  aStream.WriteByte($06);      //supplement
+  aStream.WriteByte($06);       //supplement
   aStream.WriteByte($08);
   aStream.WriteByte($60);
   Add_ACED_ToStream(aStream);

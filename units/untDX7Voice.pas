@@ -184,8 +184,8 @@ type
         LFO_AMP_MOD_DEPTH: byte;          //       0-99
         LFO_SYNC: byte;                   //       0-1
         LFO_WAVEFORM: byte;               //       0-5, (data sheet claims 9-4 ?!?)
-        //       0:TR, 1:SD, 2:SU,
-        //       3:SQ, 4:SI, 5:SH
+                                          //       0:TR, 1:SD, 2:SU,
+                                          //       3:SQ, 4:SI, 5:SH
         PITCH_MOD_SENSITIVITY: byte;      //       0-7
         TRANSPOSE: byte;                  //       0-48   12 = C2
         VOICE_NAME_CHAR_1: byte;          //       ASCII
@@ -199,7 +199,7 @@ type
         VOICE_NAME_CHAR_9: byte;          //       ASCII
         VOICE_NAME_CHAR_10: byte;         //       ASCII
         OPERATOR_ON_OFF: byte;            //       bit6 = 0 / bit 5: OP1 / .. .
-        //       ... / bit 0: OP6
+                                          //       ... / bit 0: OP6
       );
   end;
 
