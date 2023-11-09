@@ -29,8 +29,7 @@ procedure ConvertDX5toMDX(ABankA1, ABankB1, ABankA2, ABankB2, APerf: string);
 
 implementation
 
-function LoadDX7IIACEDPCEDtoPCEDx(isVoiceA: boolean; aACED: TDX7IISupplementContainer;
-  aPCED: TDX7IIPerformanceContainer): TMDX_PCEDx_Params;
+function LoadDX7IIACEDPCEDtoPCEDx(isVoiceA: boolean; aACED: TDX7IISupplementContainer; aPCED: TDX7IIPerformanceContainer): TMDX_PCEDx_Params;
 var
   aced: TDX7II_ACED_Params;
   pced: TDX7II_PCED_Params;
@@ -697,7 +696,11 @@ begin
     // 0 - 63 - Internal
     // 64-127 - Cartridge
     WriteLn('Voice A ' + IntToStr(iVoiceA) + ' ; ' + 'Voice B ' + IntToStr(iVoiceB));
+    if iVoiceA < 64 then iVoiceA := iVoiceA + 1
+    else
     if iVoiceA > 63 then iVoiceA := iVoiceA - 63;
+    if iVoiceB < 64 then iVoiceB := iVoiceB + 1
+    else
     if iVoiceB > 63 then iVoiceB := iVoiceB - 63;
     //WriteLn('Voice A* ' + IntToStr(iVoiceA) + ' ; ' + 'Voice B* ' + IntToStr(iVoiceB));
 

@@ -17,7 +17,7 @@ unit untDispatcher;
 interface
 
 uses
-  Classes, SysUtils, untdxutils, untConverter;
+  Classes, SysUtils, TypInfo, untdxutils, untConverter;
 
 procedure DispatchCheck(ABank: string);  //TX7 and DX7II
 procedure DispatchCheck(ABankA, ABankB, APerf: string); overload; //DX7II with Performance
@@ -33,15 +33,21 @@ begin
   msBank := TMemoryStream.Create;
   msBank.LoadFromFile(ABank);
   ms := ContainsDX_SixOP_MemSet(msBank);
-  if (VMEM in ms) and (AMEM in ms) then
+
+  if (VMEM in ms) and (AMEM in ms) and not (PMEM in ms) then
   begin
     WriteLn('It is a DX7II bank with supplement');
     ConvertDX7IItoMDX(ABank);
   end;
-  if (VMEM in ms) and (PMEM in ms) then
+  if (VMEM in ms) and (PMEM in ms) and not (AMEM in ms) then
   begin
     WriteLn('It is a TX7 bank with function');
     ConvertTX7toMDX(ABank);
+  end;
+  if (VMEM in ms) and (PMEM in ms) and (AMEM in ms) then
+  begin
+    WriteLn('It is a DX7II "big" dump');
+    //ConvertTX7toMDX(ABank);
   end;
   msBank.Free;
 end;

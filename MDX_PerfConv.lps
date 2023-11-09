@@ -68,8 +68,7 @@
       <Unit>
         <Filename Value="MDX_PerfConv.lpr"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
-        <TopLine Value="256"/>
+        <TopLine Value="218"/>
         <CursorPos X="5" Y="269"/>
         <UsageCount Value="202"/>
         <Loaded Value="True"/>
@@ -79,43 +78,44 @@
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="9"/>
         <CursorPos X="3" Y="234"/>
-        <UsageCount Value="179"/>
+        <UsageCount Value="184"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="untDispatcher.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="91"/>
-        <CursorPos X="77" Y="24"/>
-        <UsageCount Value="66"/>
+        <TopLine Value="22"/>
+        <CursorPos X="7" Y="50"/>
+        <UsageCount Value="71"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="untConverter.pas"/>
         <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="2"/>
-        <TopLine Value="752"/>
-        <CursorPos X="82" Y="285"/>
-        <UsageCount Value="59"/>
+        <TopLine Value="681"/>
+        <CursorPos X="44" Y="702"/>
+        <UsageCount Value="64"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="units\untDXUtils.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="11"/>
-        <TopLine Value="578"/>
-        <CursorPos X="99" Y="406"/>
-        <UsageCount Value="41"/>
+        <TopLine Value="271"/>
+        <CursorPos X="3" Y="280"/>
+        <UsageCount Value="46"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="units\untDX7IIPerformance.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="14"/>
-        <TopLine Value="151"/>
-        <CursorPos X="41" Y="122"/>
-        <UsageCount Value="40"/>
+        <TopLine Value="103"/>
+        <CursorPos X="163" Y="58"/>
+        <UsageCount Value="45"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -124,7 +124,7 @@
         <EditorIndex Value="15"/>
         <TopLine Value="75"/>
         <CursorPos X="56" Y="35"/>
-        <UsageCount Value="35"/>
+        <UsageCount Value="40"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -153,7 +153,7 @@
         <EditorIndex Value="12"/>
         <TopLine Value="993"/>
         <CursorPos X="43" Y="202"/>
-        <UsageCount Value="87"/>
+        <UsageCount Value="89"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -161,29 +161,29 @@
         <EditorIndex Value="8"/>
         <TopLine Value="608"/>
         <CursorPos X="43" Y="171"/>
-        <UsageCount Value="46"/>
+        <UsageCount Value="48"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="units\untDX7Bank.pas"/>
         <EditorIndex Value="13"/>
         <CursorPos X="3" Y="84"/>
-        <UsageCount Value="88"/>
+        <UsageCount Value="90"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="units\untParConst.pas"/>
         <EditorIndex Value="10"/>
-        <TopLine Value="689"/>
-        <CursorPos X="25" Y="1223"/>
-        <UsageCount Value="81"/>
+        <TopLine Value="7"/>
+        <CursorPos X="17" Y="959"/>
+        <UsageCount Value="83"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="units\untMDXPerformance.pas"/>
         <EditorIndex Value="6"/>
         <CursorPos X="47" Y="441"/>
-        <UsageCount Value="29"/>
+        <UsageCount Value="31"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -191,7 +191,7 @@
         <EditorIndex Value="7"/>
         <TopLine Value="188"/>
         <CursorPos X="3" Y="143"/>
-        <UsageCount Value="28"/>
+        <UsageCount Value="30"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -199,7 +199,7 @@
         <EditorIndex Value="5"/>
         <TopLine Value="210"/>
         <CursorPos X="3" Y="151"/>
-        <UsageCount Value="28"/>
+        <UsageCount Value="30"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -214,7 +214,7 @@
         <Filename Value="units\untMiniINI.pas"/>
         <EditorIndex Value="4"/>
         <TopLine Value="564"/>
-        <UsageCount Value="26"/>
+        <UsageCount Value="28"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -222,27 +222,11 @@
         <EditorIndex Value="3"/>
         <TopLine Value="418"/>
         <CursorPos X="33" Y="444"/>
-        <UsageCount Value="12"/>
+        <UsageCount Value="14"/>
         <Loaded Value="True"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="28">
-      <Position>
-        <Filename Value="untConverter.pas"/>
-        <Caret Line="672" TopLine="644"/>
-      </Position>
-      <Position>
-        <Filename Value="untConverter.pas"/>
-        <Caret Line="673" TopLine="645"/>
-      </Position>
-      <Position>
-        <Filename Value="untConverter.pas"/>
-        <Caret Line="674" TopLine="646"/>
-      </Position>
-      <Position>
-        <Filename Value="untConverter.pas"/>
-        <Caret Line="676" TopLine="648"/>
-      </Position>
       <Position>
         <Filename Value="untConverter.pas"/>
         <Caret Line="677" TopLine="649"/>
@@ -342,6 +326,22 @@
       <Position>
         <Filename Value="units\untMDXPerformance.pas"/>
         <Caret Line="440" Column="33" TopLine="423"/>
+      </Position>
+      <Position>
+        <Filename Value="units\untDXUtils.pas"/>
+        <Caret Line="115" Column="19" TopLine="94"/>
+      </Position>
+      <Position>
+        <Filename Value="untDispatcher.pas"/>
+        <Caret Line="39" Column="52" TopLine="19"/>
+      </Position>
+      <Position>
+        <Filename Value="untDispatcher.pas"/>
+        <Caret Line="20" Column="29" TopLine="6"/>
+      </Position>
+      <Position>
+        <Filename Value="units\untParConst.pas"/>
+        <Caret Line="886" TopLine="878"/>
       </Position>
     </JumpHistory>
     <RunParams>

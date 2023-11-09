@@ -851,6 +851,114 @@ const
     (0, 1, 0)
     );
 
+  DX7II_PCED_NAMES: array [0..50, 0..1] of string = (
+    ('PerformanceLayerMode', 'PLMD'),
+    ('VoiceANumber', 'VNMA'),
+    ('VoiceBnumber', 'VNMB'),
+    ('MicrotuningTable', 'MCTB'),
+    ('MicrotuningKey', 'MCKY'),
+    ('MicrotuningSwitch', 'MCSW'),
+    ('DualDetune', 'DDTN'),
+    ('SplitPoint', 'SPPT'),
+    ('EGForcedDampingSwitch', 'FDMP'),
+    ('SustainFootSwitch', 'SFSW'),
+    ('FootSwitchAssign', 'FSAS'),
+    ('FootSwitch', 'FSW'),
+    ('SoftPedalRange', 'SPRNG'),
+    ('NoteShiftRangeA', 'NSFTA'),
+    ('NoteShiftRangeB', 'NSFTB'),
+    ('VolumeBalance', 'BLNC'),
+    ('TotalVolume', 'TVLM'),
+    ('ContinuousSlider1', 'CSLD1'),
+    ('ContinuousSlider2', 'CSLD2'),
+    ('ContinuousSliderAssign', 'CSSW'),
+    ('PanMode', 'PNMD'),
+    ('PanControlRange', 'PANRNG'),
+    ('PanControlAssign', 'PANASN'),
+    ('PanEGRate1', 'PNEGR1'),
+    ('PanEGRate2', 'PNEGR2'),
+    ('PanEGRate3', 'PNEGR3'),
+    ('PanEGRate4', 'PNEGR4'),
+    ('PanEGLevel1', 'PNEGL1'),
+    ('PanEGLevel2', 'PNEGL2'),
+    ('PanEGLevel3', 'PNEGL3'),
+    ('PanEGLevel4', 'PNEGL4'),
+    ('PerfName01', 'PNAM'),
+    ('PerfName02', 'PNAM'),
+    ('PerfName03', 'PNAM'),
+    ('PerfName04', 'PNAM'),
+    ('PerfName05', 'PNAM'),
+    ('PerfName06', 'PNAM'),
+    ('PerfName07', 'PNAM'),
+    ('PerfName08', 'PNAM'),
+    ('PerfName09', 'PNAM'),
+    ('PerfName10', 'PNAM'),
+    ('PerfName11', 'PNAM'),
+    ('PerfName12', 'PNAM'),
+    ('PerfName13', 'PNAM'),
+    ('PerfName14', 'PNAM'),
+    ('PerfName15', 'PNAM'),
+    ('PerfName16', 'PNAM'),
+    ('PerfName17', 'PNAM'),
+    ('PerfName18', 'PNAM'),
+    ('PerfName19', 'PNAM'),
+    ('PerfName20', '')
+    );
+
+  DX7II_PCED_MIN_MAX_INT: array [0..50, 0..2] of byte = (
+    (0, 2, 1),
+    (0, 127, 0),
+    (0, 127, 0),
+    (0, 74, 0),
+    (0, 11, 0),
+    (0, 3, 0),
+    (0, 7, 0),
+    (0, 127, 60),
+    (0, 1, 0),
+    (0, 3, 3),
+    (0, 3, 1),
+    (0, 3, 3),
+    (0, 7, 0),
+    (0, 48, 24),
+    (0, 48, 24),
+    (0, 100, 0),
+    (0, 99, 99),
+    (0, 105, 0),
+    (0, 109, 0),
+    (0, 3, 0),
+    (0, 3, 1),
+    (0, 99, 0),
+    (0, 2, 0),
+    (0, 99, 99),
+    (0, 99, 99),
+    (0, 99, 99),
+    (0, 99, 99),
+    (0, 99, 50),
+    (0, 99, 50),
+    (0, 99, 50),
+    (0, 99, 50),
+    (32, 126, 73),
+    (32, 126, 78),
+    (32, 126, 73),
+    (32, 126, 84),
+    (32, 126, 32),
+    (32, 126, 80),
+    (32, 126, 69),
+    (32, 126, 82),
+    (32, 126, 70),
+    (32, 126, 32),
+    (32, 126, 32),
+    (32, 126, 32),
+    (32, 126, 32),
+    (32, 126, 32),
+    (32, 126, 32),
+    (32, 126, 32),
+    (32, 126, 32),
+    (32, 126, 32),
+    (32, 126, 32),
+    (32, 126, 32)
+    );
+
   TX7_PCED_NAMES: array [0..93, 0..1] of string = (
     ('A_VoiceNr', 'A_VCNR'),
     ('A_SourceSelect', 'A_SS'),
@@ -1237,8 +1345,7 @@ function Freq_Ratio(coarse, fine: byte): float;
 function Freq_Fixed(coarse, fine: byte): float;
 function Nr2Note(Nr: byte): string;
 function Nr2NoteMDX(Nr: byte): string;
-function GetDefinedValues(T: TTypeMatrix; V: TValMatrix;
-  var Ret: array of byte): boolean;
+function GetDefinedValues(T: TTypeMatrix; V: TValMatrix; var Ret: array of byte): boolean;
 
 implementation
 
@@ -1279,8 +1386,7 @@ begin
   Result := scl[n] + IntToStr(i - 2);
 end;
 
-function GetDefinedValues(T: TTypeMatrix; V: TValMatrix;
-  var Ret: array of byte): boolean;
+function GetDefinedValues(T: TTypeMatrix; V: TValMatrix; var Ret: array of byte): boolean;
 var
   i: integer;
 begin
