@@ -309,6 +309,9 @@ type
 
 var
   Application: TMDX_PerfConv;
+
+{$R *.res}
+
 begin
   Application := TMDX_PerfConv.Create(nil);
   Application.Title := 'MDX_PerfConv';
