@@ -19,7 +19,11 @@ unit untMDXSupplement;
 interface
 
 uses
-  Classes, HlpHashFactory, SysUtils, untParConst;
+  Classes, SysUtils, untParConst
+  {$IFNDEF CMDLINE}
+   , HlpHashFactory
+  {$ENDIF}
+  ;
 
 const
   lastParam: integer = 52; //because of moving target
@@ -103,7 +107,9 @@ type
     function GetChecksumPart: integer;
     function GetChecksum: integer;
     procedure SysExFunctionToStream(ch: integer; var aStream: TMemoryStream);
+    {$IFNDEF CMDLINE}
     function CalculateHash: string;
+    {$ENDIF}
   end;
 
 implementation
@@ -160,6 +166,7 @@ begin
     Result := False;
 end;
 
+{$IFNDEF CMDLINE}
 function TMDXSupplementContainer.CalculateHash: string;
 var
   aStream: TMemoryStream;
@@ -172,6 +179,7 @@ begin
   Result := THashFactory.TCrypto.CreateSHA2_256().ComputeStream(aStream).ToString();
   aStream.Free;
 end;
+{$ENDIF}
 
 function TMDXSupplementContainer.GetChecksumPart: integer;
 var

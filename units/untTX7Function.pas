@@ -19,7 +19,11 @@ unit untTX7Function;
 interface
 
 uses
-  Classes, HlpHashFactory, SysUtils, untUtils, untParConst;
+  Classes, SysUtils, untUtils, untParConst
+  {$IFNDEF CMDLINE}
+  , HlpHashFactory
+  {$ENDIF}
+  ;
 
 type
   TTX7_PMEM_Dump = array [0..63] of byte;
@@ -225,7 +229,9 @@ type
     function GetChecksum: integer;
     function GetFunctionName: string;
     procedure SysExFunctionToStream(aCh: integer; var aStream: TMemoryStream);
+    {$IFNDEF CMDLINE}
     function CalculateHash: string;
+    {$ENDIF}
   end;
 
 function PCEDtoPMEM(aPar: TTX7_PCED_Params): TTX7_PMEM_Params;
@@ -532,6 +538,7 @@ begin
     Result := False;
 end;
 
+{$IFNDEF CMDLINE}
 function TTX7FunctionContainer.CalculateHash: string;
 var
   aStream: TMemoryStream;
@@ -544,6 +551,7 @@ begin
   Result := THashFactory.TCrypto.CreateSHA2_256().ComputeStream(aStream).ToString();
   aStream.Free;
 end;
+{$ENDIF}
 
 function TTX7FunctionContainer.FunctIsInit: boolean;
 var

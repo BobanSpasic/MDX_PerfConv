@@ -15,18 +15,17 @@ program MDX_PerfConv;
 {$mode objfpc}{$H+}
 
 uses
+ {$DEFINE CMDLINE}
  {$IFDEF UNIX}
   cthreads,
-     {$ENDIF}
+  {$ENDIF}
   Classes,
   SysUtils,
   CustApp,
-  untUtils,
-  untDXUtils,
   untDispatcher,
   untConverter,
-  untDX7IIPerformance,
-  untDX7IIPerformanceBank;
+  untDXUtils;
+
 
 type
 

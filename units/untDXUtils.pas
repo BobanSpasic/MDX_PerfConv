@@ -20,7 +20,7 @@ unit untDXUtils;
 interface
 
 uses
-  Classes, StrUtils, SysUtils, FileUtil, untUtils, untParConst;
+  Classes, StrUtils, SysUtils, untUtils, untParConst;
 
 type
   TDXSysExHeader = record

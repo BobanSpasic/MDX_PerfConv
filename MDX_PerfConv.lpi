@@ -21,43 +21,7 @@
       <StringTable FileDescription="Performance converter from DX7II, TX7, DX5 to MiniDexed" LegalCopyright="Boban Spasic" ProductName="MDX Performance Converter"/>
     </VersionInfo>
     <BuildModes>
-      <Item Name="Default" Default="True"/>
-      <Item Name="Debug">
-        <CompilerOptions>
-          <Version Value="11"/>
-          <PathDelim Value="\"/>
-          <Target>
-            <Filename Value="bin\Win_x64\MDX_PerfConv.exe"/>
-          </Target>
-          <SearchPaths>
-            <IncludeFiles Value="$(ProjOutDir)"/>
-            <OtherUnitFiles Value="units"/>
-            <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
-          </SearchPaths>
-          <Parsing>
-            <SyntaxOptions>
-              <IncludeAssertionCode Value="True"/>
-            </SyntaxOptions>
-          </Parsing>
-          <CodeGeneration>
-            <Checks>
-              <IOChecks Value="True"/>
-              <RangeChecks Value="True"/>
-              <OverflowChecks Value="True"/>
-              <StackChecks Value="True"/>
-            </Checks>
-            <VerifyObjMethodCallValidity Value="True"/>
-          </CodeGeneration>
-          <Linking>
-            <Debugging>
-              <DebugInfoType Value="dsDwarf3"/>
-              <UseHeaptrc Value="True"/>
-              <TrashVariables Value="True"/>
-              <UseExternalDbgSyms Value="True"/>
-            </Debugging>
-          </Linking>
-        </CompilerOptions>
-      </Item>
+      <Item Name="Debug" Default="True"/>
       <Item Name="Release Win x64">
         <CompilerOptions>
           <Version Value="11"/>
@@ -67,7 +31,7 @@
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
-            <OtherUnitFiles Value="ext\HashLib\Base;ext\HashLib\Interfaces;ext\HashLib\Utils;ext\HashLib\KDF;ext\HashLib\Nullable;ext\HashLib\NullDigest;ext\HashLib\Checksum;ext\HashLib\Crypto;ext\HashLib\Hash32;ext\HashLib\Hash64;ext\HashLib\Hash128;ext\HashLib\Crypto\Blake2BParams;ext\HashLib\Crypto\Blake2SParams;ext\HashLib\Interfaces\IBlake2BParams;ext\HashLib\Interfaces\IBlake2SParams;units"/>
+            <OtherUnitFiles Value="units"/>
             <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <CodeGeneration>
@@ -86,6 +50,12 @@
             </Debugging>
             <LinkSmart Value="True"/>
           </Linking>
+          <Other>
+            <CustomOptions Value="-dCMDLINE"/>
+            <OtherDefines Count="1">
+              <Define0 Value="CMDLINE"/>
+            </OtherDefines>
+          </Other>
         </CompilerOptions>
       </Item>
       <Item Name="Release Linux x64">
@@ -93,11 +63,11 @@
           <Version Value="11"/>
           <PathDelim Value="\"/>
           <Target>
-            <Filename Value="bin\Win_x64\MDX_PerfConv.exe"/>
+            <Filename Value="bin\Linux\MDX_PerfConv"/>
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
-            <OtherUnitFiles Value="ext\HashLib\Base;ext\HashLib\Interfaces;ext\HashLib\Utils;ext\HashLib\KDF;ext\HashLib\Nullable;ext\HashLib\NullDigest;ext\HashLib\Checksum;ext\HashLib\Crypto;ext\HashLib\Hash32;ext\HashLib\Hash64;ext\HashLib\Hash128;ext\HashLib\Crypto\Blake2BParams;ext\HashLib\Crypto\Blake2SParams;ext\HashLib\Interfaces\IBlake2BParams;ext\HashLib\Interfaces\IBlake2SParams;units"/>
+            <OtherUnitFiles Value="units"/>
             <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <CodeGeneration>
@@ -115,6 +85,9 @@
             </Debugging>
             <LinkSmart Value="True"/>
           </Linking>
+          <Other>
+            <CustomOptions Value="-dCMDLINE"/>
+          </Other>
         </CompilerOptions>
       </Item>
     </BuildModes>
@@ -125,21 +98,9 @@
     <RunParams>
       <FormatVersion Value="2"/>
     </RunParams>
-    <RequiredPackages>
-      <Item>
-        <PackageName Value="HashLib4PascalPackage"/>
-      </Item>
-      <Item>
-        <PackageName Value="LazUtils"/>
-      </Item>
-    </RequiredPackages>
     <Units>
       <Unit>
         <Filename Value="MDX_PerfConv.lpr"/>
-        <IsPartOfProject Value="True"/>
-      </Unit>
-      <Unit>
-        <Filename Value="units\untUtils.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit>
       <Unit>
@@ -150,36 +111,44 @@
         <Filename Value="untConverter.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit>
-      <Unit>
-        <Filename Value="units\untDXUtils.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit>
-      <Unit>
-        <Filename Value="units\untDX7IIPerformance.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit>
-      <Unit>
-        <Filename Value="units\untDX7IIPerformanceBank.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
     <Version Value="11"/>
     <PathDelim Value="\"/>
     <Target>
-      <Filename Value="bin\Win_x64\MDX_PerfConv.exe"/>
+      <Filename Value="bin\Debug\MDX_PerfConv.exe"/>
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
       <OtherUnitFiles Value="units"/>
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
+    <Parsing>
+      <SyntaxOptions>
+        <IncludeAssertionCode Value="True"/>
+      </SyntaxOptions>
+    </Parsing>
+    <CodeGeneration>
+      <Checks>
+        <IOChecks Value="True"/>
+        <RangeChecks Value="True"/>
+        <OverflowChecks Value="True"/>
+        <StackChecks Value="True"/>
+      </Checks>
+      <VerifyObjMethodCallValidity Value="True"/>
+    </CodeGeneration>
     <Linking>
       <Debugging>
-        <DebugInfoType Value="dsDwarf2Set"/>
+        <DebugInfoType Value="dsDwarf3"/>
+        <UseHeaptrc Value="True"/>
+        <TrashVariables Value="True"/>
+        <UseExternalDbgSyms Value="True"/>
       </Debugging>
     </Linking>
+    <Other>
+      <CustomOptions Value="-dCMDLINE"/>
+    </Other>
   </CompilerOptions>
   <Debugging>
     <Exceptions>

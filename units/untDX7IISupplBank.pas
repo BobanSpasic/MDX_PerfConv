@@ -42,7 +42,9 @@ type
     function SaveSupplBankToSysExFile(aFile: string): boolean;
     procedure SysExSupplBankToStream(aCh: integer; var aStream: TMemoryStream);
     procedure AppendSysExSupplBankToStream(aCh: integer; var aStream: TMemoryStream);
+    {$IFNDEF CMDLINE}
     function CalculateHash(aSupplementNr: integer): string;
+    {$ENDIF}
     procedure InitSupplBank;
     function SupplIsInit(nr: integer): boolean;
   end;
@@ -201,6 +203,7 @@ begin
   aStream.WriteByte($F7);
 end;
 
+{$IFNDEF CMDLINE}
 function TDX7IISupplBankContainer.CalculateHash(aSupplementNr: integer): string;
 begin
   if (aSupplementNr > 0) and (aSupplementNr < 33) then
@@ -208,6 +211,7 @@ begin
   else
     Result := '';
 end;
+{$ENDIF}
 
 procedure TDX7IISupplBankContainer.InitSupplBank;
 var

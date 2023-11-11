@@ -1,0 +1,1 @@
+C:\lazarus\fpc\3.2.2\bin\x86_64-win64\fpc.exe  -Twin64 -Px86_64 -MObjFPC -Scghi -CX -Os2 -XX -l -vewnhibq -Filib\x86_64-win64 -Fuunits -Fu. -FUlib\x86_64-win64 -FEbin\Win_x64 -obin\Win_x64\MDX_PerfConv.exe -dCMDLINE

@@ -19,7 +19,11 @@ unit untDX7IISupplement;
 interface
 
 uses
-  Classes, HlpHashFactory, SysUtils, untUtils, untParConst;
+  Classes, SysUtils, untUtils, untParConst
+  {$IFNDEF CMDLINE}
+  , HlpHashFactory
+  {$ENDIF}
+  ;
 
 type
   TDX7II_AMEM_Dump = array [0..34] of byte;
@@ -146,7 +150,9 @@ type
     function GetChecksum: integer;
     function SupplIsInit: boolean;
     procedure SysExSupplementToStream(aCh: integer; var aStream: TMemoryStream);
+    {$IFNDEF CMDLINE}
     function CalculateHash: string;
+    {$ENDIF}
   end;
 
 function ACEDtoAMEM(aPar: TDX7II_ACED_Params): TDX7II_AMEM_Params;
@@ -380,6 +386,7 @@ begin
     Result := False;
 end;
 
+{$IFNDEF CMDLINE}
 function TDX7IISupplementContainer.CalculateHash: string;
 var
   aStream: TMemoryStream;
@@ -392,6 +399,7 @@ begin
   Result := THashFactory.TCrypto.CreateSHA2_256().ComputeStream(aStream).ToString();
   aStream.Free;
 end;
+{$ENDIF}
 
 function TDX7IISupplementContainer.SupplIsInit: boolean;
 var

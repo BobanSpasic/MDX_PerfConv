@@ -15,8 +15,12 @@ unit untMDXPerformance;
 interface
 
 uses
-  Classes, SysUtils, untDX7Voice, untMDXSupplement, untMiniINI, untParConst,
-  LazFileUtils, StrUtils, HlpHashFactory;
+  Classes, SysUtils, untDX7Voice, untMDXSupplement, untMiniINI, untParConst, untUtils,
+  StrUtils
+  {$IFNDEF CMDLINE}
+  , HlpHashFactory
+  {$ENDIF}
+  ;
 
 type
   TMDXTG = record
@@ -113,8 +117,10 @@ type
     function GetTGVoiceName(aNr: integer): string;
     function GetTGVoiceData(aNr: integer): TDX7_VCED_Params;
     function GetTGPCEDxData(aNr: integer): TMDX_PCEDx_Params;
+    {$IFNDEF CMDLINE}
     function CalculateTGHash(aNr: integer): string;
     function CalculateHash: string;
+    {$ENDIF}
     procedure AllMIDIChToZero;
   end;
 
@@ -569,6 +575,7 @@ begin
   Result := FMDX_Params.TG[aNr].SupplData;
 end;
 
+{$IFNDEF CMDLINE}
 function TMDXPerformanceContainer.CalculateTGHash(aNr: integer): string;
 var
   aStream: TMemoryStream;
@@ -585,7 +592,8 @@ begin
   Result := THashFactory.TCrypto.CreateSHA2_256().ComputeStream(aStream).ToString();
   aStream.Free;
 end;
-
+{$ENDIF}
+{$IFNDEF CMDLINE}
 function TMDXPerformanceContainer.CalculateHash: string;
 var
   aStream: TMemoryStream;
@@ -606,5 +614,6 @@ begin
   Result := THashFactory.TCrypto.CreateSHA2_256().ComputeStream(aStream).ToString();
   aStream.Free;
 end;
+{$ENDIF}
 
 end.

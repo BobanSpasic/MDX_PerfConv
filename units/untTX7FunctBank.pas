@@ -48,7 +48,9 @@ type
     function SaveFunctBankToSysExFile(aFile: string): boolean;
     procedure SysExFunctBankToStream(aCh: integer; var aStream: TMemoryStream);
     procedure AppendSysExFunctBankToStream(aCh: integer; var aStream: TMemoryStream);
+    {$IFNDEF CMDLINE}
     function CalculateHash(aFunctionNr: integer): string;
+    {$ENDIF}
     procedure InitFunctBank;
     function FunctIsInit(nr: integer): boolean;
   end;
@@ -220,6 +222,7 @@ begin
   aStream.WriteByte($F7);
 end;
 
+{$IFNDEF CMDLINE}
 function TTX7FunctBankContainer.CalculateHash(aFunctionNr: integer): string;
 begin
   if (aFunctionNr > 0) and (aFunctionNr < 65) then
@@ -227,6 +230,7 @@ begin
   else
     Result := '';
 end;
+{$ENDIF}
 
 procedure TTX7FunctBankContainer.InitFunctBank;
 var

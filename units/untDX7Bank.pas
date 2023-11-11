@@ -40,7 +40,9 @@ type
     function SaveBankToSysExFile(aFile: string): boolean;
     procedure SysExBankToStream(aCh: integer; var aStream: TMemoryStream);
     procedure AppendSysExBankToStream(aCh: integer; var aStream: TMemoryStream);
+    {$IFNDEF CMDLINE}
     function CalculateHash(aVoiceNr: integer): string;
+    {$ENDIF}
     procedure InitBank;
   end;
 
@@ -216,6 +218,7 @@ begin
   aStream.WriteByte($F7);
 end;
 
+{$IFNDEF CMDLINE}
 function TDX7BankContainer.CalculateHash(aVoiceNr: integer): string;
 begin
   if (aVoiceNr > 0) and (aVoiceNr < 33) then
@@ -223,5 +226,6 @@ begin
   else
     Result := '';
 end;
+{$ENDIF}
 
 end.

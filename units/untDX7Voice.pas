@@ -29,8 +29,9 @@ unit untDX7Voice;
 interface
 
 uses
-  Classes, HlpHashFactory, SysUtils, untUtils, untParConst;
-
+  Classes, SysUtils, untUtils, untParConst
+  {$IFNDEF CMDLINE} , HlpHashFactory {$ENDIF}
+  ;
 type
   TDX7_VMEM_Dump = array [0..127] of byte;
   TDX7_VCED_Dump = array [0..155] of byte;
@@ -362,7 +363,9 @@ type
     function GetChecksum: integer;
     function GetVCEDChecksum: byte;
     procedure SysExVoiceToStream(aCh: integer; var aStream: TMemoryStream);
+    {$IFNDEF CMDLINE}
     function CalculateHash: string;
+    {$ENDIF}
     function CheckMinMax(var slReport: TStringList): boolean;
     function HasNullInName: boolean;
     procedure Normalize;
@@ -930,6 +933,7 @@ begin
     Result := False;
 end;
 
+{$IFNDEF CMDLINE}
 function TDX7VoiceContainer.CalculateHash: string;
 var
   aStream: TMemoryStream;
@@ -944,6 +948,7 @@ begin
   Result := THashFactory.TCrypto.CreateSHA2_256().ComputeStream(aStream).ToString();
   aStream.Free;
 end;
+{$ENDIF}
 
 function TDX7VoiceContainer.GetChecksumPart: integer;
 var
