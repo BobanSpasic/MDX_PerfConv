@@ -20,7 +20,7 @@ jobs:
         wget -q "https://downloads.sourceforge.net/project/freepascal/Linux/3.2.2/fpc-3.2.2.x86_64-linux.tar"
         tar xfv fpc-3.2.2.x86_64-linux.tar
         cd fpc-*-linux
-        echo -e '/usr\nN\nN\nN\n' | bash ./install.sh
+        echo -e '/usr\nN\nN\nN\n' | sudo bash ./install.sh
         cd ..
         mkdir -p lib/x86_64-linux/ bin/Linux/
         bash -ex compile.sh
