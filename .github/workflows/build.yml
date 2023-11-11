@@ -26,7 +26,14 @@ jobs:
         bash -ex compile.sh
       shell: bash
 
+    - name: Upload binary to artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: mdx_perfconv
+        path: bin/Linux/MDX_PerfConv
+        
     - name: Cleanup Old Releases
+      if: github.ref == 'refs/heads/main'
       run: |
         old_release_id=$(curl -s -H "Authorization: Bearer ${{secrets.GITHUB_TOKEN}}" "https://api.github.com/repos/${{github.repository}}/releases" | jq -r '.[] | select(.tag_name == "continuous") | .id')
         if [[ -n "$old_release_id" ]]; then
@@ -36,13 +43,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Upload binary to artifacts
-      uses: actions/upload-artifact@v2
-      with:
-        name: mdx_perfconv
-        path: bin/Linux/MDX_PerfConv
-
     - name: Create or Update Release
+      if: github.ref == 'refs/heads/main'
       id: create_release
       uses: softprops/action-gh-release@v1
       with:
