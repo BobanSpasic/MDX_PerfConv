@@ -1,0 +1,50 @@
+name: Build and Release
+
+on:
+  push:
+    branches:
+      - '*'
+      # main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+
+    - name: Install dependencies and build
+      run: |
+        wget "https://downloads.sourceforge.net/project/freepascal/Linux/3.2.2/fpc-3.2.2.x86_64-linux.tar"
+        tar xfv fpc-3.2.2.x86_64-linux.tar
+        cd fpc-*-linux
+        echo -e '/usr\nN\nN\nN\n' | sh ./install.sh
+        cd ..
+        mkdir -p lib/x86_64-linux/ bin/Linux/
+        bash compile.sh
+      shell: bash
+
+    - name: Cleanup Old Releases
+      run: |
+        old_release_id=$(curl -s -H "Authorization: Bearer ${{secrets.GITHUB_TOKEN}}" "https://api.github.com/repos/${{github.repository}}/releases" | jq -r '.[] | select(.tag_name == "continuous") | .id')
+        if [[ -n "$old_release_id" ]]; then
+          echo "Deleting old release..."
+          curl -X DELETE -H "Authorization: Bearer ${{secrets.GITHUB_TOKEN}}" "https://api.github.com/repos/${{github.repository}}/releases/$old_release_id"
+        fi
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Upload binary to artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: mdx_perfconv
+        path: bin/Linux/MDX_PerfConv
+
+    - name: Create or Update Release
+      id: create_release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: bin/Linux/MDX_PerfConv
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
