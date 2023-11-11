@@ -3,8 +3,8 @@ name: Build and Release
 on:
   push:
     branches:
-      - '*'
-      # main
+      - main
+  pull_request:
 
 jobs:
   build:
@@ -49,5 +49,6 @@ jobs:
       uses: softprops/action-gh-release@v1
       with:
         files: bin/Linux/MDX_PerfConv
+        tag_name: continuous
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
