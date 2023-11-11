@@ -3,7 +3,7 @@
   <ProjectSession>
     <PathDelim Value="\"/>
     <Version Value="12"/>
-    <BuildModes Active="Release Linux x64">
+    <BuildModes Active="Release Win x64">
       <Item Name="Release FreeBSD x64">
         <CompilerOptions>
           <Version Value="11"/>
@@ -100,6 +100,7 @@
       <Unit>
         <Filename Value="units\untUtils.pas"/>
         <EditorIndex Value="10"/>
+        <TopLine Value="107"/>
         <CursorPos X="3" Y="234"/>
         <UsageCount Value="195"/>
         <Loaded Value="True"/>
@@ -108,14 +109,14 @@
         <Filename Value="units\untDXUtils.pas"/>
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="12"/>
-        <TopLine Value="6"/>
-        <CursorPos X="31" Y="23"/>
+        <TopLine Value="124"/>
+        <CursorPos X="13" Y="141"/>
         <UsageCount Value="58"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="units\untDX7IIPerformance.pas"/>
-        <EditorIndex Value="15"/>
+        <EditorIndex Value="16"/>
         <TopLine Value="103"/>
         <CursorPos X="163" Y="58"/>
         <UsageCount Value="57"/>
@@ -123,7 +124,7 @@
       </Unit>
       <Unit>
         <Filename Value="units\untDX7IIPerformanceBank.pas"/>
-        <EditorIndex Value="16"/>
+        <EditorIndex Value="17"/>
         <TopLine Value="75"/>
         <CursorPos X="56" Y="35"/>
         <UsageCount Value="52"/>
@@ -152,7 +153,7 @@
       </Unit>
       <Unit>
         <Filename Value="units\untDX7Voice.pas"/>
-        <EditorIndex Value="13"/>
+        <EditorIndex Value="14"/>
         <TopLine Value="351"/>
         <CursorPos X="5" Y="366"/>
         <UsageCount Value="96"/>
@@ -168,7 +169,7 @@
       </Unit>
       <Unit>
         <Filename Value="units\untDX7Bank.pas"/>
-        <EditorIndex Value="14"/>
+        <EditorIndex Value="15"/>
         <TopLine Value="26"/>
         <CursorPos X="12" Y="45"/>
         <UsageCount Value="97"/>
@@ -236,24 +237,23 @@
         <UsageCount Value="11"/>
         <Loaded Value="True"/>
       </Unit>
+      <Unit>
+        <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\objpas\sysutils\sysstrh.inc"/>
+        <EditorIndex Value="13"/>
+        <TopLine Value="108"/>
+        <CursorPos X="13" Y="120"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\objpas\sysutils\sysstr.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="933"/>
+        <CursorPos X="2" Y="886"/>
+        <UsageCount Value="10"/>
+      </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="units\untDX7Voice.pas"/>
-        <Caret Line="33" Column="37" TopLine="17"/>
-      </Position>
-      <Position>
-        <Filename Value="MDX_PerfConv.lpr"/>
-        <Caret Line="18" Column="20"/>
-      </Position>
-      <Position>
-        <Filename Value="units\untDX7Voice.pas"/>
-        <Caret Line="33" Column="23" TopLine="16"/>
-      </Position>
-      <Position>
-        <Filename Value="units\untDX7Voice.pas"/>
-        <Caret Line="949" Column="8" TopLine="928"/>
-      </Position>
       <Position>
         <Filename Value="units\untDX7Voice.pas"/>
         <Caret Line="366" Column="5" TopLine="351"/>
@@ -357,6 +357,22 @@
       <Position>
         <Filename Value="units\untMDXPerformance.pas"/>
         <Caret Line="19" Column="4" TopLine="2"/>
+      </Position>
+      <Position>
+        <Filename Value="units\untUtils.pas"/>
+        <Caret Line="234" Column="3" TopLine="27"/>
+      </Position>
+      <Position>
+        <Filename Value="units\untDXUtils.pas"/>
+        <Caret Line="139" Column="19" TopLine="231"/>
+      </Position>
+      <Position>
+        <Filename Value="units\untDXUtils.pas"/>
+        <Caret Line="470" Column="32" TopLine="442"/>
+      </Position>
+      <Position>
+        <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\objpas\sysutils\sysstrh.inc"/>
+        <Caret Line="120" Column="13" TopLine="108"/>
       </Position>
     </JumpHistory>
     <RunParams>

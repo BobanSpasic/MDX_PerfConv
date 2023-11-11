@@ -124,7 +124,7 @@ function RepairDX7SysEx(aFileName: string; var aFeedback: string): boolean;
 
 implementation
 
-operator in (const AByte: byte; const AArray: array of byte): boolean; inline;
+operator in (const AByte: byte; const AArray: array of byte): boolean; overload;
 var
   Item: byte;
 begin
@@ -134,6 +134,13 @@ begin
 
   Result := False;
 end;
+
+{$IF FPC_FULLVERSION <= 30200}
+function IntToHex(Value: Integer): string; overload;
+begin
+  Result := IntToHex(Value, 2);
+end;
+{$ENDIF}
 
 function ContainsDX_SixOP_Data(dmp: TMemoryStream; var StartPos: integer;
   const Report: TStrings): boolean;

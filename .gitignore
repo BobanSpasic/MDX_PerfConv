@@ -9,5 +9,4 @@ lib\*
 *.dll
 *.exe
 *.lintian
-*.bat
 bin*
