@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     steps:
     - name: Check out code
@@ -22,7 +22,7 @@ jobs:
         echo -e '/usr\nN\nN\nN\n' | sh ./install.sh
         cd ..
         mkdir -p lib/x86_64-linux/ bin/Linux/
-        bash compile.sh
+        bash -ex compile.sh
       shell: bash
 
     - name: Cleanup Old Releases
