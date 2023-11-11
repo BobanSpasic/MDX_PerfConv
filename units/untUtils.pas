@@ -35,7 +35,7 @@ function Printable(c: char): char;
 
 implementation
 
-operator in (const AByte: byte; const AArray: array of byte): boolean; inline;
+operator in (const AByte: byte; const AArray: array of byte): boolean; overload;
 var
   Item: byte;
 begin
