@@ -16,10 +16,11 @@ jobs:
 
     - name: Install dependencies and build
       run: |
-        wget "https://downloads.sourceforge.net/project/freepascal/Linux/3.2.2/fpc-3.2.2.x86_64-linux.tar"
+        # A newer FreePascal compiler is needed than what ships with Ubuntu 20.04
+        wget -q "https://downloads.sourceforge.net/project/freepascal/Linux/3.2.2/fpc-3.2.2.x86_64-linux.tar"
         tar xfv fpc-3.2.2.x86_64-linux.tar
         cd fpc-*-linux
-        echo -e '/usr\nN\nN\nN\n' | sh ./install.sh
+        echo -e '/usr\nN\nN\nN\n' | bash ./install.sh
         cd ..
         mkdir -p lib/x86_64-linux/ bin/Linux/
         bash -ex compile.sh
