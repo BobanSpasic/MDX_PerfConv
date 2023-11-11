@@ -106,12 +106,12 @@ begin
     if isVoiceA then
     begin
       sup.DetuneSGN := 0;
-      sup.DetuneVAL := Floor(pced.DualDetune * 14);
+      sup.DetuneVAL := Floor(pced.DualDetune * 3.572);
     end
     else
     begin
       sup.DetuneSGN := 1;
-      sup.DetuneVAL := Floor(pced.DualDetune * 14);
+      sup.DetuneVAL := Floor(pced.DualDetune * 3.572);
     end;
   end;
   Result := sup;
@@ -182,7 +182,7 @@ begin
   if (par.G_KeyAssignMode = 1) and (par.G_DualModeDetune <> 0) then
   begin
     sup.DetuneSGN := 0;
-    sup.DetuneVAL := Floor(par.G_DualModeDetune * 6.6);
+    sup.DetuneVAL := Floor(par.G_DualModeDetune * 1.786);
   end;
   sup.PitchBendRange := par.A_PitchBendRange;
   sup.PitchBendStep := par.A_PitchBendStep;
@@ -215,7 +215,7 @@ begin
   if (par.G_KeyAssignMode = 1) and (par.G_DualModeDetune <> 0) then
   begin
     sup.DetuneSGN := 1;
-    sup.DetuneVAL := Floor(par.G_DualModeDetune * 6.6);
+    sup.DetuneVAL := Floor(par.G_DualModeDetune * 1.786);
   end;
   sup.PitchBendRange := par.B_PitchBendRange;
   sup.PitchBendStep := par.B_PitchBendStep;
@@ -251,6 +251,7 @@ var
 
   i, j: integer;
 begin
+  //ToDo - FileName and MIDI Ch
   msSearchPosition := 0;
   msFoundPosition := 0;
 
@@ -279,6 +280,7 @@ begin
   for i := 0 to 3 do
   begin
     MDX.InitPerformance;
+    MDX.AllMIDIChToZero;
     MDX.FMDX_Params.General.Name := TX7.GetFunctionName(i);
     MDX.FMDX_Params.General.Category := 'Converted';
     MDX.FMDX_Params.General.Origin := 'Conversion from TX7/DX1/DX5 Performances';
@@ -323,6 +325,7 @@ var
 
   i, j: integer;
 begin
+  //ToDo - FileName and MIDI Ch
   msSearchPosition := 0;
   msFoundPosition := 0;
 
@@ -350,6 +353,7 @@ begin
   for i := 0 to 3 do
   begin
     MDX.InitPerformance;
+    MDX.AllMIDIChToZero;
     MDX.FMDX_Params.General.Name :=
       'Voices ' + IntToStr(i * 8) + ' to ' + IntToStr((i + 1) * 8 - 1);
     MDX.FMDX_Params.General.Category := 'Converted';
@@ -480,6 +484,7 @@ begin
   for i := 1 to 32 do
   begin
     MDX.InitPerformance;
+    MDX.AllMIDIChToZero;
     MDX.FMDX_Params.General.Name := TX7.GetFunctionName(i);
     MDX.FMDX_Params.General.Category := 'Converted';
     MDX.FMDX_Params.General.Origin := 'Conversion from TX7/DX1/DX5 Performances';
@@ -520,6 +525,7 @@ begin
   for i := 1 to 32 do
   begin
     MDX.InitPerformance;
+    MDX.AllMIDIChToZero;
     DX7_VCED := TDX7VoiceContainer.Create;
     TX7_PCED := TTX7FunctionContainer.Create;
     MDX_TG1 := TMDXSupplementContainer.Create;
@@ -528,6 +534,7 @@ begin
     TX7.GetFunction(32 + i, TX7_PCED);
     sName := Format('%.6d', [i + 32]) + '_' +
       Trim(GetValidFileName(TX7.GetFunctionName(i + 32)));
+    sName := copy(sName, 1, 21);
 
     DXA2.GetVoice(i, DX7_VCED);
     MDX.LoadVoiceToTG(1, DX7_VCED.Get_VCED_Params);
@@ -674,6 +681,7 @@ begin
   for i := 1 to 32 do
   begin
     MDX.InitPerformance;
+    MDX.AllMIDIChToZero;
     DX7_VCED_A := TDX7VoiceContainer.Create;
     DX7_VCED_B := TDX7VoiceContainer.Create;
     DX7II_ACED_A := TDX7IISupplementContainer.Create;
@@ -685,6 +693,8 @@ begin
     DX7II.GetPerformance(i, DX7II_PCED);
     sName := Format('%.6d', [i]) + '_' +
       Trim(GetValidFileName(DX7II.GetPerformanceName(i)));
+    sName := copy(sName, 1, 21);
+
     MDX.FMDX_Params.General.Name := DX7II.GetPerformanceName(i);
     MDX.FMDX_Params.General.Category := 'Converted';
     MDX.FMDX_Params.General.Origin := 'Conversion from DX7II Performances';

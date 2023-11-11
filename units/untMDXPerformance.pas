@@ -115,6 +115,7 @@ type
     function GetTGPCEDxData(aNr: integer): TMDX_PCEDx_Params;
     function CalculateTGHash(aNr: integer): string;
     function CalculateHash: string;
+    procedure AllMIDIChToZero;
   end;
 
 implementation
@@ -162,6 +163,20 @@ begin
     ReverbLowPass := 30;
     ReverbDiffusion := 65;
     ReverbLevel := 80;
+  end;
+end;
+
+procedure TMDXPerformanceContainer.AllMIDIChToZero;
+var
+  i: integer;
+begin
+  for i := 1 to 8 do
+  begin
+    with FMDX_Params.TG[i] do
+    begin
+      MIDIChannel := 0;
+      SupplData.Volume := 0;
+    end;
   end;
 end;
 

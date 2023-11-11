@@ -78,7 +78,7 @@
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="9"/>
         <CursorPos X="3" Y="234"/>
-        <UsageCount Value="184"/>
+        <UsageCount Value="194"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -87,7 +87,7 @@
         <EditorIndex Value="1"/>
         <TopLine Value="22"/>
         <CursorPos X="7" Y="50"/>
-        <UsageCount Value="71"/>
+        <UsageCount Value="81"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -95,9 +95,9 @@
         <IsPartOfProject Value="True"/>
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="2"/>
-        <TopLine Value="681"/>
-        <CursorPos X="44" Y="702"/>
-        <UsageCount Value="64"/>
+        <TopLine Value="92"/>
+        <CursorPos X="50" Y="114"/>
+        <UsageCount Value="74"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -106,7 +106,7 @@
         <EditorIndex Value="11"/>
         <TopLine Value="271"/>
         <CursorPos X="3" Y="280"/>
-        <UsageCount Value="46"/>
+        <UsageCount Value="56"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -115,7 +115,7 @@
         <EditorIndex Value="14"/>
         <TopLine Value="103"/>
         <CursorPos X="163" Y="58"/>
-        <UsageCount Value="45"/>
+        <UsageCount Value="55"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -124,7 +124,7 @@
         <EditorIndex Value="15"/>
         <TopLine Value="75"/>
         <CursorPos X="56" Y="35"/>
-        <UsageCount Value="40"/>
+        <UsageCount Value="50"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -132,28 +132,28 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="694"/>
         <CursorPos X="36" Y="732"/>
-        <UsageCount Value="107"/>
+        <UsageCount Value="106"/>
       </Unit>
       <Unit>
         <Filename Value="untDXUtils.pas"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="84"/>
         <CursorPos X="35" Y="103"/>
-        <UsageCount Value="25"/>
+        <UsageCount Value="24"/>
       </Unit>
       <Unit>
         <Filename Value="untDX7Voice.pas"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="11"/>
         <CursorPos X="50" Y="32"/>
-        <UsageCount Value="14"/>
+        <UsageCount Value="13"/>
       </Unit>
       <Unit>
         <Filename Value="units\untDX7Voice.pas"/>
         <EditorIndex Value="12"/>
         <TopLine Value="993"/>
         <CursorPos X="43" Y="202"/>
-        <UsageCount Value="89"/>
+        <UsageCount Value="94"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -161,14 +161,14 @@
         <EditorIndex Value="8"/>
         <TopLine Value="608"/>
         <CursorPos X="43" Y="171"/>
-        <UsageCount Value="48"/>
+        <UsageCount Value="53"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="units\untDX7Bank.pas"/>
         <EditorIndex Value="13"/>
         <CursorPos X="3" Y="84"/>
-        <UsageCount Value="90"/>
+        <UsageCount Value="95"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -176,14 +176,15 @@
         <EditorIndex Value="10"/>
         <TopLine Value="7"/>
         <CursorPos X="17" Y="959"/>
-        <UsageCount Value="83"/>
+        <UsageCount Value="88"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="units\untMDXPerformance.pas"/>
         <EditorIndex Value="6"/>
-        <CursorPos X="47" Y="441"/>
-        <UsageCount Value="31"/>
+        <TopLine Value="161"/>
+        <CursorPos X="23" Y="178"/>
+        <UsageCount Value="36"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -191,7 +192,7 @@
         <EditorIndex Value="7"/>
         <TopLine Value="188"/>
         <CursorPos X="3" Y="143"/>
-        <UsageCount Value="30"/>
+        <UsageCount Value="35"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -199,7 +200,7 @@
         <EditorIndex Value="5"/>
         <TopLine Value="210"/>
         <CursorPos X="3" Y="151"/>
-        <UsageCount Value="30"/>
+        <UsageCount Value="35"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -208,13 +209,13 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="523"/>
         <CursorPos X="3" Y="732"/>
-        <UsageCount Value="7"/>
+        <UsageCount Value="6"/>
       </Unit>
       <Unit>
         <Filename Value="units\untMiniINI.pas"/>
         <EditorIndex Value="4"/>
-        <TopLine Value="564"/>
-        <UsageCount Value="28"/>
+        <TopLine Value="193"/>
+        <UsageCount Value="33"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -222,126 +223,130 @@
         <EditorIndex Value="3"/>
         <TopLine Value="418"/>
         <CursorPos X="33" Y="444"/>
-        <UsageCount Value="14"/>
+        <UsageCount Value="19"/>
         <Loaded Value="True"/>
       </Unit>
     </Units>
-    <JumpHistory HistoryIndex="28">
+    <JumpHistory HistoryIndex="29">
       <Position>
         <Filename Value="untConverter.pas"/>
-        <Caret Line="677" TopLine="649"/>
-      </Position>
-      <Position>
-        <Filename Value="untConverter.pas"/>
-        <Caret Line="678" TopLine="650"/>
+        <Caret Line="526" Column="25" TopLine="497"/>
       </Position>
       <Position>
         <Filename Value="untConverter.pas"/>
-        <Caret Line="677" TopLine="650"/>
+        <Caret Line="680" Column="25" TopLine="652"/>
       </Position>
       <Position>
         <Filename Value="untConverter.pas"/>
-        <Caret Line="680" TopLine="652"/>
+        <Caret Line="312" Column="5" TopLine="312"/>
       </Position>
       <Position>
         <Filename Value="untConverter.pas"/>
-        <Caret Line="681" TopLine="653"/>
+        <Caret Line="537" Column="31" TopLine="509"/>
       </Position>
       <Position>
         <Filename Value="untConverter.pas"/>
-        <Caret Line="682" TopLine="654"/>
+        <Caret Line="697" Column="5" TopLine="7"/>
       </Position>
       <Position>
         <Filename Value="untConverter.pas"/>
-        <Caret Line="686" TopLine="658"/>
+        <Caret Line="114" Column="53" TopLine="83"/>
       </Position>
       <Position>
         <Filename Value="untConverter.pas"/>
-        <Caret Line="687" TopLine="659"/>
+        <Caret Line="182" Column="58" TopLine="154"/>
       </Position>
       <Position>
         <Filename Value="untConverter.pas"/>
-        <Caret Line="688" TopLine="660"/>
+        <Caret Line="184" Column="16" TopLine="156"/>
       </Position>
       <Position>
         <Filename Value="untConverter.pas"/>
-        <Caret Line="689" TopLine="661"/>
+        <Caret Line="217" Column="19" TopLine="189"/>
       </Position>
       <Position>
         <Filename Value="untConverter.pas"/>
-        <Caret Line="690" Column="32" TopLine="662"/>
+        <Caret Line="108" Column="21" TopLine="92"/>
       </Position>
       <Position>
         <Filename Value="untConverter.pas"/>
-        <Caret Line="691" TopLine="663"/>
+        <Caret Line="113" Column="21" TopLine="92"/>
       </Position>
       <Position>
         <Filename Value="untConverter.pas"/>
-        <Caret Line="693" TopLine="665"/>
+        <Caret Line="187" Column="69" TopLine="156"/>
       </Position>
       <Position>
         <Filename Value="untConverter.pas"/>
-        <Caret Line="696" TopLine="668"/>
+        <Caret Line="218" Column="56" TopLine="189"/>
       </Position>
       <Position>
         <Filename Value="untConverter.pas"/>
-        <Caret Line="697" TopLine="669"/>
+        <Caret Line="108" Column="21" TopLine="92"/>
       </Position>
       <Position>
         <Filename Value="untConverter.pas"/>
-        <Caret Line="705" TopLine="688"/>
+        <Caret Line="113" Column="20" TopLine="92"/>
       </Position>
       <Position>
         <Filename Value="untConverter.pas"/>
-        <Caret Line="706" TopLine="688"/>
+        <Caret Line="184" Column="18" TopLine="156"/>
       </Position>
       <Position>
         <Filename Value="untConverter.pas"/>
-        <Caret Line="707" TopLine="688"/>
+        <Caret Line="217" Column="19" TopLine="189"/>
       </Position>
       <Position>
         <Filename Value="untConverter.pas"/>
-        <Caret Line="708" TopLine="688"/>
+        <Caret Line="218" Column="48" TopLine="190"/>
       </Position>
       <Position>
         <Filename Value="untConverter.pas"/>
-        <Caret Line="709" TopLine="688"/>
+        <Caret Line="104" Column="58" TopLine="88"/>
       </Position>
       <Position>
         <Filename Value="untConverter.pas"/>
-        <Caret Line="712" TopLine="688"/>
+        <Caret Line="108" Column="17" TopLine="88"/>
       </Position>
       <Position>
         <Filename Value="untConverter.pas"/>
-        <Caret Line="713" TopLine="688"/>
+        <Caret Line="109" Column="45" TopLine="88"/>
       </Position>
       <Position>
         <Filename Value="untConverter.pas"/>
-        <Caret Line="715" TopLine="688"/>
+        <Caret Line="113" Column="17" TopLine="88"/>
       </Position>
       <Position>
         <Filename Value="untConverter.pas"/>
-        <Caret Line="717" TopLine="689"/>
+        <Caret Line="114" Column="45" TopLine="88"/>
       </Position>
       <Position>
-        <Filename Value="units\untMDXPerformance.pas"/>
-        <Caret Line="440" Column="33" TopLine="423"/>
+        <Filename Value="untConverter.pas"/>
+        <Caret Line="182" Column="57" TopLine="154"/>
       </Position>
       <Position>
-        <Filename Value="units\untDXUtils.pas"/>
-        <Caret Line="115" Column="19" TopLine="94"/>
+        <Filename Value="untConverter.pas"/>
+        <Caret Line="184" Column="15" TopLine="156"/>
       </Position>
       <Position>
-        <Filename Value="untDispatcher.pas"/>
-        <Caret Line="39" Column="52" TopLine="19"/>
+        <Filename Value="untConverter.pas"/>
+        <Caret Line="185" Column="48" TopLine="157"/>
       </Position>
       <Position>
-        <Filename Value="untDispatcher.pas"/>
-        <Caret Line="20" Column="29" TopLine="6"/>
+        <Filename Value="untConverter.pas"/>
+        <Caret Line="215" Column="57" TopLine="187"/>
       </Position>
       <Position>
-        <Filename Value="units\untParConst.pas"/>
-        <Caret Line="886" TopLine="878"/>
+        <Filename Value="untConverter.pas"/>
+        <Caret Line="217" Column="15" TopLine="189"/>
+      </Position>
+      <Position>
+        <Filename Value="untConverter.pas"/>
+        <Caret Line="218" Column="48" TopLine="190"/>
+      </Position>
+      <Position>
+        <Filename Value="untConverter.pas"/>
+        <Caret Line="113" Column="61" TopLine="88"/>
       </Position>
     </JumpHistory>
     <RunParams>
