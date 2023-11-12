@@ -25,6 +25,9 @@ jobs:
         mkdir -p lib/x86_64-linux/ bin/Linux/
         bash -ex compile.sh
         # Convert dx7ii performances for testing
+        wget -q "https://github.com/asb2m10/dexed/files/10782404/DX7IIfd.ROM1A.zip" # https://github.com/asb2m10/dexed/issues/165#issuecomment-1436586010
+        unzip DX7IIfd.ROM1A.zip
+        # TODO: Use "DX7IIfd ROM1A 1-32.syx" and "DX7IIfd ROM1A 33-64.syx" AMEM
         wget -q "https://yamahablackboxes.com/patches/dx7ii/voices/dx7iifdvoice32.syx"
         wget -q "https://yamahablackboxes.com/patches/dx7ii/voices/dx7iifdvoice64.syx"
         wget -q "https://yamahablackboxes.com/patches/dx7ii/performances/dx7iifdperf.syx"
@@ -35,11 +38,11 @@ jobs:
         wget -q "https://yamahablackboxes.com/patches/dx7ii/performances/dx7iifdperfb.syx"
         bin/Linux/MDX_PerfConv --info -a dx7iifdvoice32b.syx -b dx7iifdvoice64b.syx -p dx7iifdperfb.syx
         bin/Linux/MDX_PerfConv -c -n 33 -a dx7iifdvoice32b.syx -b dx7iifdvoice64b.syx -p dx7iifdperfb.syx
-        # Convert TX802 performances for testing
-        wget -q "http://hsjp.eu/downloads/Dexed/Dexed_cart_1.0.zip"
-        unzip -q Dexed_cart_1.0.zip
-        bin/Linux/MDX_PerfConv --info -a "./Dexed_cart_1.0/Original Yamaha/TX802/TX802BankA1.SYX" -b "./Dexed_cart_1.0/Original Yamaha/TX802/TX802BankB1.SYX" -p "./Dexed_cart_1.0/Original Yamaha/TX802/TX802_Factory_Performances.syx"
-        bin/Linux/MDX_PerfConv -c -n 65 -a "./Dexed_cart_1.0/Original Yamaha/TX802/TX802BankA1.SYX" -b "./Dexed_cart_1.0/Original Yamaha/TX802/TX802BankB1.SYX" -p "./Dexed_cart_1.0/Original Yamaha/TX802/TX802_Factory_Performances.syx"
+        # TODO: Convert TX802 performances for testing
+        # wget -q "http://hsjp.eu/downloads/Dexed/Dexed_cart_1.0.zip"
+        # unzip -q Dexed_cart_1.0.zip
+        # bin/Linux/MDX_PerfConv --info -a "./Dexed_cart_1.0/Original Yamaha/TX802/TX802BankA1.SYX" -b "./Dexed_cart_1.0/Original Yamaha/TX802/TX802BankB1.SYX" -p "./Dexed_cart_1.0/Original Yamaha/TX802/TX802_Factory_Performances.syx"
+        # bin/Linux/MDX_PerfConv -c -n 65 -a "./Dexed_cart_1.0/Original Yamaha/TX802/TX802BankA1.SYX" -b "./Dexed_cart_1.0/Original Yamaha/TX802/TX802BankB1.SYX" -p "./Dexed_cart_1.0/Original Yamaha/TX802/TX802_Factory_Performances.syx"
         # wget "https://github.com/asb2m10/dexed/files/5360597/tx802bankb-fixed.zip"
         # unzip tx802bankb-fixed.zip
         ls -lh
