@@ -49,6 +49,11 @@ begin
     WriteLn('It is a DX7II "big" dump');
     //ConvertTX7toMDX(ABank);
   end;
+  if PMEM802 in ms then
+  begin
+    WriteLn('It is a TX802 performance bank dump');
+    ConvertTX802ToMDX(ABank, ANumber);
+  end;
   msBank.Free;
 end;
 

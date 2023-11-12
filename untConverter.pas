@@ -19,12 +19,13 @@ uses
   Classes, SysUtils, untDX7Bank, untDX7Voice, untDX7IISupplBank,
   untDX7IISupplement, untTX7FunctBank, untTX7Function, untMDXPerformance,
   untMDXSupplement, untDX7IIPerformance, untDX7IIPerformanceBank,
-  untDXUtils, untParConst, Math, untUtils;
+  untDXUtils, untParConst, Math, untUtils, untTX802Fraeser;
 
 procedure ConvertTX7toMDX(ABank: string; ANumber: integer);
 procedure ConvertDX7IItoMDX(ABank: string; ANumber: integer);
 procedure ConvertDX7IItoMDX(ABankA, ABankB, APerf: string; ANumber: integer); overload;
 procedure ConvertDX5toMDX(ABankA1, ABankB1, ABankA2, ABankB2, APerf: string; ANumber: integer);
+procedure ConvertTX802ToMDX(ABank: string; ANumber: integer);
 
 
 implementation
@@ -832,6 +833,17 @@ begin
   DXBs.Free;
   DX7II.Free;
   MDX.Free;
+end;
+
+procedure ConvertTX802ToMDX(ABank: string; ANumber: integer);
+begin
+  WriteLn('This is just a test of reading the TX802 performance files, not an actual conversion');
+  WriteLn('A file with the extension .pmem will be created. It is just for testing and not of actual use');
+  WriteLn('This will change in the future and here will real conversion take place');
+  ConvertTX802ASCIIToBin(ABank);
+  WriteLn('This is just a test of reading the TX802 performance files, not an actual conversion');
+  WriteLn('A file with the extension .pmem will be created. It is just for testing and not of actual use');
+  WriteLn('This will change in the future and here will real conversion take place');
 end;
 
 end.

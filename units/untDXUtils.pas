@@ -98,7 +98,7 @@ type
   end;
 
 type
-  MEMS6 = (VMEM, AMEM, PMEM, LMPMEM);
+  MEMS6 = (VMEM, AMEM, PMEM, LMPMEM, PMEM802);
   CEDS6 = (VCED, ACED, PCED);
 
 type
@@ -152,10 +152,12 @@ var
   iCalcChk: integer;
   iRep: integer;
   i: integer;
+  bUnknown: boolean;
 begin
   iDumpStart := -1;
   iDataSize := -1;
   iDumpEnd := -1;
+  bUnknown := False;
   Result := False;
   iRep := StartPos;
   while iRep < dmp.Size do
@@ -195,6 +197,7 @@ begin
               IntToStr(StartPos));
           if rHeader.f = $7E then
           begin
+            Report.Add('Processing Yamaha universal dump');
             if (dmp.Position + 10) <= dmp.Size then
             begin
               for i := 0 to 9 do
@@ -221,11 +224,13 @@ begin
         else
         begin
           Report.Add('Unknown Yamaha DX dump type: ' + IntToStr(rHeader.f));
+          bUnknown := True;
         end;
         iDataSize := (rHeader.msb shl 7) + rHeader.lsb;
         Report.Add('Calculated data size: ' + IntToStr(iDataSize));
         if (iDumpStart + iDataSize + 8) <= dmp.Size then
         begin
+          //TX802 has no F7 at the PMEM block end
           iDumpEnd := PosBytes($F7, dmp, iDumpStart + 1);
           if iDumpEnd = -1 then iDumpEnd := dmp.Size;
           Report.Add('Real data size: ' + IntToStr(iDumpEnd - iDumpStart - 7));
@@ -257,8 +262,12 @@ begin
         end
         else
         begin
-          Report.Add('File too short');
-          Exit;
+          if not bUnknown then
+          begin
+            Report.Add('File too short');
+            Exit;
+          end
+          else inc(iRep);
         end;
       end
       else
@@ -320,6 +329,8 @@ begin
             end;
             if SameArrays(rHeader.ud, abLM6Type[1]) then
               Result := Result + [LMPMEM];
+            if SameArrays(rHeader.ud, abLM6Type[9]) then
+              Result := Result + [PMEM802];
           end;
         end;
         iDataSize := (rHeader.msb shl 7) + rHeader.lsb;
@@ -342,6 +353,7 @@ function FindDX_SixOP_MEM(mm: MEMS6; dmp: TMemoryStream;
 var
   rHeader: TDXSysExHeader;
   i:integer;
+  dbg: integer;
 begin
   if SearchStartPos <= dmp.Size then
   begin
@@ -349,6 +361,7 @@ begin
     SearchStartPos := -1;
     while (SearchStartPos = -1) and (dmp.Position < dmp.Size - 6) do
     begin
+      dbg := dmp.Position;
       rHeader.f0 := dmp.ReadByte;
       if rHeader.f0 = $F0 then                                   // $F0 - SysEx
       begin
@@ -393,9 +406,23 @@ begin
             end;
             if not SameArrays(rHeader.ud, abLM6Type[1]) then
               SearchStartPos := -1;
-            // $06 - 32 Supplement dump
+            // DX7II PMEM
             if not (rHeader.msb = $0C) then SearchStartPos := -1;    // byte count MS
             if not (rHeader.lsb = $6A) then SearchStartPos := -1;    // byte count LS
+          end;
+          PMEM802:
+          begin
+            if not (rHeader.f = $7E) then SearchStartPos := -1;
+            if (dmp.Position + 10) <= dmp.Size then
+            begin
+              for i := 0 to 9 do
+                rHeader.ud[i] := dmp.ReadByte;
+            end;
+            if not SameArrays(rHeader.ud, abLM6Type[9]) then
+              SearchStartPos := -1;
+            // TX802 PMEM
+            if not (rHeader.msb = $01) then SearchStartPos := -1;    // byte count MS
+            if not (rHeader.lsb = $28) then SearchStartPos := -1;    // byte count LS
           end;
         end;
       end;
@@ -416,7 +443,7 @@ begin
     if SearchStartPos <> -1 then
     begin
       Result := True;
-      if mm = LMPMEM then
+      if (mm = LMPMEM) or (mm = PMEM802) then
       FoundPos := SearchStartPos + 16 else
       FoundPos := SearchStartPos + 6;
     end

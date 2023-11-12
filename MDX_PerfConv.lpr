@@ -24,7 +24,8 @@ uses
   CustApp,
   untDispatcher,
   untConverter,
-  untDXUtils;
+  untDXUtils,
+  untTX802Fraeser;
 
 
 type
