@@ -1,4 +1,5 @@
-# MDX_PerfConv
+# MDX_PerfConv [![Build and Release](../../actions/workflows/build.yml/badge.svg)](../../actions/workflows/build.yml)
+
 MiniDexed performance converter - convert TX7, DX7II, DX5 etc. function and performance banks into MiniDexed format
 
 Usage:
