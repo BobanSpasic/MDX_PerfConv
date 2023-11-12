@@ -24,13 +24,27 @@ jobs:
         cd ..
         mkdir -p lib/x86_64-linux/ bin/Linux/
         bash -ex compile.sh
+        wget -q "https://yamahablackboxes.com/patches/dx7ii/voices/dx7iifdvoice32.syx"
+        wget -q "https://yamahablackboxes.com/patches/dx7ii/voices/dx7iifdvoice64.syx"
+        wget -q "https://yamahablackboxes.com/patches/dx7ii/performances/dx7iifdperf.syx"
+        bin/Linux/MDX_PerfConv --info -a dx7iifdvoice32.syx -b dx7iifdvoice64.syx -p dx7iifdperf.syx
+        bin/Linux/MDX_PerfConv -c -a dx7iifdvoice32.syx -b dx7iifdvoice64.syx -p dx7iifdperf.syx
+        wget -q "https://yamahablackboxes.com/patches/dx7ii/voices/dx7iifdvoice32b.syx"
+        wget -q "https://yamahablackboxes.com/patches/dx7ii/voices/dx7iifdvoice64b.syx"
+        wget -q "https://yamahablackboxes.com/patches/dx7ii/performances/dx7iifdperfb.syx"
+        bin/Linux/MDX_PerfConv --info -a dx7iifdvoice32b.syx -b dx7iifdvoice64b.syx -p dx7iifdperfb.syx
+        bin/Linux/MDX_PerfConv -c -n 33 -a dx7iifdvoice32b.syx -b dx7iifdvoice64b.syx -p dx7iifdperfb.syx
+        ls -lh
+        zip -r dx7iifd.zip *.ini
       shell: bash
 
     - name: Upload binary to artifacts
       uses: actions/upload-artifact@v2
       with:
         name: mdx_perfconv
-        path: bin/Linux/MDX_PerfConv
+        path: |
+          bin/Linux/MDX_PerfConv
+          dx7iifd.zip
         
     - name: Cleanup Old Releases
       if: github.ref == 'refs/heads/main'
@@ -48,7 +62,9 @@ jobs:
       id: create_release
       uses: softprops/action-gh-release@v1
       with:
-        files: bin/Linux/MDX_PerfConv
+        files: |
+          bin/Linux/MDX_PerfConv
+          dx7iifd.zip
         tag_name: continuous
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
