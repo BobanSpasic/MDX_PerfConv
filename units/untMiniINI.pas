@@ -193,10 +193,10 @@ begin
   FMiniINI.Clear;
   FMiniINI.Add('#');
   FMiniINI.Add('#  performance.ini');
-  FMiniINI.Add('#  edited/created with');
-  FMiniINI.Add('#  MiniDexed Control Center');
+  FMiniINI.Add('#  created with');
+  FMiniINI.Add('#  MDX Performance converter');
   FMiniINI.Add('#');
-  FMiniINI.Add('#  https://github.com/BobanSpasic/MiniDexedLibrarian');
+  FMiniINI.Add('#  https://github.com/BobanSpasic/MDX_PerfConv');
   FMiniINI.Add('#');
   FMiniINI.Add('');
   if aComments then

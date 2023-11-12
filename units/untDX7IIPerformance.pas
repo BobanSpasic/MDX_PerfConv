@@ -17,7 +17,7 @@ unit untDX7IIPerformance;
 interface
 
 uses
-  Classes, SysUtils, untUtils;
+  Classes, SysUtils, untUtils, untParConst;
 
 type
   TDX7II_PCED_Dump = array [0..50] of byte;
@@ -118,13 +118,8 @@ begin
 end;
 
 procedure TDX7IIPerformanceContainer.InitPerformance;
-const
-  //ToDo - implement it over untParConst
-  a: array[0..50] of byte =
-    (1, 0, 0, 0, 0, 0, 0, 60, 0, 3, 1, 3, 0, 24, 24, 0, 99, 0, 0, 0, 1, 0, 0, 99, 99, 99, 99, 50,
-    50, 50, 50, 73, 78, 73, 84, 32, 80, 69, 82, 70, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32);
 begin
-  FDX7II_PCED_Params.params := a;
+  GetDefinedValues(DX7IIP, fInit, FDX7II_PCED_Params.params);
 end;
 
 function TDX7IIPerformanceContainer.Get_PCED_Params: TDX7II_PCED_Params;

@@ -22,7 +22,7 @@ uses
 
 type
   TValMatrix = (fMin, fMax, fInit);
-  TTypeMatrix = (DX7, DX7II, TX7, MDX, V50VCED, V50ACED, V50ACED2, V50ACED3, DS55, YS);
+  TTypeMatrix = (DX7, DX7II, DX7IIP, TX7, MDX, V50VCED, V50ACED, V50ACED2, V50ACED3, DS55, YS);
 
 const
   V50_VCED_NAMES: array[0..93, 0..1] of string = (
@@ -1419,6 +1419,20 @@ begin
           finit: begin
             for i := low(Ret) to high(Ret) do
               Ret[i] := DX7II_ACED_MIN_MAX_INT[i][2];
+          end;
+        end;
+      DX7IIP: case V of
+          fmin: begin
+            for i := low(Ret) to high(Ret) do
+              Ret[i] := DX7II_PCED_MIN_MAX_INT[i][0];
+          end;
+          fmax: begin
+            for i := low(Ret) to high(Ret) do
+              Ret[i] := DX7II_PCED_MIN_MAX_INT[i][1];
+          end;
+          finit: begin
+            for i := low(Ret) to high(Ret) do
+              Ret[i] := DX7II_PCED_MIN_MAX_INT[i][2];
           end;
         end;
       TX7: case V of

@@ -49,6 +49,7 @@ type
     fVoiceB1: string;
     fVoiceA2: string;
     fVoiceB2: string;
+    iNumbering: integer;
     fPerf: string;
     slReport: TStringList;
     msInputFile: TMemoryStream;
@@ -62,8 +63,8 @@ type
     fPerf := '';
     // quick check parameters
     CaseSensitiveOptions := True;
-    ErrorMsg := CheckOptions('hica:b:A:B:p:',
-      'help info convert voiceA1: voiceB1: voiceA2: voiceB2: perf:');
+    ErrorMsg := CheckOptions('hica:b:A:B:p:n:',
+      'help info convert voiceA1: voiceB1: voiceA2: voiceB2: perf: numbering:');
 
     if ErrorMsg <> '' then
     begin
@@ -80,20 +81,39 @@ type
       Exit;
     end;
 
+    if HasOption('n', 'numbering') then
+      iNumbering := (StrToIntDef(GetOptionValue('n', 'numbering'), 1) -1) else iNumbering := 0;
+    //The convert functions are already adding 1 for the first number
+
     if HasOption('a', 'voicea1') then
+    begin
       fVoiceA1 := GetOptionValue('a', 'voiceA1');
+      fVoiceA1 := ExpandFileName(fVoiceA1);
+    end;
 
     if HasOption('b', 'voiceb1') then
+    begin
       fVoiceB1 := GetOptionValue('b', 'voiceB1');
+      fVoiceB1 := ExpandFileName(fVoiceB1);
+    end;
 
     if HasOption('A', 'voicea2') then
+    begin
       fVoiceA2 := GetOptionValue('A', 'voiceA2');
+      fVoiceA2 := ExpandFileName(fVoiceA2);
+    end;
 
     if HasOption('B', 'voiceb2') then
+    begin
       fVoiceB2 := GetOptionValue('B', 'voiceB2');
+      fVoiceB2 := ExpandFileName(fVoiceB2);
+    end;
 
     if HasOption('p', 'perf') then
+    begin
       fPerf := GetOptionValue('p', 'perf');
+      fPerf := ExpandFileName(fPerf);
+    end;
 
     if HasOption('i', 'info') then
     begin
@@ -230,17 +250,17 @@ type
         if FileExists(fVoiceA1) and FileExists(fVoiceB1) and
           FileExists(fVoiceA2) and FileExists(fVoiceB2) and FileExists(fPerf) then
         begin
-          DispatchCheck(fVoiceA1, fVoiceB1, fVoiceA2, fVoiceB2, fPerf);
+          DispatchCheck(fVoiceA1, fVoiceB1, fVoiceA2, fVoiceB2, fPerf, iNumbering);
         end
         else
         if FileExists(fVoiceA1) and FileExists(fVoiceB1) and FileExists(fPerf) then
         begin
-          DispatchCheck(fVoiceA1, fVoiceB1, fPerf);
+          DispatchCheck(fVoiceA1, fVoiceB1, fPerf, iNumbering);
         end
         else
         if FileExists(fVoiceA1) then
         begin
-          DispatchCheck(fVoiceA1);
+          DispatchCheck(fVoiceA1, iNumbering);
         end;
       end;
     end;
@@ -278,6 +298,8 @@ type
     writeln('       -A (filename)    --voiceA2=(filename)  Path to voice bank A2');
     writeln('       -B (filename)    --voiceB2=(filename)  Path to voice bank B2');
     writeln('       -p (filename)    --perf=(filename)     Path to performance file');
+    writeln('       -n (number)      --numbering=(number)  First number for filenames');
+    writeln('                                              of the output performances');
     writeLn('');
     writeLn('  Parameters are CASE-SENSITIVE');
     writeLn('');

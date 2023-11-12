@@ -42,3 +42,12 @@ Usage:
        MDX_PerfConv --info --voiceA1=VoiceBank.syx
 
 Not supported: DX7II "big" dumps (12kb)
+
+## About the output files:
+- if the input file contains just single voices (e.g. TX7 Function Bank (VMEM+PMEM) or DX7II Voice Bank (VMEM+AMEM)) - the output performance files will contain 8 voices each with MIDI Channels set to 1 to 8. So, you will get 4 performance.ini files from one bank file  
+- if the input files are combining more than one voice (DX5 performance, DX7II performance) - the output performance file will contain one performance with MIDI Channels set to 1  
+
+## Help needed: 
+If you have a DX7II or a DX1/DX5, I would need some help with conversion of some parameters to MiniDexed (Detune, Split points, Pan, Volume etc.)  
+If you have a GitHub account, then just open a issue here.  
+If you do not have a GitHub account, but you want to help - feel free to contact me spasic[[at]]gmail.com  
