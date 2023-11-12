@@ -15,6 +15,8 @@ Usage:
        -A (filename)    --voiceA2=(filename)  Path to voice bank A2  
        -B (filename)    --voiceB2=(filename)  Path to voice bank B2  
        -p (filename)    --perf=(filename)     Path to performance file  
+       -n (number)      --numbering=(number)  First number for filenames
+                                              of the output performances
 
   Parameters are CASE-SENSITIVE
 
