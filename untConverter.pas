@@ -21,10 +21,10 @@ uses
   untMDXSupplement, untDX7IIPerformance, untDX7IIPerformanceBank,
   untDXUtils, untParConst, Math, untUtils;
 
-procedure ConvertTX7toMDX(ABank: string);
-procedure ConvertDX7IItoMDX(ABank: string);
-procedure ConvertDX7IItoMDX(ABankA, ABankB, APerf: string); overload;
-procedure ConvertDX5toMDX(ABankA1, ABankB1, ABankA2, ABankB2, APerf: string);
+procedure ConvertTX7toMDX(ABank: string; ANumber: integer);
+procedure ConvertDX7IItoMDX(ABank: string; ANumber: integer);
+procedure ConvertDX7IItoMDX(ABankA, ABankB, APerf: string; ANumber: integer); overload;
+procedure ConvertDX5toMDX(ABankA1, ABankB1, ABankA2, ABankB2, APerf: string; ANumber: integer);
 
 
 implementation
@@ -235,7 +235,7 @@ begin
   Result := sup;
 end;
 
-procedure ConvertTX7toMDX(ABank: string);
+procedure ConvertTX7toMDX(ABank: string; ANumber: integer);
 var
   ms: TMemoryStream;
   DX: TDX7BankContainer;
@@ -292,7 +292,7 @@ begin
     MDX.FMDX_Params.General.Category := 'Converted';
     MDX.FMDX_Params.General.Origin := 'Conversion from TX7 Performances';
 
-    sName := Format('%.6d', [i]) + '_' +
+    sName := Format('%.6d', [i + ANumber]) + '_' +
       Trim(ExtractFileNameWithoutExt(ExtractFileName(ABank)));
     sName := copy(sName, 1, 19) + '_' + IntToStr(i);
 
@@ -309,7 +309,7 @@ begin
       MDX.LoadPCEDxToTG(j, MDX_TG.Get_PCEDx_Params);
       MDX.FMDX_Params.TG[j].MIDIChannel := j;
       MDX.SavePerformanceToFile(IncludeTrailingPathDelimiter(sPath) +
-      sName + '.ini', False);
+        sName + '.ini', False);
 
       DX7_VCED.Free;
       TX7_PCED.Free;
@@ -323,7 +323,7 @@ begin
   MDX.Free;
 end;
 
-procedure ConvertDX7IItoMDX(ABank: string);
+procedure ConvertDX7IItoMDX(ABank: string; ANumber: integer);
 var
   ms: TMemoryStream;
   DX7: TDX7BankContainer;
@@ -379,7 +379,7 @@ begin
     MDX.FMDX_Params.General.Category := 'Converted';
     MDX.FMDX_Params.General.Origin := 'Conversion from DX7II Voices';
 
-    sName := Format('%.6d', [i]) + '_' +
+    sName := Format('%.6d', [i + ANumber]) + '_' +
       Trim(ExtractFileNameWithoutExt(ExtractFileName(ABank)));
     sName := copy(sName, 1, 19) + '_' + IntToStr(i);
 
@@ -396,7 +396,7 @@ begin
       MDX.LoadPCEDxToTG(j, MDX_TG.Get_PCEDx_Params);
       MDX.FMDX_Params.TG[j].MIDIChannel := j;
       MDX.SavePerformanceToFile(IncludeTrailingPathDelimiter(sPath) +
-      sName + '.ini', False);
+        sName + '.ini', False);
 
       DX7_VCED.Free;
       DX7II_ACED.Free;
@@ -410,7 +410,7 @@ begin
   MDX.Free;
 end;
 
-procedure ConvertDX5toMDX(ABankA1, ABankB1, ABankA2, ABankB2, APerf: string);
+procedure ConvertDX5toMDX(ABankA1, ABankB1, ABankA2, ABankB2, APerf: string; ANumber: integer);
 var
   msA1: TMemoryStream;
   msB1: TMemoryStream;
@@ -521,7 +521,7 @@ begin
     MDX_TG2 := TMDXSupplementContainer.Create;
 
     TX7.GetFunction(i, TX7_PCED);
-    sName := Format('%.6d', [i]) + '_' + Trim(GetValidFileName(TX7.GetFunctionName(i)));
+    sName := Format('%.6d', [i + ANumber]) + '_' + Trim(GetValidFileName(TX7.GetFunctionName(i)));
 
     DXA1.GetVoice(i, DX7_VCED);
     MDX.LoadVoiceToTG(1, DX7_VCED.Get_VCED_Params);
@@ -558,8 +558,8 @@ begin
     MDX_TG1 := TMDXSupplementContainer.Create;
     MDX_TG2 := TMDXSupplementContainer.Create;
 
-    TX7.GetFunction(32 + i, TX7_PCED);
-    sName := Format('%.6d', [i + 32]) + '_' +
+    TX7.GetFunction(i + 32, TX7_PCED);
+    sName := Format('%.6d', [i + ANumber + 32]) + '_' +
       Trim(GetValidFileName(TX7.GetFunctionName(i + 32)));
     sName := copy(sName, 1, 21);
 
@@ -601,7 +601,7 @@ begin
   MDX.Free;
 end;
 
-procedure ConvertDX7IItoMDX(ABankA, ABankB, APerf: string); overload;
+procedure ConvertDX7IItoMDX(ABankA, ABankB, APerf: string; ANumber: integer); overload;
 var
   msA: TMemoryStream;
   msB: TMemoryStream;
@@ -728,7 +728,7 @@ begin
     MDX_TG2 := TMDXSupplementContainer.Create;
 
     DX7II.GetPerformance(i, DX7II_PCED);
-    sName := Format('%.6d', [i]) + '_' +
+    sName := Format('%.6d', [i + ANumber]) + '_' +
       Trim(GetValidFileName(DX7II.GetPerformanceName(i)));
     sName := copy(sName, 1, 21);
 

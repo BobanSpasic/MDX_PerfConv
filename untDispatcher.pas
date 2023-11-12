@@ -19,13 +19,13 @@ interface
 uses
   Classes, SysUtils, TypInfo, untdxutils, untConverter;
 
-procedure DispatchCheck(ABank: string);  //TX7 and DX7II
-procedure DispatchCheck(ABankA, ABankB, APerf: string); overload; //DX7II with Performance
-procedure DispatchCheck(ABankA1, ABankB1, ABankA2, ABankB2, APerf: string); overload; //DX1 and DX5
+procedure DispatchCheck(ABank: string; ANumber: integer);  //TX7 and DX7II
+procedure DispatchCheck(ABankA, ABankB, APerf: string; ANumber: integer); overload; //DX7II with Performance
+procedure DispatchCheck(ABankA1, ABankB1, ABankA2, ABankB2, APerf: string; ANumber: integer); overload; //DX1 and DX5
 
 implementation
 
-procedure DispatchCheck(ABank: string);
+procedure DispatchCheck(ABank: string; ANumber: integer);
 var
   msBank: TMemoryStream;
   ms: MemSet;
@@ -37,12 +37,12 @@ begin
   if (VMEM in ms) and (AMEM in ms) and not (PMEM in ms) then
   begin
     WriteLn('It is a DX7II bank with supplement');
-    ConvertDX7IItoMDX(ABank);
+    ConvertDX7IItoMDX(ABank, ANumber);
   end;
   if (VMEM in ms) and (PMEM in ms) and not (AMEM in ms) then
   begin
     WriteLn('It is a TX7 bank with function');
-    ConvertTX7toMDX(ABank);
+    ConvertTX7toMDX(ABank, ANumber);
   end;
   if (VMEM in ms) and (PMEM in ms) and (AMEM in ms) then
   begin
@@ -52,7 +52,7 @@ begin
   msBank.Free;
 end;
 
-procedure DispatchCheck(ABankA, ABankB, APerf: string);
+procedure DispatchCheck(ABankA, ABankB, APerf: string; ANumber: integer);
 var
   msBankA: TMemoryStream;
   msBankB: TMemoryStream;
@@ -76,14 +76,14 @@ begin
     (LMPMEM in msP) then
   begin
     WriteLn('It is a DX7II performance set');
-    ConvertDX7IItoMDX(ABankA, ABankB, APerf);
+    ConvertDX7IItoMDX(ABankA, ABankB, APerf, ANumber);
   end;
 
   if (VMEM in msA) and (VMEM in msB) and (LMPMEM in msP) then
   begin
     WriteLn('It is a INCOMPLETE DX7II performance set without AMEM data');
     WriteLn('Do not expect wonders from this conversion');
-    ConvertDX7IItoMDX(ABankA, ABankB, APerf);
+    ConvertDX7IItoMDX(ABankA, ABankB, APerf, ANumber);
   end;
 
   msBankA.Free;
@@ -91,7 +91,7 @@ begin
   msPerf.Free;
 end;
 
-procedure DispatchCheck(ABankA1, ABankB1, ABankA2, ABankB2, APerf: string);
+procedure DispatchCheck(ABankA1, ABankB1, ABankA2, ABankB2, APerf: string; ANumber: integer);
 var
   msBankA1: TMemoryStream;
   msBankB1: TMemoryStream;
@@ -125,7 +125,7 @@ begin
     (VMEM in msB2) and (PMEM in msP) then
   begin
     WriteLn('It is a DX5 performance set');
-    ConvertDX5toMDX(ABankA1, ABankB1, ABankA2, ABankB2, APerf);
+    ConvertDX5toMDX(ABankA1, ABankB1, ABankA2, ABankB2, APerf, ANumber);
   end;
 
   msBankA1.Free;
