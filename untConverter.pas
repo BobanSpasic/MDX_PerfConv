@@ -250,8 +250,9 @@ var
   msFoundPosition: integer;
 
   i, j: integer;
+  sName: string;
+  sPath: string;
 begin
-  //ToDo - FileName and MIDI Ch
   msSearchPosition := 0;
   msFoundPosition := 0;
 
@@ -277,13 +278,24 @@ begin
       WriteLn(TX7.GetFunctionName(i));
   end;
 
+  sPath := ExtractFilePath(ABank);
+  if sPath = '' then sPath := GetCurrentDir;
+  WriteLn('');
+  WriteLn('Writting to the directory ' + sPath);
+  WriteLn('');
+
   for i := 0 to 3 do
   begin
     MDX.InitPerformance;
     MDX.AllMIDIChToZero;
     MDX.FMDX_Params.General.Name := TX7.GetFunctionName(i);
     MDX.FMDX_Params.General.Category := 'Converted';
-    MDX.FMDX_Params.General.Origin := 'Conversion from TX7/DX1/DX5 Performances';
+    MDX.FMDX_Params.General.Origin := 'Conversion from TX7 Performances';
+
+    sName := Format('%.6d', [i]) + '_' +
+      Trim(ExtractFileNameWithoutExt(ExtractFileName(ABank)));
+    sName := copy(sName, 1, 19) + '_' + IntToStr(i);
+
     for j := 1 to 8 do
     begin
       DX7_VCED := TDX7VoiceContainer.Create;
@@ -295,7 +307,9 @@ begin
       MDX.LoadVoiceToTG(j, DX7_VCED.Get_VCED_Params);
       MDX_TG.Set_PCEDx_Params(LoadTX7PCEDtoPCEDx(TX7_PCED));
       MDX.LoadPCEDxToTG(j, MDX_TG.Get_PCEDx_Params);
-      MDX.SavePerformanceToFile(ABank + IntToStr(i) + '.ini', False);
+      MDX.FMDX_Params.TG[j].MIDIChannel := j;
+      MDX.SavePerformanceToFile(IncludeTrailingPathDelimiter(sPath) +
+      sName + '.ini', False);
 
       DX7_VCED.Free;
       TX7_PCED.Free;
@@ -324,8 +338,9 @@ var
   msFoundPosition: integer;
 
   i, j: integer;
+  sName: string;
+  sPath: string;
 begin
-  //ToDo - FileName and MIDI Ch
   msSearchPosition := 0;
   msFoundPosition := 0;
 
@@ -349,6 +364,11 @@ begin
     WriteLn('AMEM loaded from ' + IntToStr(msFoundPosition));
   end;
 
+  sPath := ExtractFilePath(ABank);
+  if sPath = '' then sPath := GetCurrentDir;
+  WriteLn('');
+  WriteLn('Writting to the directory ' + sPath);
+  WriteLn('');
 
   for i := 0 to 3 do
   begin
@@ -358,6 +378,11 @@ begin
       'Voices ' + IntToStr(i * 8) + ' to ' + IntToStr((i + 1) * 8 - 1);
     MDX.FMDX_Params.General.Category := 'Converted';
     MDX.FMDX_Params.General.Origin := 'Conversion from DX7II Voices';
+
+    sName := Format('%.6d', [i]) + '_' +
+      Trim(ExtractFileNameWithoutExt(ExtractFileName(ABank)));
+    sName := copy(sName, 1, 19) + '_' + IntToStr(i);
+
     for j := 1 to 8 do
     begin
       DX7_VCED := TDX7VoiceContainer.Create;
@@ -369,7 +394,9 @@ begin
       MDX.LoadVoiceToTG(j, DX7_VCED.Get_VCED_Params);
       MDX_TG.Set_PCEDx_Params(LoadDX7IIACEDtoPCEDx(DX7II_ACED));
       MDX.LoadPCEDxToTG(j, MDX_TG.Get_PCEDx_Params);
-      MDX.SavePerformanceToFile(ABank + IntToStr(i) + '.ini', False);
+      MDX.FMDX_Params.TG[j].MIDIChannel := j;
+      MDX.SavePerformanceToFile(IncludeTrailingPathDelimiter(sPath) +
+      sName + '.ini', False);
 
       DX7_VCED.Free;
       DX7II_ACED.Free;
@@ -487,7 +514,7 @@ begin
     MDX.AllMIDIChToZero;
     MDX.FMDX_Params.General.Name := TX7.GetFunctionName(i);
     MDX.FMDX_Params.General.Category := 'Converted';
-    MDX.FMDX_Params.General.Origin := 'Conversion from TX7/DX1/DX5 Performances';
+    MDX.FMDX_Params.General.Origin := 'Conversion from DX1/DX5 Performances';
     DX7_VCED := TDX7VoiceContainer.Create;
     TX7_PCED := TTX7FunctionContainer.Create;
     MDX_TG1 := TMDXSupplementContainer.Create;
@@ -650,6 +677,11 @@ begin
     WriteLn('');
     WriteLn('AMEM A loaded from ' + ABankA + ' from position ' +
       IntToStr(msFoundPosition));
+  end
+  else
+  begin
+    WriteLn('AMEM A not found, using INIT parameters');
+    DXAs.InitSupplBank;
   end;
 
   msSearchPosition := 0;
@@ -659,6 +691,11 @@ begin
     WriteLn('');
     WriteLn('AMEM B loaded from ' + ABankB + ' from position ' +
       IntToStr(msFoundPosition));
+  end
+  else
+  begin
+    WriteLn('AMEM B not found, using INIT parameters');
+    DXBs.InitSupplBank;
   end;
 
   msSearchPosition := 0;
@@ -771,10 +808,11 @@ begin
       end;
       MDX.FMDX_Params.TG[2].MIDIChannel := 1;
 
-      WriteLn('Writting ' + sName + '.ini');
-      MDX.SavePerformanceToFile(IncludeTrailingPathDelimiter(sPath) +
-        sName + '.ini', False);
     end;
+
+    WriteLn('Writting ' + sName + '.ini');
+    MDX.SavePerformanceToFile(IncludeTrailingPathDelimiter(sPath) +
+      sName + '.ini', False);
 
     DX7_VCED_A.Free;
     DX7_VCED_B.Free;

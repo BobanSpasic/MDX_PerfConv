@@ -81,19 +81,34 @@ type
     end;
 
     if HasOption('a', 'voicea1') then
+    begin
       fVoiceA1 := GetOptionValue('a', 'voiceA1');
+      fVoiceA1 := ExpandFileName(fVoiceA1);
+    end;
 
     if HasOption('b', 'voiceb1') then
+    begin
       fVoiceB1 := GetOptionValue('b', 'voiceB1');
+      fVoiceB1 := ExpandFileName(fVoiceB1);
+    end;
 
     if HasOption('A', 'voicea2') then
+    begin
       fVoiceA2 := GetOptionValue('A', 'voiceA2');
+      fVoiceA2 := ExpandFileName(fVoiceA2);
+    end;
 
     if HasOption('B', 'voiceb2') then
+    begin
       fVoiceB2 := GetOptionValue('B', 'voiceB2');
+      fVoiceB2 := ExpandFileName(fVoiceB2);
+    end;
 
     if HasOption('p', 'perf') then
+    begin
       fPerf := GetOptionValue('p', 'perf');
+      fPerf := ExpandFileName(fPerf);
+    end;
 
     if HasOption('i', 'info') then
     begin

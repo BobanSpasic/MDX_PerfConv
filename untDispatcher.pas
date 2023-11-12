@@ -79,6 +79,13 @@ begin
     ConvertDX7IItoMDX(ABankA, ABankB, APerf);
   end;
 
+  if (VMEM in msA) and (VMEM in msB) and (LMPMEM in msP) then
+  begin
+    WriteLn('It is a INCOMPLETE DX7II performance set without AMEM data');
+    WriteLn('Do not expect wonders from this conversion');
+    ConvertDX7IItoMDX(ABankA, ABankB, APerf);
+  end;
+
   msBankA.Free;
   msBankB.Free;
   msPerf.Free;
