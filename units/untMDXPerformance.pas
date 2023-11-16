@@ -480,7 +480,7 @@ begin
     ini.WriteInteger('NoteLimitHigh' + sCount,
       FMDX_Params.TG[iCount].SupplData.NoteLimitHigh);
     ini.WriteInteger('NoteShift' + sCount,
-      FMDX_Params.TG[iCount].SupplData.NoteShift);
+      FMDX_Params.TG[iCount].SupplData.NoteShift - 24);
     ini.WriteInteger('ReverbSend' + sCount,
       FMDX_Params.TG[iCount].SupplData.FX1Send);
     ini.WriteInteger('PitchBendRange' + sCount,

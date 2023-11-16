@@ -1209,7 +1209,7 @@ const
     ('Res_20', 'RES')
     );
 
-  MDX_PCEDx_MIN_MAX_INT: array [0..52, 0..2] of byte = (
+  MDX_PCEDx_MIN_MAX_INT: array [0..52, 0..2] of integer = (
     (0, 127, 100),
     (0, 127, 64),
     (0, 1, 0),

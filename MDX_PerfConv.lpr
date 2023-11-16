@@ -25,7 +25,7 @@ uses
   untDispatcher,
   untConverter,
   untDXUtils,
-  untTX802Fraeser;
+  untTX802PerformanceBank;
 
 
 type
@@ -257,6 +257,11 @@ type
         if FileExists(fVoiceA1) and FileExists(fVoiceB1) and FileExists(fPerf) then
         begin
           DispatchCheck(fVoiceA1, fVoiceB1, fPerf, iNumbering);
+        end
+        else
+        if FileExists(fVoiceA1) and FileExists(fVoiceB1) then
+        begin
+          DispatchCheck(fVoiceA1, fVoiceB1, iNumbering);
         end
         else
         if FileExists(fVoiceA1) then

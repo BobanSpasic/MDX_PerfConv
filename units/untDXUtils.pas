@@ -353,7 +353,6 @@ function FindDX_SixOP_MEM(mm: MEMS6; dmp: TMemoryStream;
 var
   rHeader: TDXSysExHeader;
   i:integer;
-  dbg: integer;
 begin
   if SearchStartPos <= dmp.Size then
   begin
@@ -361,7 +360,6 @@ begin
     SearchStartPos := -1;
     while (SearchStartPos = -1) and (dmp.Position < dmp.Size - 6) do
     begin
-      dbg := dmp.Position;
       rHeader.f0 := dmp.ReadByte;
       if rHeader.f0 = $F0 then                                   // $F0 - SysEx
       begin

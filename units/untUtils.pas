@@ -27,8 +27,7 @@ procedure Unused(const A1);
 procedure Unused(const A1, A2);
 procedure Unused(const A1, A2, A3);
 function SameArrays(var a1, a2: array of byte): boolean;
-function PosBytes(aBytes: array of byte; aStream: TStream;
-  aFromPos: integer = 0): integer;
+function PosBytes(aBytes: array of byte; aStream: TStream; aFromPos: integer = 0): integer;
 function GetValidFileName(aFileName: string): string;
 function ExtractFileNameWithoutExt(const AFilename: string): string;
 function Printable(c: char): char;
@@ -145,8 +144,7 @@ begin
   Result := i > High(a1);
 end;
 
-function PosBytes(aBytes: array of byte; aStream: TStream;
-  aFromPos: integer = 0): integer;
+function PosBytes(aBytes: array of byte; aStream: TStream; aFromPos: integer = 0): integer;
 var
   i, j: integer;
   arrLen: integer;
@@ -193,13 +191,9 @@ function GetValidFileName(aFileName: string): string;
 var
   FFile, FExt: string;
   FFileWithExt: string;
-  FWinReservedNames: array [1..22] of
-  string = ('CON', 'PRN', 'AUX', 'NUL', 'COM1', 'COM2', 'COM3', 'COM4',
-    'COM5', 'COM6', 'COM7', 'COM8', 'COM9', 'LPT1', 'LPT2', 'LPT3',
-    'LPT4', 'LPT5', 'LPT6', 'LPT7', 'LPT8', 'LPT9');
+  FWinReservedNames: array [1..22] of string = ('CON', 'PRN', 'AUX', 'NUL', 'COM1', 'COM2', 'COM3', 'COM4', 'COM5', 'COM6', 'COM7', 'COM8', 'COM9', 'LPT1', 'LPT2', 'LPT3', 'LPT4', 'LPT5', 'LPT6', 'LPT7', 'LPT8', 'LPT9');
   //% is not illegal, but it will prevent batch processing
-  FWinIllegalChars: array [1..11] of
-  char = ('<', '>', ':', '"', '\', '/', '?', '|', '*', '=', '%');
+  FWinIllegalChars: array [1..11] of char = ('<', '>', ':', '"', '\', '/', '?', '|', '*', '=', '%');
   i: integer;
 begin
   FFile := ExtractFileNameWithoutExt(aFileName);
@@ -221,11 +215,14 @@ begin
 
   // do not allow dot or space at the end of the name (inkl. extension)
   FFileWithExt := Trim(FFile) + Trim(FExt);
-  if FFileWithExt[Length(FFileWithExt)] = ' ' then
-    SetLength(FFileWithExt, Length(FFileWithExt) - 1);
-  if FFileWithExt[Length(FFileWithExt)] = '.' then
-    SetLength(FFileWithExt, Length(FFileWithExt) - 1);
-
+  if Length(FFileWithExt) > 0 then
+  begin
+    if FFileWithExt[Length(FFileWithExt)] = ' ' then
+      SetLength(FFileWithExt, Length(FFileWithExt) - 1);
+    if FFileWithExt[Length(FFileWithExt)] = '.' then
+      SetLength(FFileWithExt, Length(FFileWithExt) - 1);
+  end;
+  if Length(FFileWithExt) = 0 then FFileWithExt := 'Empty file name';
   Result := FFileWithExt;
 end;
 
