@@ -83,18 +83,19 @@
         <Filename Value="untDispatcher.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="3"/>
-        <TopLine Value="41"/>
-        <CursorPos X="31" Y="62"/>
-        <UsageCount Value="134"/>
+        <TopLine Value="27"/>
+        <CursorPos Y="34"/>
+        <UsageCount Value="137"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="untConverter.pas"/>
         <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="4"/>
-        <TopLine Value="240"/>
-        <CursorPos X="7" Y="225"/>
-        <UsageCount Value="127"/>
+        <TopLine Value="1449"/>
+        <CursorPos X="26" Y="1479"/>
+        <UsageCount Value="130"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -103,16 +104,15 @@
         <EditorIndex Value="1"/>
         <TopLine Value="380"/>
         <CursorPos X="3" Y="391"/>
-        <UsageCount Value="57"/>
+        <UsageCount Value="60"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
-        <Filename Value="units\unttx802performancebank.pas"/>
+        <Filename Value="units\untTX802PerformanceBank.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="untTX802PerformanceBank"/>
         <EditorIndex Value="2"/>
         <CursorPos X="6" Y="96"/>
-        <UsageCount Value="53"/>
+        <UsageCount Value="56"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -135,7 +135,7 @@
         <EditorIndex Value="14"/>
         <TopLine Value="346"/>
         <CursorPos X="10" Y="362"/>
-        <UsageCount Value="85"/>
+        <UsageCount Value="86"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -143,7 +143,7 @@
         <EditorIndex Value="16"/>
         <TopLine Value="19"/>
         <CursorPos X="94" Y="150"/>
-        <UsageCount Value="84"/>
+        <UsageCount Value="85"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -151,7 +151,7 @@
         <EditorIndex Value="18"/>
         <TopLine Value="35"/>
         <CursorPos X="56" Y="35"/>
-        <UsageCount Value="79"/>
+        <UsageCount Value="80"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -177,7 +177,6 @@
       </Unit>
       <Unit>
         <Filename Value="units\untDX7Voice.pas"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="17"/>
         <TopLine Value="1042"/>
         <CursorPos X="36" Y="1074"/>
@@ -189,7 +188,7 @@
         <EditorIndex Value="11"/>
         <TopLine Value="472"/>
         <CursorPos Y="490"/>
-        <UsageCount Value="82"/>
+        <UsageCount Value="83"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -213,7 +212,7 @@
         <EditorIndex Value="10"/>
         <TopLine Value="391"/>
         <CursorPos X="43" Y="407"/>
-        <UsageCount Value="65"/>
+        <UsageCount Value="66"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -221,7 +220,7 @@
         <EditorIndex Value="5"/>
         <TopLine Value="22"/>
         <CursorPos X="18" Y="48"/>
-        <UsageCount Value="64"/>
+        <UsageCount Value="65"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -229,7 +228,7 @@
         <EditorIndex Value="9"/>
         <TopLine Value="136"/>
         <CursorPos Y="150"/>
-        <UsageCount Value="64"/>
+        <UsageCount Value="65"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -245,7 +244,7 @@
         <EditorIndex Value="8"/>
         <TopLine Value="203"/>
         <CursorPos X="5" Y="208"/>
-        <UsageCount Value="62"/>
+        <UsageCount Value="63"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -253,7 +252,7 @@
         <EditorIndex Value="6"/>
         <TopLine Value="26"/>
         <CursorPos X="54" Y="94"/>
-        <UsageCount Value="48"/>
+        <UsageCount Value="49"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -261,7 +260,7 @@
         <EditorIndex Value="7"/>
         <TopLine Value="28"/>
         <CursorPos X="13" Y="47"/>
-        <UsageCount Value="38"/>
+        <UsageCount Value="39"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -295,124 +294,124 @@
     </Units>
     <JumpHistory HistoryIndex="29">
       <Position>
-        <Filename Value="units\unttx802performancebank.pas"/>
-        <Caret Line="95" Column="14" TopLine="79"/>
-      </Position>
-      <Position>
-        <Filename Value="units\untTX802Performance.pas"/>
-        <Caret Line="391" Column="3" TopLine="380"/>
-      </Position>
-      <Position>
-        <Filename Value="units\untDXUtils.pas"/>
-        <Caret Line="355" Column="13" TopLine="339"/>
-      </Position>
-      <Position>
-        <Filename Value="units\untDXUtils.pas"/>
-        <Caret Line="362" Column="10" TopLine="346"/>
+        <Filename Value="untConverter.pas"/>
+        <Caret Line="1457" TopLine="1429"/>
       </Position>
       <Position>
         <Filename Value="untConverter.pas"/>
-        <Caret Line="114" Column="44" TopLine="81"/>
+        <Caret Line="1458" TopLine="1430"/>
       </Position>
       <Position>
         <Filename Value="untConverter.pas"/>
-        <Caret Line="183" Column="42" TopLine="155"/>
+        <Caret Line="1459" TopLine="1431"/>
       </Position>
       <Position>
         <Filename Value="untConverter.pas"/>
-        <Caret Line="216" Column="45" TopLine="200"/>
+        <Caret Line="1460" TopLine="1432"/>
       </Position>
       <Position>
         <Filename Value="untConverter.pas"/>
-        <Caret Line="101" Column="38" TopLine="85"/>
+        <Caret Line="1459" TopLine="1432"/>
       </Position>
       <Position>
         <Filename Value="untConverter.pas"/>
-        <Caret Line="103" Column="37" TopLine="85"/>
+        <Caret Line="1460" TopLine="1432"/>
       </Position>
       <Position>
         <Filename Value="untConverter.pas"/>
-        <Caret Line="183" Column="37" TopLine="155"/>
-      </Position>
-      <Position>
-        <Filename Value="units\untDX7Voice.pas"/>
-        <Caret Line="1031" Column="44" TopLine="1021"/>
+        <Caret Line="1459" TopLine="1432"/>
       </Position>
       <Position>
         <Filename Value="untConverter.pas"/>
-        <Caret Line="1591" Column="50" TopLine="1575"/>
+        <Caret Line="1460" TopLine="1432"/>
       </Position>
       <Position>
         <Filename Value="untConverter.pas"/>
-        <Caret Line="10" Column="64"/>
+        <Caret Line="1459" TopLine="1432"/>
       </Position>
       <Position>
         <Filename Value="untConverter.pas"/>
-        <Caret Line="1634" Column="3" TopLine="1609"/>
+        <Caret Line="1465" TopLine="1437"/>
       </Position>
       <Position>
         <Filename Value="untConverter.pas"/>
-        <Caret Line="1067" Column="3" TopLine="1042"/>
+        <Caret Line="1466" TopLine="1438"/>
       </Position>
       <Position>
         <Filename Value="untConverter.pas"/>
-        <Caret Line="1490" Column="7" TopLine="1477"/>
+        <Caret Line="1468" TopLine="1440"/>
       </Position>
       <Position>
         <Filename Value="untConverter.pas"/>
-        <Caret Line="1246" Column="69" TopLine="1236"/>
+        <Caret Line="1469" TopLine="1441"/>
       </Position>
       <Position>
         <Filename Value="untConverter.pas"/>
-        <Caret Line="956" Column="69" TopLine="935"/>
+        <Caret Line="1470" TopLine="1442"/>
       </Position>
       <Position>
         <Filename Value="untConverter.pas"/>
-        <Caret Line="826" Column="3" TopLine="813"/>
+        <Caret Line="1471" TopLine="1443"/>
       </Position>
       <Position>
         <Filename Value="untConverter.pas"/>
-        <Caret Line="1556" Column="17" TopLine="1539"/>
+        <Caret Line="1470" TopLine="1443"/>
       </Position>
       <Position>
         <Filename Value="untConverter.pas"/>
-        <Caret Line="1270" Column="9" TopLine="1251"/>
-      </Position>
-      <Position>
-        <Filename Value="units\untMDXPerformance.pas"/>
-        <Caret Line="408" Column="33" TopLine="381"/>
-      </Position>
-      <Position>
-        <Filename Value="units\untMDXPerformance.pas"/>
-        <Caret Line="409" Column="43" TopLine="381"/>
-      </Position>
-      <Position>
-        <Filename Value="units\untMDXPerformance.pas"/>
-        <Caret Line="410" Column="29" TopLine="382"/>
-      </Position>
-      <Position>
-        <Filename Value="units\untMDXPerformance.pas"/>
-        <Caret Line="521" Column="29" TopLine="491"/>
-      </Position>
-      <Position>
-        <Filename Value="units\untMDXPerformance.pas"/>
-        <Caret Line="522" Column="45" TopLine="494"/>
-      </Position>
-      <Position>
-        <Filename Value="units\untDX7Voice.pas"/>
-        <Caret Line="1035" Column="15" TopLine="1017"/>
-      </Position>
-      <Position>
-        <Filename Value="units\untDX7Voice.pas"/>
-        <Caret Line="1065" Column="50" TopLine="1045"/>
-      </Position>
-      <Position>
-        <Filename Value="units\untDX7Voice.pas"/>
-        <Caret Line="32" Column="27"/>
+        <Caret Line="1471" TopLine="1443"/>
       </Position>
       <Position>
         <Filename Value="untConverter.pas"/>
-        <Caret Line="7" Column="155"/>
+        <Caret Line="1470" TopLine="1443"/>
+      </Position>
+      <Position>
+        <Filename Value="untConverter.pas"/>
+        <Caret Line="1471" TopLine="1443"/>
+      </Position>
+      <Position>
+        <Filename Value="untConverter.pas"/>
+        <Caret Line="1470" TopLine="1443"/>
+      </Position>
+      <Position>
+        <Filename Value="untConverter.pas"/>
+        <Caret Line="1481" TopLine="1464"/>
+      </Position>
+      <Position>
+        <Filename Value="untConverter.pas"/>
+        <Caret Line="1482" TopLine="1464"/>
+      </Position>
+      <Position>
+        <Filename Value="untConverter.pas"/>
+        <Caret Line="1491" TopLine="1464"/>
+      </Position>
+      <Position>
+        <Filename Value="untConverter.pas"/>
+        <Caret Line="1492" TopLine="1464"/>
+      </Position>
+      <Position>
+        <Filename Value="untConverter.pas"/>
+        <Caret Line="1495" TopLine="1467"/>
+      </Position>
+      <Position>
+        <Filename Value="untDispatcher.pas"/>
+        <Caret Line="34" TopLine="27"/>
+      </Position>
+      <Position>
+        <Filename Value="untConverter.pas"/>
+        <Caret Line="1495" TopLine="1467"/>
+      </Position>
+      <Position>
+        <Filename Value="untConverter.pas"/>
+        <Caret Line="1496" TopLine="1468"/>
+      </Position>
+      <Position>
+        <Filename Value="untConverter.pas"/>
+        <Caret Line="1505" TopLine="1488"/>
+      </Position>
+      <Position>
+        <Filename Value="untConverter.pas"/>
+        <Caret Line="1506" TopLine="1488"/>
       </Position>
     </JumpHistory>
     <RunParams>
@@ -420,55 +419,66 @@
       <Modes ActiveMode="default">
         <Mode Name="default">
           <local>
-            <CommandLineParams Value="-c -a 802PRG1.SYX -b 802PRG2.SYX -p TX802_Factory_Performances.syx"/>
-            <WorkingDirectory Value="C:\Users\Bobby\Documents\Lazarus\MiniDexed_Projects\MDX_PerfConv\bin\Win_x64"/>
+            <CommandLineParams Value="-c -a ajay.syx"/>
+            <WorkingDirectory Value="C:\Users\Bobby\Documents\Lazarus\MiniDexed_Projects\MDX_PerfConv\bin\Debug"/>
           </local>
         </Mode>
       </Modes>
     </RunParams>
     <HistoryLists>
-      <List Name="WorkingDirectory" Type="File" Count="11">
-        <Item1 Value="C:\Users\Bobby\Documents\Lazarus\MiniDexed_Projects\MDX_PerfConv\bin\Win_x64"/>
-        <Item2 Value="D:/Lazarus_Projects/MiniDexed_Projects/MiniDexedPerfConv/bin/Win_x64"/>
-        <Item3 Value="/media/bobby/fat32/Lazarus_Projects/MiniDexed_Projects/MDX_PerfConv/test"/>
-        <Item4 Value="/media/bobby/fat32/Lazarus_Projects/MiniDexed_Projects/MDX_PerfConv"/>
-        <Item5 Value="D:\Lazarus_Projects\MiniDexed_Projects\MiniDexedPerfConv\bin\Win_x64"/>
-        <Item6 Value="C:\Users\Administrator\Documents\Lazarus\MDX_Tool\bin\Debug"/>
-        <Item7 Value="C:\Users\Administrator\Documents\Lazarus\MDX_Tool\bin\Win_x64"/>
-        <Item8 Value="C:\Users\User\Documents\Lazarus\MDX_Tool"/>
-        <Item9 Value="C:\Users\User\Documents\Lazarus\MDX_Tool\bin\Debug"/>
-        <Item10 Value="C:\Users\Administrator\Documents\Lazarus\MDX_Tool"/>
-        <Item11 Value="\media\bobby\fat32\Lazarus_Projects\MiniDexed_Projects\MDX_PerfConv\test"/>
+      <List Name="WorkingDirectory" Type="File" Count="12">
+        <Item1 Value="C:\Users\Bobby\Documents\Lazarus\MiniDexed_Projects\MDX_PerfConv\bin\Debug"/>
+        <Item2 Value="C:\Users\Bobby\Documents\Lazarus\MiniDexed_Projects\MDX_PerfConv\bin\Win_x64"/>
+        <Item3 Value="D:/Lazarus_Projects/MiniDexed_Projects/MiniDexedPerfConv/bin/Win_x64"/>
+        <Item4 Value="/media/bobby/fat32/Lazarus_Projects/MiniDexed_Projects/MDX_PerfConv/test"/>
+        <Item5 Value="/media/bobby/fat32/Lazarus_Projects/MiniDexed_Projects/MDX_PerfConv"/>
+        <Item6 Value="D:\Lazarus_Projects\MiniDexed_Projects\MiniDexedPerfConv\bin\Win_x64"/>
+        <Item7 Value="C:\Users\Administrator\Documents\Lazarus\MDX_Tool\bin\Debug"/>
+        <Item8 Value="C:\Users\Administrator\Documents\Lazarus\MDX_Tool\bin\Win_x64"/>
+        <Item9 Value="C:\Users\User\Documents\Lazarus\MDX_Tool"/>
+        <Item10 Value="C:\Users\User\Documents\Lazarus\MDX_Tool\bin\Debug"/>
+        <Item11 Value="C:\Users\Administrator\Documents\Lazarus\MDX_Tool"/>
+        <Item12 Value="\media\bobby\fat32\Lazarus_Projects\MiniDexed_Projects\MDX_PerfConv\test"/>
       </List>
       <List Name="LaunchingApplication" Type="File" Count="2">
         <Item1 Value="C:\WINDOWS\system32\cmd.exe /C ${TargetCmdLine}"/>
         <Item2 Value="/usr/bin/gnome-terminal -t &apos;Lazarus Run Output&apos; -e &apos;$(LazarusDir)/tools/runwait.sh $(TargetCmdLine)&apos;"/>
       </List>
-      <List Name="CommandLineParameters" Count="19">
-        <Item1 Value="-c -a 802PRG1.SYX -b 802PRG2.SYX -p TX802_Factory_Performances.syx"/>
-        <Item2 Value="-c -a TX802_Factory_Performances.syx"/>
-        <Item3 Value="../bin/Linux/MDX_PerfConv -c -a dx7iifdvoice32.syx -b dx7iifdvoice64.syx -p dx7iifdperf.syx"/>
-        <Item4 Value="bin/Linux/MDX_PerfConv -c -a dx7iifdvoice32.syx -b dx7iifdvoice64.syx -p dx7iifdperf.syx 
+      <List Name="CommandLineParameters" Count="20">
+        <Item1 Value="-c -a ajay.syx"/>
+        <Item2 Value="-c -a 802PRG1.SYX -b 802PRG2.SYX -p TX802_Factory_Performances.syx"/>
+        <Item3 Value="-c -a TX802_Factory_Performances.syx"/>
+        <Item4 Value="../bin/Linux/MDX_PerfConv -c -a dx7iifdvoice32.syx -b dx7iifdvoice64.syx -p dx7iifdperf.syx"/>
+        <Item5 Value="bin/Linux/MDX_PerfConv -c -a dx7iifdvoice32.syx -b dx7iifdvoice64.syx -p dx7iifdperf.syx 
 "/>
-        <Item5 Value="-c -a &quot;dx7ii\DX1-5 for DX7II CRT 1-32.syx&quot; -b &quot;dx7ii\DX1-5 for DX7II CRT 33-64.syx&quot; -p &quot;DX7II\DX1-5 for DX7II CRT perf.syx&quot;"/>
-        <Item6 Value="-c --voicea1=DX5A1.SYX --voiceb1=DX5B1.SYX --voicea2=DX5A2.SYX --voiceb2=DX5B2.SYX -p &quot;DX5 Performance.syx&quot;"/>
-        <Item7 Value="-c -a TX7.syx"/>
-        <Item8 Value="-q -f dx7.sql -d extracted"/>
-        <Item9 Value="-q -f dx.sql -d extracted"/>
-        <Item10 Value="-m -f Trombones_(5).syx"/>
-        <Item11 Value="-i -f tx52.syx"/>
-        <Item12 Value="-i -f BUCK-1.SYX"/>
-        <Item13 Value="-i -f DMC-1.SYX"/>
-        <Item14 Value="-r -f DMC-1.SYX"/>
-        <Item15 Value="-r -f BUCK-1.SYX"/>
-        <Item16 Value="-i -r BUCK-1.SYX"/>
-        <Item17 Value="-c -a &quot;dx7ii/DX1-5 for DX7II CRT 1-32.syx&quot; -b &quot;dx7ii/DX1-5 for DX7II CRT 33-64.syx&quot; -p &quot;DX7II/DX1-5 for DX7II CRT perf.syx&quot;"/>
-        <Item18 Value="bin/Linux/MDX_PerfConv -c -a dx7iifdvoice32.syx -b dx7iifdvoice64.syx -p dx7iifdperf.syx"/>
-        <Item19 Value="..\bin\Linux\MDX_PerfConv -c -a dx7iifdvoice32.syx -b dx7iifdvoice64.syx -p dx7iifdperf.syx"/>
+        <Item6 Value="-c -a &quot;dx7ii\DX1-5 for DX7II CRT 1-32.syx&quot; -b &quot;dx7ii\DX1-5 for DX7II CRT 33-64.syx&quot; -p &quot;DX7II\DX1-5 for DX7II CRT perf.syx&quot;"/>
+        <Item7 Value="-c --voicea1=DX5A1.SYX --voiceb1=DX5B1.SYX --voicea2=DX5A2.SYX --voiceb2=DX5B2.SYX -p &quot;DX5 Performance.syx&quot;"/>
+        <Item8 Value="-c -a TX7.syx"/>
+        <Item9 Value="-q -f dx7.sql -d extracted"/>
+        <Item10 Value="-q -f dx.sql -d extracted"/>
+        <Item11 Value="-m -f Trombones_(5).syx"/>
+        <Item12 Value="-i -f tx52.syx"/>
+        <Item13 Value="-i -f BUCK-1.SYX"/>
+        <Item14 Value="-i -f DMC-1.SYX"/>
+        <Item15 Value="-r -f DMC-1.SYX"/>
+        <Item16 Value="-r -f BUCK-1.SYX"/>
+        <Item17 Value="-i -r BUCK-1.SYX"/>
+        <Item18 Value="-c -a &quot;dx7ii/DX1-5 for DX7II CRT 1-32.syx&quot; -b &quot;dx7ii/DX1-5 for DX7II CRT 33-64.syx&quot; -p &quot;DX7II/DX1-5 for DX7II CRT perf.syx&quot;"/>
+        <Item19 Value="bin/Linux/MDX_PerfConv -c -a dx7iifdvoice32.syx -b dx7iifdvoice64.syx -p dx7iifdperf.syx"/>
+        <Item20 Value="..\bin\Linux\MDX_PerfConv -c -a dx7iifdvoice32.syx -b dx7iifdvoice64.syx -p dx7iifdperf.syx"/>
       </List>
     </HistoryLists>
   </ProjectSession>
   <Debugging>
+    <BreakPoints>
+      <Item>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="untDispatcher.pas"/>
+        <Line Value="34"/>
+      </Item>
+    </BreakPoints>
     <Watches>
       <Item>
         <Expression Value="fBank"/>

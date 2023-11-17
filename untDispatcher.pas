@@ -117,7 +117,7 @@ begin
     ConvertDX7IItoMDX(ABankA, ABankB, APerf, ANumber);
   end;
 
-  if (VMEM in msA) and (VMEM in msB) and (LMPMEM in msP) then
+  if (VMEM in msA) and (VMEM in msB) and (LMPMEM in msP) and not ((AMEM in msA) or (AMEM in msB)) then
   begin
     WriteLn('It is a INCOMPLETE DX7II performance set without AMEM data');
     WriteLn('Do not expect wonders from this conversion');

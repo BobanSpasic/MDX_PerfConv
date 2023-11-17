@@ -113,9 +113,8 @@
         <IsPartOfProject Value="True"/>
       </Unit>
       <Unit>
-        <Filename Value="units\unttx802performancebank.pas"/>
+        <Filename Value="units\untTX802PerformanceBank.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="untTX802PerformanceBank"/>
       </Unit>
     </Units>
   </ProjectOptions>

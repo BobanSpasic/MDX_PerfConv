@@ -1,0 +1,20 @@
+
+Mark:
+
+  Here are the 802 banks I mentioned. You might enjoy how I programmed these
+voices: I ran sequences on the C1 through the desktop machine running the
+Sideman D/TX editor, everything gets tested immediately, real-time FM program-
+ming. I know people do it all the time, it's a gas, really the only way to
+program any synth.
+
+  The banks are mixed bags, though they can probably be sorted into some kind
+of representative order. There are tweakings of patches from various sources,
+patches built up from randomization procedures, voices made up from scratch,
+restricted-parameter alterations, etc.
+
+  The banks are in MIDIex (version 2) format.
+
+  I hope you can find something to enjoy and use here.
+
+						Dave Phillips
+						12/10/92

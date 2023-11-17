@@ -728,6 +728,7 @@ begin
 
     TX7.GetFunction(i, TX7_PCED);
     sName := Format('%.6d', [i + ANumber]) + '_' + Trim(GetValidFileName(TX7.GetFunctionName(i)));
+    sName := copy(sName, 1, 21);
 
     DXA1.GetVoice(i, DX7_VCED);
     MDX.LoadVoiceToTG(1, DX7_VCED.Get_VCED_Params);
@@ -864,8 +865,8 @@ begin
     WriteLn('');
     WriteLn('VMEM A loaded from ' + ABankA + ' from position ' +
       IntToStr(msFoundPosition));
-    for i := 1 to 32 do
-      WriteLn(DXA.GetVoiceName(i));
+    {for i := 1 to 32 do
+      WriteLn(DXA.GetVoiceName(i));}
   end;
 
   msSearchPosition := 0;
@@ -875,8 +876,8 @@ begin
     WriteLn('');
     WriteLn('VMEM B loaded from ' + ABankB + ' from position ' +
       IntToStr(msFoundPosition));
-    for i := 1 to 32 do
-      WriteLn(DXB.GetVoiceName(i));
+    {for i := 1 to 32 do
+      WriteLn(DXB.GetVoiceName(i));}
   end;
 
   msSearchPosition := 0;
@@ -962,7 +963,7 @@ begin
 
     if iVoiceA < 33 then
     begin
-      WriteLn('1: Bank A, Voice ' + IntToStr(iVoiceA));
+      WriteLn('1: Bank A, Voice ' + IntToStr(iVoiceA) + ' - ' + DXA.GetVoiceName(iVoiceA));
       DXA.GetVoice(iVoiceA, DX7_VCED_A);
       DXAs.GetSupplement(iVoiceA, DX7II_ACED_A);
       perg := DX7II_ACED_A.Get_ACED_Params.Pitch_EG_Range;
@@ -976,7 +977,7 @@ begin
     end
     else
     begin
-      WriteLn('1: Bank B, Voice ' + IntToStr(iVoiceA - 32));
+      WriteLn('1: Bank B, Voice ' + IntToStr(iVoiceA - 32) + ' - ' + DXB.GetVoiceName(iVoiceA - 32));
       DXB.GetVoice(iVoiceA - 32, DX7_VCED_A);
       DXBs.GetSupplement(iVoiceA - 32, DX7II_ACED_A);
       perg := DX7II_ACED_A.Get_ACED_Params.Pitch_EG_Range;
@@ -1007,7 +1008,7 @@ begin
     begin
       if iVoiceB < 33 then
       begin
-        WriteLn('2: Bank A, Voice ' + IntToStr(iVoiceB));
+        WriteLn('2: Bank A, Voice ' + IntToStr(iVoiceB) + ' - ' + DXA.GetVoiceName(iVoiceB));
         DXA.GetVoice(iVoiceB, DX7_VCED_B);
         DXAs.GetSupplement(iVoiceB, DX7II_ACED_B);
         perg := DX7II_ACED_B.Get_ACED_Params.Pitch_EG_Range;
@@ -1021,7 +1022,7 @@ begin
       end
       else
       begin
-        WriteLn('2: Bank B, Voice ' + IntToStr(iVoiceB - 32));
+        WriteLn('2: Bank B, Voice ' + IntToStr(iVoiceB - 32) + ' - ' + DXA.GetVoiceName(iVoiceB - 32));
         DXB.GetVoice(iVoiceB - 32, DX7_VCED_B);
         DXBs.GetSupplement(iVoiceB - 32, DX7II_ACED_B);
         perg := DX7II_ACED_B.Get_ACED_Params.Pitch_EG_Range;
@@ -1475,6 +1476,7 @@ begin
   begin
     WriteLn('VMEM B not found, using INIT parameters');
     DXB.InitBank;
+    msFoundPosition := 0;
   end;
 
   msSearchPosition := 0;
@@ -1489,6 +1491,7 @@ begin
   begin
     WriteLn('AMEM A not found, using INIT parameters');
     DXAs.InitSupplBank;
+    msFoundPosition := 0;
   end;
 
   msSearchPosition := msFoundPosition;
@@ -1503,6 +1506,7 @@ begin
   begin
     WriteLn('AMEM B not found, using INIT parameters');
     DXBs.InitSupplBank;
+    msFoundPosition := 0;
   end;
 
   msSearchPosition := 0;
