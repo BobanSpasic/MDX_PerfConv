@@ -29,9 +29,9 @@ unit untDX7Voice;
 interface
 
 uses
-  Classes, SysUtils, untUtils, untParConst
-  {$IFNDEF CMDLINE} , HlpHashFactory {$ENDIF}
-  ;
+  Classes, SysUtils, Math, untUtils, untParConst
+  {$IFNDEF CMDLINE} , HlpHashFactory {$ENDIF}  ;
+
 type
   TDX7_VMEM_Dump = array [0..127] of byte;
   TDX7_VCED_Dump = array [0..155] of byte;
@@ -185,8 +185,8 @@ type
         LFO_AMP_MOD_DEPTH: byte;          //       0-99
         LFO_SYNC: byte;                   //       0-1
         LFO_WAVEFORM: byte;               //       0-5, (data sheet claims 9-4 ?!?)
-                                          //       0:TR, 1:SD, 2:SU,
-                                          //       3:SQ, 4:SI, 5:SH
+        //       0:TR, 1:SD, 2:SU,
+        //       3:SQ, 4:SI, 5:SH
         PITCH_MOD_SENSITIVITY: byte;      //       0-7
         TRANSPOSE: byte;                  //       0-48   12 = C2
         VOICE_NAME_CHAR_1: byte;          //       ASCII
@@ -200,7 +200,7 @@ type
         VOICE_NAME_CHAR_9: byte;          //       ASCII
         VOICE_NAME_CHAR_10: byte;         //       ASCII
         OPERATOR_ON_OFF: byte;            //       bit6 = 0 / bit 5: OP1 / .. .
-                                          //       ... / bit 0: OP6
+        //       ... / bit 0: OP6
       );
   end;
 
@@ -345,10 +345,8 @@ type
     FDX7_VCED_Params: TDX7_VCED_Params;
     FDX7_VMEM_Params: TDX7_VMEM_Params;
   public
-    function Load_VMEM_FromStream(var aStream: TMemoryStream;
-      Position: integer): boolean;
-    function Load_VCED_FromStream(var aStream: TMemoryStream;
-      Position: integer): boolean;
+    function Load_VMEM_FromStream(var aStream: TMemoryStream; Position: integer): boolean;
+    function Load_VCED_FromStream(var aStream: TMemoryStream; Position: integer): boolean;
     procedure InitVoice; //set defaults
     function GetVoiceName: string;
     procedure SetVoiceName(aName: string);
@@ -369,6 +367,7 @@ type
     function CheckMinMax(var slReport: TStringList): boolean;
     function HasNullInName: boolean;
     procedure Normalize;
+    procedure Mk2ToMk1(aPEGR, aAMS1, aAMS2, aAMS3, aAMS4, aAMS5, aAMS6: byte);
   end;
 
 function VCEDtoVMEM(aPar: TDX7_VCED_Params): TDX7_VMEM_Params;
@@ -741,8 +740,7 @@ begin
   Result := t;
 end;
 
-function TDX7VoiceContainer.Load_VMEM_FromStream(var aStream: TMemoryStream;
-  Position: integer): boolean;
+function TDX7VoiceContainer.Load_VMEM_FromStream(var aStream: TMemoryStream; Position: integer): boolean;
 var
   i: integer;
 begin
@@ -763,8 +761,7 @@ begin
   end;
 end;
 
-function TDX7VoiceContainer.Load_VCED_FromStream(var aStream: TMemoryStream;
-  Position: integer): boolean;
+function TDX7VoiceContainer.Load_VCED_FromStream(var aStream: TMemoryStream; Position: integer): boolean;
 var
   i: integer;
 begin
@@ -948,6 +945,7 @@ begin
   Result := THashFactory.TCrypto.CreateSHA2_256().ComputeStream(aStream).ToString();
   aStream.Free;
 end;
+
 {$ENDIF}
 
 function TDX7VoiceContainer.GetChecksumPart: integer;
@@ -995,8 +993,7 @@ begin
   tmpStream.Free;
 end;
 
-procedure TDX7VoiceContainer.SysExVoiceToStream(aCh: integer;
-  var aStream: TMemoryStream);
+procedure TDX7VoiceContainer.SysExVoiceToStream(aCh: integer; var aStream: TMemoryStream);
 var
   FCh: byte;
 begin
@@ -1027,6 +1024,64 @@ begin
     (FDX7_VMEM_Params.VOICE_NAME_CHAR_8 = 0) or
     (FDX7_VMEM_Params.VOICE_NAME_CHAR_9 = 0) or
     (FDX7_VMEM_Params.VOICE_NAME_CHAR_10 = 0) then Result := True;
+end;
+
+procedure TDX7VoiceContainer.Mk2ToMk1(aPEGR, aAMS1, aAMS2, aAMS3, aAMS4, aAMS5, aAMS6: byte);
+const
+  ams: array[0..7] of byte = (0,1,2,3,3,3,3,3);
+var
+  peg: integer;
+  //pegr: byte;
+  pegr: single;
+begin
+  // Pitch EG Level correction
+  {//DXConvert
+  case aPEGR of
+    0: pegr := 50;    //8 octaves
+    1: pegr := 32;    //4 octaves
+    2: pegr := 16;    //1 octave
+    3: pegr := 8;     //0.5 octave
+  end; }
+  case aPEGR of
+    0: pegr := 50;
+    1: pegr := 25;
+    2: pegr := 6.25;
+    3: pegr := 3.125;
+  end;
+  {//DXConvert
+  peg := FDX7_VCED_Params.PITCH_EG_LEVEL_1;
+  FDX7_VCED_Params.PITCH_EG_LEVEL_1 := byte((peg - 50) * pegr div 50) + 50;
+
+  peg := FDX7_VCED_Params.PITCH_EG_LEVEL_2;
+  FDX7_VCED_Params.PITCH_EG_LEVEL_2 := byte((peg - 50) * pegr div 50) + 50;
+
+  peg := FDX7_VCED_Params.PITCH_EG_LEVEL_3;
+  FDX7_VCED_Params.PITCH_EG_LEVEL_3 := byte((peg - 50) * pegr div 50) + 50;
+
+  peg := FDX7_VCED_Params.PITCH_EG_LEVEL_4;
+  FDX7_VCED_Params.PITCH_EG_LEVEL_4 := byte((peg - 50) * pegr div 50) + 50;  }
+
+  peg := FDX7_VCED_Params.PITCH_EG_LEVEL_1;
+  FDX7_VCED_Params.PITCH_EG_LEVEL_1 := byte(floor((peg - 50) * pegr/50) + 50);
+
+  peg := FDX7_VCED_Params.PITCH_EG_LEVEL_2;
+  FDX7_VCED_Params.PITCH_EG_LEVEL_2 := byte(floor((peg - 50) * pegr/50) + 50);
+
+  peg := FDX7_VCED_Params.PITCH_EG_LEVEL_3;
+  FDX7_VCED_Params.PITCH_EG_LEVEL_3 := byte(floor((peg - 50) * pegr/50) + 50);
+
+  peg := FDX7_VCED_Params.PITCH_EG_LEVEL_4;
+  FDX7_VCED_Params.PITCH_EG_LEVEL_4 := byte(floor((peg - 50) * pegr/50) + 50);
+
+  // Amplitude Modulation Sensitivity correction
+  if aAMS1 <> 0 then FDX7_VCED_Params.OP1_AMP_MOD_SENSITIVITY := ams[aAMS1];
+  if aAMS2 <> 0 then FDX7_VCED_Params.OP2_AMP_MOD_SENSITIVITY := ams[aAMS2];
+  if aAMS3 <> 0 then FDX7_VCED_Params.OP3_AMP_MOD_SENSITIVITY := ams[aAMS3];
+  if aAMS4 <> 0 then FDX7_VCED_Params.OP4_AMP_MOD_SENSITIVITY := ams[aAMS4];
+  if aAMS5 <> 0 then FDX7_VCED_Params.OP5_AMP_MOD_SENSITIVITY := ams[aAMS5];
+  if aAMS6 <> 0 then FDX7_VCED_Params.OP6_AMP_MOD_SENSITIVITY := ams[aAMS6];
+
+  FDX7_VMEM_Params := VCEDtoVMEM(FDX7_VCED_Params);
 end;
 
 end.

@@ -405,9 +405,9 @@ begin
     FMDX_Params.TG[iCount].SupplData.BreathControlTarget :=
       ini.ReadInteger('BreathControlTarget' + sCount, 0);
     FMDX_Params.TG[iCount].SupplData.AftertouchRange :=
-      ini.ReadInteger('AfterTouchRange' + sCount, 99);
+      ini.ReadInteger('AftertouchRange' + sCount, 99);
     FMDX_Params.TG[iCount].SupplData.AftertouchTarget :=
-      ini.ReadInteger('AfterTouchTarget' + sCount, 0);
+      ini.ReadInteger('AftertouchTarget' + sCount, 0);
   end;
 
   //Effects
@@ -516,9 +516,9 @@ begin
       FMDX_Params.TG[iCount].SupplData.BreathControlRange);
     ini.WriteInteger('BreathControlTarget' + sCount,
       FMDX_Params.TG[iCount].SupplData.BreathControlTarget);
-    ini.WriteInteger('AfterTouchRange' + sCount,
+    ini.WriteInteger('AftertouchRange' + sCount,
       FMDX_Params.TG[iCount].SupplData.AftertouchRange);
-    ini.WriteInteger('AfterTouchTarget' + sCount,
+    ini.WriteInteger('AftertouchTarget' + sCount,
       FMDX_Params.TG[iCount].SupplData.AftertouchTarget);
   end;
 

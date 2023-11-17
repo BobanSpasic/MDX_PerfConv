@@ -100,7 +100,7 @@ begin
     if isVoiceA then
       sup.NoteLimitHigh := pced.SplitPoint
     else
-      sup.NoteLimitLow := pced.SplitPoint - 1;
+      sup.NoteLimitLow := pced.SplitPoint + 1;
   end;
 
   if (pced.PerformanceLayerMode = 1) and (pced.DualDetune <> 0) then
@@ -108,12 +108,16 @@ begin
     if isVoiceA then
     begin
       sup.DetuneSGN := 0;
-      sup.DetuneVAL := Floor(pced.DualDetune * 3.572);
+      {DX77II - value 7 = 25c
+       MiniDexed - value 12,375 = 25c}
+      //sup.DetuneVAL := Floor(pced.DualDetune * 3.572);
+      sup.DetuneVAL := Floor(pced.DualDetune * 1.768);
     end
     else
     begin
       sup.DetuneSGN := 1;
-      sup.DetuneVAL := Floor(pced.DualDetune * 3.572);
+      //sup.DetuneVAL := Floor(pced.DualDetune * 3.572);
+      sup.DetuneVAL := Floor(pced.DualDetune * 1.768);
     end;
   end;
   Result := sup;
@@ -180,11 +184,12 @@ begin
   GetDefinedValues(MDX, fInit, sup.params);
   sup.NoteShift := par.A_PerfKeyShift;
   if par.G_KeyAssignMode = 2 then
-    sup.NoteLimitHigh := par.G_SplitPoint - 1;
+    sup.NoteLimitHigh := par.G_SplitPoint;
   if (par.G_KeyAssignMode = 1) and (par.G_DualModeDetune <> 0) then
   begin
     sup.DetuneSGN := 0;
-    sup.DetuneVAL := Floor(par.G_DualModeDetune * 1.786);
+    //sup.DetuneVAL := Floor(par.G_DualModeDetune * 1.786);
+    sup.DetuneVAL := Floor(par.G_DualModeDetune * 0.886);
   end;
   sup.PitchBendRange := par.A_PitchBendRange;
   sup.PitchBendStep := par.A_PitchBendStep;
@@ -213,11 +218,12 @@ begin
   GetDefinedValues(MDX, fInit, sup.params);
   sup.NoteShift := par.A_PerfKeyShift;
   if par.G_KeyAssignMode = 2 then
-    sup.NoteLimitLow := par.G_SplitPoint;
+    sup.NoteLimitLow := par.G_SplitPoint + 1;
   if (par.G_KeyAssignMode = 1) and (par.G_DualModeDetune <> 0) then
   begin
     sup.DetuneSGN := 1;
-    sup.DetuneVAL := Floor(par.G_DualModeDetune * 1.786);
+    //sup.DetuneVAL := Floor(par.G_DualModeDetune * 1.786);
+    sup.DetuneVAL := Floor(par.G_DualModeDetune * 0.886);
   end;
   sup.PitchBendRange := par.B_PitchBendRange;
   sup.PitchBendStep := par.B_PitchBendStep;
@@ -529,6 +535,9 @@ var
   i, j: integer;
   sName: string;
   sPath: string;
+
+  perg, ams1, ams2, ams3, ams4, ams5, ams6: byte;
+
 begin
   msSearchPosition := 0;
   msFoundPosition := 0;
@@ -580,6 +589,14 @@ begin
 
       DX7.GetVoice(i * 8 + j, DX7_VCED);
       DX7II.GetSupplement(i * 8 + j, DX7II_ACED);
+      perg := DX7II_ACED.Get_ACED_Params.Pitch_EG_Range;
+      ams1 := DX7II_ACED.Get_ACED_Params.OP1_AM_Sensitivity;
+      ams2 := DX7II_ACED.Get_ACED_Params.OP2_AM_Sensitivity;
+      ams3 := DX7II_ACED.Get_ACED_Params.OP3_AM_Sensitivity;
+      ams4 := DX7II_ACED.Get_ACED_Params.OP4_AM_Sensitivity;
+      ams5 := DX7II_ACED.Get_ACED_Params.OP5_AM_Sensitivity;
+      ams6 := DX7II_ACED.Get_ACED_Params.OP6_AM_Sensitivity;
+      DX7_VCED.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
       MDX.LoadVoiceToTG(j, DX7_VCED.Get_VCED_Params);
       MDX_TG.Set_PCEDx_Params(LoadDX7IIACEDtoPCEDx(DX7II_ACED));
       MDX.LoadPCEDxToTG(j, MDX_TG.Get_PCEDx_Params);
@@ -820,6 +837,9 @@ var
   i: integer;
   sName: string;
   sPath: string;
+
+  perg, ams1, ams2, ams3, ams4, ams5, ams6: byte;
+
 begin
   msFoundPosition := 0;
 
@@ -945,12 +965,28 @@ begin
       WriteLn('1: Bank A, Voice ' + IntToStr(iVoiceA));
       DXA.GetVoice(iVoiceA, DX7_VCED_A);
       DXAs.GetSupplement(iVoiceA, DX7II_ACED_A);
+      perg := DX7II_ACED_A.Get_ACED_Params.Pitch_EG_Range;
+      ams1 := DX7II_ACED_A.Get_ACED_Params.OP1_AM_Sensitivity;
+      ams2 := DX7II_ACED_A.Get_ACED_Params.OP2_AM_Sensitivity;
+      ams3 := DX7II_ACED_A.Get_ACED_Params.OP3_AM_Sensitivity;
+      ams4 := DX7II_ACED_A.Get_ACED_Params.OP4_AM_Sensitivity;
+      ams5 := DX7II_ACED_A.Get_ACED_Params.OP5_AM_Sensitivity;
+      ams6 := DX7II_ACED_A.Get_ACED_Params.OP6_AM_Sensitivity;
+      DX7_VCED_A.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
     end
     else
     begin
       WriteLn('1: Bank B, Voice ' + IntToStr(iVoiceA - 32));
       DXB.GetVoice(iVoiceA - 32, DX7_VCED_A);
       DXBs.GetSupplement(iVoiceA - 32, DX7II_ACED_A);
+      perg := DX7II_ACED_A.Get_ACED_Params.Pitch_EG_Range;
+      ams1 := DX7II_ACED_A.Get_ACED_Params.OP1_AM_Sensitivity;
+      ams2 := DX7II_ACED_A.Get_ACED_Params.OP2_AM_Sensitivity;
+      ams3 := DX7II_ACED_A.Get_ACED_Params.OP3_AM_Sensitivity;
+      ams4 := DX7II_ACED_A.Get_ACED_Params.OP4_AM_Sensitivity;
+      ams5 := DX7II_ACED_A.Get_ACED_Params.OP5_AM_Sensitivity;
+      ams6 := DX7II_ACED_A.Get_ACED_Params.OP6_AM_Sensitivity;
+      DX7_VCED_A.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
     end;
     MDX.LoadVoiceToTG(1, DX7_VCED_A.Get_VCED_Params);
     MDX_TG1.Set_PCEDx_Params(LoadDX7IIACEDPCEDtoPCEDx(True, DX7II_ACED_A, DX7II_PCED));
@@ -974,12 +1010,28 @@ begin
         WriteLn('2: Bank A, Voice ' + IntToStr(iVoiceB));
         DXA.GetVoice(iVoiceB, DX7_VCED_B);
         DXAs.GetSupplement(iVoiceB, DX7II_ACED_B);
+        perg := DX7II_ACED_B.Get_ACED_Params.Pitch_EG_Range;
+        ams1 := DX7II_ACED_B.Get_ACED_Params.OP1_AM_Sensitivity;
+        ams2 := DX7II_ACED_B.Get_ACED_Params.OP2_AM_Sensitivity;
+        ams3 := DX7II_ACED_B.Get_ACED_Params.OP3_AM_Sensitivity;
+        ams4 := DX7II_ACED_B.Get_ACED_Params.OP4_AM_Sensitivity;
+        ams5 := DX7II_ACED_B.Get_ACED_Params.OP5_AM_Sensitivity;
+        ams6 := DX7II_ACED_B.Get_ACED_Params.OP6_AM_Sensitivity;
+        DX7_VCED_B.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
       end
       else
       begin
         WriteLn('2: Bank B, Voice ' + IntToStr(iVoiceB - 32));
         DXB.GetVoice(iVoiceB - 32, DX7_VCED_B);
         DXBs.GetSupplement(iVoiceB - 32, DX7II_ACED_B);
+        perg := DX7II_ACED_B.Get_ACED_Params.Pitch_EG_Range;
+        ams1 := DX7II_ACED_B.Get_ACED_Params.OP1_AM_Sensitivity;
+        ams2 := DX7II_ACED_B.Get_ACED_Params.OP2_AM_Sensitivity;
+        ams3 := DX7II_ACED_B.Get_ACED_Params.OP3_AM_Sensitivity;
+        ams4 := DX7II_ACED_B.Get_ACED_Params.OP4_AM_Sensitivity;
+        ams5 := DX7II_ACED_B.Get_ACED_Params.OP5_AM_Sensitivity;
+        ams6 := DX7II_ACED_B.Get_ACED_Params.OP6_AM_Sensitivity;
+        DX7_VCED_B.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
       end;
       MDX.LoadVoiceToTG(2, DX7_VCED_B.Get_VCED_Params);
       MDX_TG2.Set_PCEDx_Params(LoadDX7IIACEDPCEDtoPCEDx(False,
@@ -1057,6 +1109,9 @@ var
   i, j, t: integer;
   sName: string;
   sPath: string;
+
+  perg, ams1, ams2, ams3, ams4, ams5, ams6: byte;
+
 begin
   msFoundPosition := 0;
 
@@ -1228,6 +1283,14 @@ begin
         iVoice[j] := iVoice[j] - 127;
         DXA1.GetVoice(iVoice[j], DX7_VCED);
         DXA1s.GetSupplement(iVoice[j], DX7II_ACED);
+        perg := DX7II_ACED.Get_ACED_Params.Pitch_EG_Range;
+        ams1 := DX7II_ACED.Get_ACED_Params.OP1_AM_Sensitivity;
+        ams2 := DX7II_ACED.Get_ACED_Params.OP2_AM_Sensitivity;
+        ams3 := DX7II_ACED.Get_ACED_Params.OP3_AM_Sensitivity;
+        ams4 := DX7II_ACED.Get_ACED_Params.OP4_AM_Sensitivity;
+        ams5 := DX7II_ACED.Get_ACED_Params.OP5_AM_Sensitivity;
+        ams6 := DX7II_ACED.Get_ACED_Params.OP6_AM_Sensitivity;
+        DX7_VCED.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
         MDX.LoadVoiceToTG(j, DX7_VCED.Get_VCED_Params);
         MDX_TG.Set_PCEDx_Params(LoadTX802toPCEDx(DX7II_ACED, TX802_PCED, j));
         MDX.LoadPCEDxToTG(j, MDX_TG.Get_PCEDx_Params);
@@ -1241,6 +1304,14 @@ begin
         iVoice[j] := iVoice[j] - 159;
         DXA2.GetVoice(iVoice[j], DX7_VCED);
         DXA2s.GetSupplement(iVoice[j], DX7II_ACED);
+        perg := DX7II_ACED.Get_ACED_Params.Pitch_EG_Range;
+        ams1 := DX7II_ACED.Get_ACED_Params.OP1_AM_Sensitivity;
+        ams2 := DX7II_ACED.Get_ACED_Params.OP2_AM_Sensitivity;
+        ams3 := DX7II_ACED.Get_ACED_Params.OP3_AM_Sensitivity;
+        ams4 := DX7II_ACED.Get_ACED_Params.OP4_AM_Sensitivity;
+        ams5 := DX7II_ACED.Get_ACED_Params.OP5_AM_Sensitivity;
+        ams6 := DX7II_ACED.Get_ACED_Params.OP6_AM_Sensitivity;
+        DX7_VCED.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
         MDX.LoadVoiceToTG(j, DX7_VCED.Get_VCED_Params);
         MDX_TG.Set_PCEDx_Params(LoadTX802toPCEDx(DX7II_ACED, TX802_PCED, j));
         MDX.LoadPCEDxToTG(j, MDX_TG.Get_PCEDx_Params);
@@ -1254,6 +1325,14 @@ begin
         iVoice[j] := iVoice[j] - 192;
         DXB1.GetVoice(iVoice[j], DX7_VCED);
         DXB1s.GetSupplement(iVoice[j], DX7II_ACED);
+        perg := DX7II_ACED.Get_ACED_Params.Pitch_EG_Range;
+        ams1 := DX7II_ACED.Get_ACED_Params.OP1_AM_Sensitivity;
+        ams2 := DX7II_ACED.Get_ACED_Params.OP2_AM_Sensitivity;
+        ams3 := DX7II_ACED.Get_ACED_Params.OP3_AM_Sensitivity;
+        ams4 := DX7II_ACED.Get_ACED_Params.OP4_AM_Sensitivity;
+        ams5 := DX7II_ACED.Get_ACED_Params.OP5_AM_Sensitivity;
+        ams6 := DX7II_ACED.Get_ACED_Params.OP6_AM_Sensitivity;
+        DX7_VCED.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
         MDX.LoadVoiceToTG(j, DX7_VCED.Get_VCED_Params);
         MDX_TG.Set_PCEDx_Params(LoadTX802toPCEDx(DX7II_ACED, TX802_PCED, j));
         MDX.LoadPCEDxToTG(j, MDX_TG.Get_PCEDx_Params);
@@ -1267,6 +1346,14 @@ begin
         iVoice[j] := iVoice[j] - 223;
         DXB2.GetVoice(iVoice[j], DX7_VCED);
         DXB2s.GetSupplement(iVoice[j], DX7II_ACED);
+        perg := DX7II_ACED.Get_ACED_Params.Pitch_EG_Range;
+        ams1 := DX7II_ACED.Get_ACED_Params.OP1_AM_Sensitivity;
+        ams2 := DX7II_ACED.Get_ACED_Params.OP2_AM_Sensitivity;
+        ams3 := DX7II_ACED.Get_ACED_Params.OP3_AM_Sensitivity;
+        ams4 := DX7II_ACED.Get_ACED_Params.OP4_AM_Sensitivity;
+        ams5 := DX7II_ACED.Get_ACED_Params.OP5_AM_Sensitivity;
+        ams6 := DX7II_ACED.Get_ACED_Params.OP6_AM_Sensitivity;
+        DX7_VCED.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
         MDX.LoadVoiceToTG(j, DX7_VCED.Get_VCED_Params);
         MDX_TG.Set_PCEDx_Params(LoadTX802toPCEDx(DX7II_ACED, TX802_PCED, j));
         MDX.LoadPCEDxToTG(j, MDX_TG.Get_PCEDx_Params);
@@ -1343,6 +1430,9 @@ var
   i: integer;
   sName: string;
   sPath: string;
+
+  perg, ams1, ams2, ams3, ams4, ams5, ams6: byte;
+
 begin
   msFoundPosition := 0;
 
@@ -1473,12 +1563,28 @@ begin
       WriteLn('1: Bank A, Voice ' + IntToStr(iVoiceA) + ' - ' + DXA.GetVoiceName(iVoiceA));
       DXA.GetVoice(iVoiceA, DX7_VCED_A);
       DXAs.GetSupplement(iVoiceA, DX7II_ACED_A);
+      perg := DX7II_ACED_A.Get_ACED_Params.Pitch_EG_Range;
+      ams1 := DX7II_ACED_A.Get_ACED_Params.OP1_AM_Sensitivity;
+      ams2 := DX7II_ACED_A.Get_ACED_Params.OP2_AM_Sensitivity;
+      ams3 := DX7II_ACED_A.Get_ACED_Params.OP3_AM_Sensitivity;
+      ams4 := DX7II_ACED_A.Get_ACED_Params.OP4_AM_Sensitivity;
+      ams5 := DX7II_ACED_A.Get_ACED_Params.OP5_AM_Sensitivity;
+      ams6 := DX7II_ACED_A.Get_ACED_Params.OP6_AM_Sensitivity;
+      DX7_VCED_A.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
     end
     else
     begin
       WriteLn('1: Bank B, Voice ' + IntToStr(iVoiceA - 32) + ' - ' + DXB.GetVoiceName(iVoiceA - 32));
       DXB.GetVoice(iVoiceA - 32, DX7_VCED_A);
       DXBs.GetSupplement(iVoiceA - 32, DX7II_ACED_A);
+      perg := DX7II_ACED_A.Get_ACED_Params.Pitch_EG_Range;
+      ams1 := DX7II_ACED_A.Get_ACED_Params.OP1_AM_Sensitivity;
+      ams2 := DX7II_ACED_A.Get_ACED_Params.OP2_AM_Sensitivity;
+      ams3 := DX7II_ACED_A.Get_ACED_Params.OP3_AM_Sensitivity;
+      ams4 := DX7II_ACED_A.Get_ACED_Params.OP4_AM_Sensitivity;
+      ams5 := DX7II_ACED_A.Get_ACED_Params.OP5_AM_Sensitivity;
+      ams6 := DX7II_ACED_A.Get_ACED_Params.OP6_AM_Sensitivity;
+      DX7_VCED_A.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
     end;
     MDX.LoadVoiceToTG(1, DX7_VCED_A.Get_VCED_Params);
     MDX_TG1.Set_PCEDx_Params(LoadDX7IIACEDPCEDtoPCEDx(True, DX7II_ACED_A, DX7II_PCED));
@@ -1502,12 +1608,28 @@ begin
         WriteLn('2: Bank A, Voice ' + IntToStr(iVoiceB) + ' - ' + DXA.GetVoiceName(iVoiceB));
         DXA.GetVoice(iVoiceB, DX7_VCED_B);
         DXAs.GetSupplement(iVoiceB, DX7II_ACED_B);
+        perg := DX7II_ACED_B.Get_ACED_Params.Pitch_EG_Range;
+        ams1 := DX7II_ACED_B.Get_ACED_Params.OP1_AM_Sensitivity;
+        ams2 := DX7II_ACED_B.Get_ACED_Params.OP2_AM_Sensitivity;
+        ams3 := DX7II_ACED_B.Get_ACED_Params.OP3_AM_Sensitivity;
+        ams4 := DX7II_ACED_B.Get_ACED_Params.OP4_AM_Sensitivity;
+        ams5 := DX7II_ACED_B.Get_ACED_Params.OP5_AM_Sensitivity;
+        ams6 := DX7II_ACED_B.Get_ACED_Params.OP6_AM_Sensitivity;
+        DX7_VCED_B.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
       end
       else
       begin
         WriteLn('2: Bank B, Voice ' + IntToStr(iVoiceB - 32) + ' - ' + DXB.GetVoiceName(iVoiceB - 32));
         DXB.GetVoice(iVoiceB - 32, DX7_VCED_B);
         DXBs.GetSupplement(iVoiceB - 32, DX7II_ACED_B);
+        perg := DX7II_ACED_B.Get_ACED_Params.Pitch_EG_Range;
+        ams1 := DX7II_ACED_B.Get_ACED_Params.OP1_AM_Sensitivity;
+        ams2 := DX7II_ACED_B.Get_ACED_Params.OP2_AM_Sensitivity;
+        ams3 := DX7II_ACED_B.Get_ACED_Params.OP3_AM_Sensitivity;
+        ams4 := DX7II_ACED_B.Get_ACED_Params.OP4_AM_Sensitivity;
+        ams5 := DX7II_ACED_B.Get_ACED_Params.OP5_AM_Sensitivity;
+        ams6 := DX7II_ACED_B.Get_ACED_Params.OP6_AM_Sensitivity;
+        DX7_VCED_B.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
       end;
       MDX.LoadVoiceToTG(2, DX7_VCED_B.Get_VCED_Params);
       MDX_TG2.Set_PCEDx_Params(LoadDX7IIACEDPCEDtoPCEDx(False,
@@ -1587,6 +1709,9 @@ var
   i: integer;
   sName: string;
   sPath: string;
+
+  perg, ams1, ams2, ams3, ams4, ams5, ams6: byte;
+
 begin
   msFoundPosition := 0;
 
@@ -1902,24 +2027,56 @@ begin
       WriteLn('1: Bank A1, Voice ' + IntToStr(iVoiceA + 1) + ' - ' + DXA32.GetVoiceName(iVoiceA + 1));
       DXA32.GetVoice(iVoiceA + 1, DX7_VCED_A);
       DXA32s.GetSupplement(iVoiceA + 1, DX7II_ACED_A);
+      perg := DX7II_ACED_A.Get_ACED_Params.Pitch_EG_Range;
+      ams1 := DX7II_ACED_A.Get_ACED_Params.OP1_AM_Sensitivity;
+      ams2 := DX7II_ACED_A.Get_ACED_Params.OP2_AM_Sensitivity;
+      ams3 := DX7II_ACED_A.Get_ACED_Params.OP3_AM_Sensitivity;
+      ams4 := DX7II_ACED_A.Get_ACED_Params.OP4_AM_Sensitivity;
+      ams5 := DX7II_ACED_A.Get_ACED_Params.OP5_AM_Sensitivity;
+      ams6 := DX7II_ACED_A.Get_ACED_Params.OP6_AM_Sensitivity;
+      DX7_VCED_A.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
     end;
     if (iVoiceA > 31) and (iVoiceA < 64) then
     begin
       WriteLn('1: Bank A2, Voice ' + IntToStr(iVoiceA - 31) + ' - ' + DXA64.GetVoiceName(iVoiceA - 31));
       DXA64.GetVoice(iVoiceA - 31, DX7_VCED_A);
       DXA64s.GetSupplement(iVoiceA - 31, DX7II_ACED_A);
+      perg := DX7II_ACED_A.Get_ACED_Params.Pitch_EG_Range;
+      ams1 := DX7II_ACED_A.Get_ACED_Params.OP1_AM_Sensitivity;
+      ams2 := DX7II_ACED_A.Get_ACED_Params.OP2_AM_Sensitivity;
+      ams3 := DX7II_ACED_A.Get_ACED_Params.OP3_AM_Sensitivity;
+      ams4 := DX7II_ACED_A.Get_ACED_Params.OP4_AM_Sensitivity;
+      ams5 := DX7II_ACED_A.Get_ACED_Params.OP5_AM_Sensitivity;
+      ams6 := DX7II_ACED_A.Get_ACED_Params.OP6_AM_Sensitivity;
+      DX7_VCED_A.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
     end;
     if (iVoiceA > 63) and (iVoiceA < 96) then
     begin
       WriteLn('1: Bank B1, Voice ' + IntToStr(iVoiceA - 63) + ' - ' + DXB32.GetVoiceName(iVoiceA - 63));
       DXB32.GetVoice(iVoiceA - 63, DX7_VCED_A);
       DXB32s.GetSupplement(iVoiceA - 63, DX7II_ACED_A);
+      perg := DX7II_ACED_A.Get_ACED_Params.Pitch_EG_Range;
+      ams1 := DX7II_ACED_A.Get_ACED_Params.OP1_AM_Sensitivity;
+      ams2 := DX7II_ACED_A.Get_ACED_Params.OP2_AM_Sensitivity;
+      ams3 := DX7II_ACED_A.Get_ACED_Params.OP3_AM_Sensitivity;
+      ams4 := DX7II_ACED_A.Get_ACED_Params.OP4_AM_Sensitivity;
+      ams5 := DX7II_ACED_A.Get_ACED_Params.OP5_AM_Sensitivity;
+      ams6 := DX7II_ACED_A.Get_ACED_Params.OP6_AM_Sensitivity;
+      DX7_VCED_A.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
     end;
     if (iVoiceA > 95) and (iVoiceA < 128) then
     begin
       WriteLn('1: Bank B2, Voice ' + IntToStr(iVoiceA - 95) + ' - ' + DXB64.GetVoiceName(iVoiceA - 95));
       DXB64.GetVoice(iVoiceA - 95, DX7_VCED_A);
       DXB64s.GetSupplement(iVoiceA - 95, DX7II_ACED_A);
+      perg := DX7II_ACED_A.Get_ACED_Params.Pitch_EG_Range;
+      ams1 := DX7II_ACED_A.Get_ACED_Params.OP1_AM_Sensitivity;
+      ams2 := DX7II_ACED_A.Get_ACED_Params.OP2_AM_Sensitivity;
+      ams3 := DX7II_ACED_A.Get_ACED_Params.OP3_AM_Sensitivity;
+      ams4 := DX7II_ACED_A.Get_ACED_Params.OP4_AM_Sensitivity;
+      ams5 := DX7II_ACED_A.Get_ACED_Params.OP5_AM_Sensitivity;
+      ams6 := DX7II_ACED_A.Get_ACED_Params.OP6_AM_Sensitivity;
+      DX7_VCED_A.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
     end;
 
     MDX.LoadVoiceToTG(1, DX7_VCED_A.Get_VCED_Params);
@@ -1943,25 +2100,57 @@ begin
       begin
         WriteLn('2: Bank A1, Voice ' + IntToStr(iVoiceB + 1) + ' - ' + DXA32.GetVoiceName(iVoiceB + 1));
         DXA32.GetVoice(iVoiceB + 1, DX7_VCED_B);
-        DXA32s.GetSupplement(iVoiceB + 1, DX7II_ACED_A);
+        DXA32s.GetSupplement(iVoiceB + 1, DX7II_ACED_B);
+        perg := DX7II_ACED_B.Get_ACED_Params.Pitch_EG_Range;
+        ams1 := DX7II_ACED_B.Get_ACED_Params.OP1_AM_Sensitivity;
+        ams2 := DX7II_ACED_B.Get_ACED_Params.OP2_AM_Sensitivity;
+        ams3 := DX7II_ACED_B.Get_ACED_Params.OP3_AM_Sensitivity;
+        ams4 := DX7II_ACED_B.Get_ACED_Params.OP4_AM_Sensitivity;
+        ams5 := DX7II_ACED_B.Get_ACED_Params.OP5_AM_Sensitivity;
+        ams6 := DX7II_ACED_B.Get_ACED_Params.OP6_AM_Sensitivity;
+        DX7_VCED_B.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
       end;
       if (iVoiceB > 31) and (iVoiceB < 64) then
       begin
         WriteLn('2: Bank A2, Voice ' + IntToStr(iVoiceB - 31) + ' - ' + DXA64.GetVoiceName(iVoiceB - 31));
         DXA64.GetVoice(iVoiceB - 31, DX7_VCED_B);
-        DXA64s.GetSupplement(iVoiceB - 31, DX7II_ACED_A);
+        DXA64s.GetSupplement(iVoiceB - 31, DX7II_ACED_B);
+        perg := DX7II_ACED_B.Get_ACED_Params.Pitch_EG_Range;
+        ams1 := DX7II_ACED_B.Get_ACED_Params.OP1_AM_Sensitivity;
+        ams2 := DX7II_ACED_B.Get_ACED_Params.OP2_AM_Sensitivity;
+        ams3 := DX7II_ACED_B.Get_ACED_Params.OP3_AM_Sensitivity;
+        ams4 := DX7II_ACED_B.Get_ACED_Params.OP4_AM_Sensitivity;
+        ams5 := DX7II_ACED_B.Get_ACED_Params.OP5_AM_Sensitivity;
+        ams6 := DX7II_ACED_B.Get_ACED_Params.OP6_AM_Sensitivity;
+        DX7_VCED_B.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
       end;
       if (iVoiceB > 63) and (iVoiceB < 96) then
       begin
         WriteLn('2: Bank B1, Voice ' + IntToStr(iVoiceB - 63) + ' - ' + DXB32.GetVoiceName(iVoiceB - 63));
         DXB32.GetVoice(iVoiceB - 63, DX7_VCED_B);
-        DXB32s.GetSupplement(iVoiceB - 63, DX7II_ACED_A);
+        DXB32s.GetSupplement(iVoiceB - 63, DX7II_ACED_B);
+        perg := DX7II_ACED_B.Get_ACED_Params.Pitch_EG_Range;
+        ams1 := DX7II_ACED_B.Get_ACED_Params.OP1_AM_Sensitivity;
+        ams2 := DX7II_ACED_B.Get_ACED_Params.OP2_AM_Sensitivity;
+        ams3 := DX7II_ACED_B.Get_ACED_Params.OP3_AM_Sensitivity;
+        ams4 := DX7II_ACED_B.Get_ACED_Params.OP4_AM_Sensitivity;
+        ams5 := DX7II_ACED_B.Get_ACED_Params.OP5_AM_Sensitivity;
+        ams6 := DX7II_ACED_B.Get_ACED_Params.OP6_AM_Sensitivity;
+        DX7_VCED_B.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
       end;
       if (iVoiceB > 95) and (iVoiceB < 128) then
       begin
         WriteLn('2: Bank B2, Voice ' + IntToStr(iVoiceB - 95) + ' - ' + DXB64.GetVoiceName(iVoiceB - 95));
         DXB64.GetVoice(iVoiceB - 95, DX7_VCED_B);
-        DXB64s.GetSupplement(iVoiceB - 95, DX7II_ACED_A);
+        DXB64s.GetSupplement(iVoiceB - 95, DX7II_ACED_B);
+        perg := DX7II_ACED_B.Get_ACED_Params.Pitch_EG_Range;
+        ams1 := DX7II_ACED_B.Get_ACED_Params.OP1_AM_Sensitivity;
+        ams2 := DX7II_ACED_B.Get_ACED_Params.OP2_AM_Sensitivity;
+        ams3 := DX7II_ACED_B.Get_ACED_Params.OP3_AM_Sensitivity;
+        ams4 := DX7II_ACED_B.Get_ACED_Params.OP4_AM_Sensitivity;
+        ams5 := DX7II_ACED_B.Get_ACED_Params.OP5_AM_Sensitivity;
+        ams6 := DX7II_ACED_B.Get_ACED_Params.OP6_AM_Sensitivity;
+        DX7_VCED_B.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
       end;
 
       MDX.LoadVoiceToTG(2, DX7_VCED_B.Get_VCED_Params);

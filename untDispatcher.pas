@@ -50,9 +50,16 @@ begin
     WriteLn('It is a DX7II "big" dump');
     ConvertBigDX7IItoMDX(ABank, ANumber);
   end;
+  if (VMEM in ms) and (LMPMEM in ms) and not (AMEM in ms) then
+  begin
+    WriteLn('It is a INCOMPLETE DX7II "big" dump');
+    WriteLn('Do not expect wonders from this conversion');
+    ConvertBigDX7IItoMDX(ABank, ANumber);
+  end;
   if (VMEM in ms) and (PMEM802 in ms) and (AMEM in ms) then
   begin
     WriteLn('It is a TX802 "big" dump');
+    WriteLn('Not yet supported');
     //ConvertTX7toMDX(ABank);
   end;
   msBank.Free;
