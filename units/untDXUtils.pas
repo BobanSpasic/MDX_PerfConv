@@ -110,11 +110,9 @@ const
   abSysEx6Type: array [0..6] of byte = ($00, $01, $02, $05, $06, $09, $7E);
   abSysEx4Type: array [0..2] of byte = ($03, $04, $7E);
 
-function ContainsDX_SixOP_Data(dmp: TMemoryStream; var StartPos: integer;
-  const Report: TStrings): boolean;
+function ContainsDX_SixOP_Data(dmp: TMemoryStream; var StartPos: integer; const Report: TStrings): boolean;
 function ContainsDX_SixOP_MemSet(dmp: TMemoryStream): MemSet;
-function FindDX_SixOP_MEM(mm: MEMS6; dmp: TMemoryStream;
-  var SearchStartPos, FoundPos: integer): boolean;
+function FindDX_SixOP_MEM(mm: MEMS6; dmp: TMemoryStream; var SearchStartPos, FoundPos: integer): boolean;
 
 function Printable(c: char): char;
 function VCEDHexToStream(aHex: string; var aStream: TMemoryStream): boolean;
@@ -136,14 +134,14 @@ begin
 end;
 
 {$IF FPC_FULLVERSION <= 30200}
-function IntToHex(Value: Integer): string; overload;
+function IntToHex(Value: integer): string; overload;
 begin
   Result := IntToHex(Value, 2);
 end;
+
 {$ENDIF}
 
-function ContainsDX_SixOP_Data(dmp: TMemoryStream; var StartPos: integer;
-  const Report: TStrings): boolean;
+function ContainsDX_SixOP_Data(dmp: TMemoryStream; var StartPos: integer; const Report: TStrings): boolean;
 var
   rHeader: TDXSysExHeader;
   iDumpStart: integer; // position of $F0
@@ -174,7 +172,7 @@ begin
         rHeader.f := dmp.ReadByte;
         rHeader.msb := dmp.ReadByte;
         rHeader.lsb := dmp.ReadByte;
-        if rHeader.f in abSysEx6Type then
+        if (rHeader.f in abSysEx6Type) and (((rHeader.sc shr 4) and 7) = 0) then
         begin
           StartPos := dmp.Position;
           if rHeader.f = $00 then
@@ -223,52 +221,63 @@ begin
         end
         else
         begin
-          Report.Add('Unknown Yamaha DX dump type: ' + IntToStr(rHeader.f));
-          bUnknown := True;
-        end;
-        iDataSize := (rHeader.msb shl 7) + rHeader.lsb;
-        Report.Add('Calculated data size: ' + IntToStr(iDataSize));
-        if (iDumpStart + iDataSize + 8) <= dmp.Size then
-        begin
-          //TX802 has no F7 at the PMEM block end
-          iDumpEnd := PosBytes($F7, dmp, iDumpStart + 1);
-          if iDumpEnd = -1 then iDumpEnd := dmp.Size;
-          Report.Add('Real data size: ' + IntToStr(iDumpEnd - iDumpStart - 7));
-          if iDumpEnd = (iDumpStart + iDataSize + 7) then
+          if ((rHeader.sc shr 4) and 7) = 0 then
           begin
-            dmp.Position := iDumpEnd - 1;
-            rHeader.chk := dmp.ReadByte;
-            iCalcChk := 0;
-            dmp.Position := iDumpStart + 6;
-            for i := 1 to iDataSize do
-              iCalcChk := iCalcChk + dmp.ReadByte;
-            iCalcChk := ((not (iCalcChk and 255)) and 127) + 1;
-            if (rHeader.chk = iCalcChk) or (rHeader.chk = 0) then
+            Report.Add('Unknown Yamaha DX dump type: ' + IntToStr(rHeader.f));
+            bUnknown := True;
+          end
+          else
+            Report.Add('Dump request or direct data change found at position ' + IntToStr(dmp.Position));
+        end;
+        if ((rHeader.sc shr 4) and 7) = 0 then  //do just for dumps, but not for dump requests and direct data changes
+        begin
+          iDataSize := (rHeader.msb shl 7) + rHeader.lsb;
+          Report.Add('Calculated data size: ' + IntToStr(iDataSize));
+          if (iDumpStart + iDataSize + 8) <= dmp.Size then
+          begin
+            //TX802 has no F7 at the PMEM block end
+            iDumpEnd := PosBytes($F7, dmp, iDumpStart + 1);
+            if iDumpEnd = -1 then iDumpEnd := dmp.Size;
+            Report.Add('Real data size: ' + IntToStr(iDumpEnd - iDumpStart - 7));
+            if iDumpEnd = (iDumpStart + iDataSize + 7) then
             begin
-              Report.Add('Checksum match');
-              Result := True;
+              dmp.Position := iDumpEnd - 1;
+              rHeader.chk := dmp.ReadByte;
+              iCalcChk := 0;
+              dmp.Position := iDumpStart + 6;
+              for i := 1 to iDataSize do
+                iCalcChk := iCalcChk + dmp.ReadByte;
+              iCalcChk := ((not (iCalcChk and 255)) and 127) + 1;
+              if (rHeader.chk = iCalcChk) or (rHeader.chk = 0) then
+              begin
+                Report.Add('Checksum match');
+                Result := True;
+              end
+              else
+              begin
+                Report.Add('Checksum mismatch');
+                Result := False;
+              end;
             end
             else
             begin
-              Report.Add('Checksum mismatch');
-              Result := False;
+              Report.Add('Data size mismatch');
             end;
+            iRep := iDumpEnd + 1;
           end
           else
           begin
-            Report.Add('Data size mismatch');
+            if not bUnknown then
+            begin
+              Report.Add('File too short');
+              Exit;
+            end
+            else
+              Inc(iRep);
           end;
-          iRep := iDumpEnd + 1;
         end
         else
-        begin
-          if not bUnknown then
-          begin
-            Report.Add('File too short');
-            Exit;
-          end
-          else inc(iRep);
-        end;
+          Inc(iRep);
       end
       else
       begin
@@ -341,18 +350,17 @@ begin
           iRep := iDumpEnd + 1;
         end
         else
-          inc(iRep);
-          //exit;
+          Inc(iRep);
+        //exit;
       end;
     end;
   end;
 end;
 
-function FindDX_SixOP_MEM(mm: MEMS6; dmp: TMemoryStream;
-  var SearchStartPos, FoundPos: integer): boolean;
+function FindDX_SixOP_MEM(mm: MEMS6; dmp: TMemoryStream; var SearchStartPos, FoundPos: integer): boolean;
 var
   rHeader: TDXSysExHeader;
-  i:integer;
+  i: integer;
 begin
   if SearchStartPos <= dmp.Size then
   begin
@@ -442,8 +450,9 @@ begin
     begin
       Result := True;
       if (mm = LMPMEM) or (mm = PMEM802) then
-      FoundPos := SearchStartPos + 16 else
-      FoundPos := SearchStartPos + 6;
+        FoundPos := SearchStartPos + 16
+      else
+        FoundPos := SearchStartPos + 6;
     end
     else
     begin

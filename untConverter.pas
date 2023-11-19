@@ -21,13 +21,12 @@ uses
   untMDXSupplement, untDX7IIPerformance, untDX7IIPerformanceBank,
   untDXUtils, untParConst, Math, untUtils, untTX802Performance, untTX802PerformanceBank;
 
-procedure ConvertTX7toMDX(ABank: string; ANumber: integer);
-procedure ConvertDX7IItoMDX(ABank: string; ANumber: integer);
-procedure ConvertDX7IItoMDX(ABankA, ABankB, APerf: string; ANumber: integer); overload;
-procedure ConvertDX5toMDX(ABankA1, ABankB1, ABankA2, ABankB2, APerf: string; ANumber: integer);
-procedure ConvertTX802ToMDX(ABankA1, ABankA2, ABankB1, ABankB2, APerf: string; ANumber: integer);
-procedure ConvertBigDX7IItoMDX(ABankA: string; ANumber: integer);
-procedure Convert2BigDX7IItoMDX(ABankA, ABankB: string; ANumber: integer);
+procedure ConvertTX7toMDX(var ms: TMemoryStream; APath: string; ANumber: integer; AVerbose: boolean);                        // VMEM + PMEM 1-32
+procedure ConvertDX7IItoMDX(var ms: TMemoryStream; APath: string; ANumber: integer; AVerbose: boolean);                      // VMEM + AMEM 1-32
+procedure ConvertDX5toMDX(var ms: TMemoryStream; APath: string; ANumber: integer; AVerbose: boolean);                        // 4xVMEM, PMEM
+procedure ConvertTX802ToMDX(var ms: TMemoryStream; APath: string; ANumber: integer; AVerbose: boolean);                      // 4xVMEM, 4xAMEM, 2xPMEM
+procedure ConvertBigDX7IItoMDX(var ms: TMemoryStream; APath: string; ANumber: integer; AVerbose: boolean);                   // 2xVMEM, 2xAMEM, 1xPMEM
+procedure Convert2BigDX7IItoMDX(var msA1, msB1: TMemoryStream; APathA, APathB: string; ANumber: integer; AVerbose: boolean); // 4xVMEM, 4xAMEM, 2xPMEM
 
 implementation
 
@@ -430,9 +429,8 @@ begin
   Result := sup;
 end;
 
-procedure ConvertTX7toMDX(ABank: string; ANumber: integer);
+procedure ConvertTX7toMDX(var ms: TMemoryStream; APath: string; ANumber: integer; AVerbose: boolean);
 var
-  ms: TMemoryStream;
   DX: TDX7BankContainer;
   TX7: TTX7FunctBankContainer;
   MDX: TMDXPerformanceContainer;
@@ -451,9 +449,6 @@ begin
   msSearchPosition := 0;
   msFoundPosition := 0;
 
-  ms := TMemoryStream.Create;
-  ms.LoadFromFile(ABank);
-
   DX := TDX7BankContainer.Create;
   TX7 := TTX7FunctBankContainer.Create;
   MDX := TMDXPerformanceContainer.Create;
@@ -461,19 +456,21 @@ begin
   begin
     DX.LoadBankFromStream(ms, msFoundPosition);
     WriteLn('VMEM loaded from ' + IntToStr(msFoundPosition));
-    for i := 1 to 32 do
-      WriteLn(DX.GetVoiceName(i));
+    if AVerbose then
+      for i := 1 to 32 do
+        WriteLn(DX.GetVoiceName(i));
   end;
   msSearchPosition := 0;
   if FindDX_SixOP_MEM(PMEM, ms, msSearchPosition, msFoundPosition) then
   begin
     TX7.LoadFunctBankFromStream(ms, msFoundPosition);
     WriteLn('PMEM loaded from ' + IntToStr(msFoundPosition));
-    for i := 1 to 32 do
-      WriteLn(TX7.GetFunctionName(i));
+    if AVerbose then
+      for i := 1 to 32 do
+        WriteLn(TX7.GetFunctionName(i));
   end;
 
-  sPath := ExtractFilePath(ABank);
+  sPath := ExtractFilePath(APath);
   if sPath = '' then sPath := GetCurrentDir;
   WriteLn('');
   WriteLn('Writting to the directory ' + sPath);
@@ -488,7 +485,7 @@ begin
     MDX.FMDX_Params.General.Origin := 'Conversion from TX7 Performances';
 
     sName := Format('%.6d', [i + ANumber]) + '_' +
-      Trim(ExtractFileNameWithoutExt(ExtractFileName(ABank)));
+      Trim(ExtractFileNameWithoutExt(ExtractFileName(APath)));
     sName := copy(sName, 1, 19) + '_' + IntToStr(i);
 
     for j := 1 to 8 do
@@ -512,15 +509,13 @@ begin
     end;
   end;
 
-  ms.Free;
   DX.Free;
   TX7.Free;
   MDX.Free;
 end;
 
-procedure ConvertDX7IItoMDX(ABank: string; ANumber: integer);
+procedure ConvertDX7IItoMDX(var ms: TMemoryStream; APath: string; ANumber: integer; AVerbose: boolean);
 var
-  ms: TMemoryStream;
   DX7: TDX7BankContainer;
   DX7II: TDX7IISupplBankContainer;
   MDX: TMDXPerformanceContainer;
@@ -542,9 +537,6 @@ begin
   msSearchPosition := 0;
   msFoundPosition := 0;
 
-  ms := TMemoryStream.Create;
-  ms.LoadFromFile(ABank);
-
   DX7 := TDX7BankContainer.Create;
   DX7II := TDX7IISupplBankContainer.Create;
   MDX := TMDXPerformanceContainer.Create;
@@ -552,8 +544,9 @@ begin
   begin
     DX7.LoadBankFromStream(ms, msFoundPosition);
     WriteLn('VMEM loaded from ' + IntToStr(msFoundPosition));
-    for i := 1 to 32 do
-      WriteLn(DX7.GetVoiceName(i));
+    if AVerbose then
+      for i := 1 to 32 do
+        WriteLn(DX7.GetVoiceName(i));
   end;
   msSearchPosition := 0;
   if FindDX_SixOP_MEM(AMEM, ms, msSearchPosition, msFoundPosition) then
@@ -562,7 +555,7 @@ begin
     WriteLn('AMEM loaded from ' + IntToStr(msFoundPosition));
   end;
 
-  sPath := ExtractFilePath(ABank);
+  sPath := ExtractFilePath(APath);
   if sPath = '' then sPath := GetCurrentDir;
   WriteLn('');
   WriteLn('Writting to the directory ' + sPath);
@@ -578,7 +571,7 @@ begin
     MDX.FMDX_Params.General.Origin := 'Conversion from DX7II Voices';
 
     sName := Format('%.6d', [i + ANumber + 1]) + '_' +
-      Trim(ExtractFileNameWithoutExt(ExtractFileName(ABank)));
+      Trim(ExtractFileNameWithoutExt(ExtractFileName(APath)));
     sName := copy(sName, 1, 19) + '_' + IntToStr(i);
 
     for j := 1 to 8 do
@@ -610,19 +603,13 @@ begin
     end;
   end;
 
-  ms.Free;
   DX7.Free;
   DX7II.Free;
   MDX.Free;
 end;
 
-procedure ConvertDX5toMDX(ABankA1, ABankB1, ABankA2, ABankB2, APerf: string; ANumber: integer);
+procedure ConvertDX5toMDX(var ms: TMemoryStream; APath: string; ANumber: integer; AVerbose: boolean);
 var
-  msA1: TMemoryStream;
-  msB1: TMemoryStream;
-  msA2: TMemoryStream;
-  msB2: TMemoryStream;
-  msP: TMemoryStream;
   DXA1: TDX7BankContainer;
   DXB1: TDX7BankContainer;
   DXA2: TDX7BankContainer;
@@ -645,17 +632,6 @@ var
 begin
   msFoundPosition := 0;
 
-  msA1 := TMemoryStream.Create;
-  msA1.LoadFromFile(ABankA1);
-  msB1 := TMemoryStream.Create;
-  msB1.LoadFromFile(ABankB1);
-  msA2 := TMemoryStream.Create;
-  msA2.LoadFromFile(ABankA2);
-  msB2 := TMemoryStream.Create;
-  msB2.LoadFromFile(ABankB2);
-  msP := TMemoryStream.Create;
-  msP.LoadFromFile(APerf);
-
   DXA1 := TDX7BankContainer.Create;
   DXB1 := TDX7BankContainer.Create;
   DXA2 := TDX7BankContainer.Create;
@@ -664,51 +640,56 @@ begin
   MDX := TMDXPerformanceContainer.Create;
 
   msSearchPosition := 0;
-  if FindDX_SixOP_MEM(VMEM, msA1, msSearchPosition, msFoundPosition) then
+  if FindDX_SixOP_MEM(VMEM, ms, msSearchPosition, msFoundPosition) then
   begin
-    DXA1.LoadBankFromStream(msA1, msFoundPosition);
+    DXA1.LoadBankFromStream(ms, msFoundPosition);
     WriteLn('VMEM loaded from ' + IntToStr(msFoundPosition));
-    for i := 1 to 32 do
-      WriteLn(DXA1.GetVoiceName(i));
+    if AVerbose then
+      for i := 1 to 32 do
+        WriteLn(DXA1.GetVoiceName(i));
+  end;
+
+  msSearchPosition := msFoundPosition;
+  if FindDX_SixOP_MEM(VMEM, ms, msSearchPosition, msFoundPosition) then
+  begin
+    DXB1.LoadBankFromStream(ms, msFoundPosition);
+    WriteLn('VMEM loaded from ' + IntToStr(msFoundPosition));
+    if AVerbose then
+      for i := 1 to 32 do
+        WriteLn(DXB1.GetVoiceName(i));
+  end;
+
+  msSearchPosition := msFoundPosition;
+  if FindDX_SixOP_MEM(VMEM, ms, msSearchPosition, msFoundPosition) then
+  begin
+    DXA2.LoadBankFromStream(ms, msFoundPosition);
+    WriteLn('VMEM loaded from ' + IntToStr(msFoundPosition));
+    if AVerbose then
+      for i := 1 to 32 do
+        WriteLn(DXA2.GetVoiceName(i));
+  end;
+
+  msSearchPosition := msFoundPosition;
+  if FindDX_SixOP_MEM(VMEM, ms, msSearchPosition, msFoundPosition) then
+  begin
+    DXB2.LoadBankFromStream(ms, msFoundPosition);
+    WriteLn('VMEM loaded from ' + IntToStr(msFoundPosition));
+    if AVerbose then
+      for i := 1 to 32 do
+        WriteLn(DXB2.GetVoiceName(i));
   end;
 
   msSearchPosition := 0;
-  if FindDX_SixOP_MEM(VMEM, msB1, msSearchPosition, msFoundPosition) then
+  if FindDX_SixOP_MEM(PMEM, ms, msSearchPosition, msFoundPosition) then
   begin
-    DXB1.LoadBankFromStream(msB1, msFoundPosition);
-    WriteLn('VMEM loaded from ' + IntToStr(msFoundPosition));
-    for i := 1 to 32 do
-      WriteLn(DXB1.GetVoiceName(i));
-  end;
-
-  msSearchPosition := 0;
-  if FindDX_SixOP_MEM(VMEM, msA2, msSearchPosition, msFoundPosition) then
-  begin
-    DXA2.LoadBankFromStream(msA2, msFoundPosition);
-    WriteLn('VMEM loaded from ' + IntToStr(msFoundPosition));
-    for i := 1 to 32 do
-      WriteLn(DXA2.GetVoiceName(i));
-  end;
-
-  msSearchPosition := 0;
-  if FindDX_SixOP_MEM(VMEM, msB2, msSearchPosition, msFoundPosition) then
-  begin
-    DXB2.LoadBankFromStream(msB2, msFoundPosition);
-    WriteLn('VMEM loaded from ' + IntToStr(msFoundPosition));
-    for i := 1 to 32 do
-      WriteLn(DXB2.GetVoiceName(i));
-  end;
-
-  msSearchPosition := 0;
-  if FindDX_SixOP_MEM(PMEM, msP, msSearchPosition, msFoundPosition) then
-  begin
-    TX7.LoadFunctBankFromStream(msP, msFoundPosition);
+    TX7.LoadFunctBankFromStream(ms, msFoundPosition);
     WriteLn('PMEM loaded from ' + IntToStr(msFoundPosition));
-    for i := 1 to 64 do
-      WriteLn(TX7.GetFunctionName(i));
+    if AVerbose then
+      for i := 1 to 64 do
+        WriteLn(TX7.GetFunctionName(i));
   end;
 
-  sPath := ExtractFilePath(APerf);
+  sPath := ExtractFilePath(APath);
   if sPath = '' then sPath := GetCurrentDir;
   WriteLn('Writting to the directory ' + sPath);
 
@@ -795,11 +776,6 @@ begin
     MDX_TG2.Free;
   end;
 
-  msA1.Free;
-  msB1.Free;
-  msA2.Free;
-  msB2.Free;
-  msP.Free;
   DXA1.Free;
   DXB1.Free;
   DXA2.Free;
@@ -808,282 +784,8 @@ begin
   MDX.Free;
 end;
 
-procedure ConvertDX7IItoMDX(ABankA, ABankB, APerf: string; ANumber: integer); overload;
+procedure ConvertTX802ToMDX(var ms: TMemoryStream; APath: string; ANumber: integer; AVerbose: boolean);
 var
-  msA: TMemoryStream;
-  msB: TMemoryStream;
-  msP: TMemoryStream;
-  DXA: TDX7BankContainer;
-  DXB: TDX7BankContainer;
-  DXAs: TDX7IISupplBankContainer;
-  DXBs: TDX7IISupplBankContainer;
-  DX7II: TDX7IIPerfBankContainer;
-  MDX: TMDXPerformanceContainer;
-
-  DX7_VCED_A: TDX7VoiceContainer;
-  DX7_VCED_B: TDX7VoiceContainer;
-  DX7II_ACED_A: TDX7IISupplementContainer;
-  DX7II_ACED_B: TDX7IISupplementContainer;
-  DX7II_PCED: TDX7IIPerformanceContainer;
-  MDX_TG1: TMDXSupplementContainer;
-  MDX_TG2: TMDXSupplementContainer;
-
-  Params: TDX7II_PCED_Params;
-  iVoiceA: integer;
-  iVoiceB: integer;
-
-  msSearchPosition: integer;
-  msFoundPosition: integer;
-
-  i: integer;
-  sName: string;
-  sPath: string;
-
-  perg, ams1, ams2, ams3, ams4, ams5, ams6: byte;
-
-begin
-  msFoundPosition := 0;
-
-  msA := TMemoryStream.Create;
-  msA.LoadFromFile(ABankA);
-  msB := TMemoryStream.Create;
-  msB.LoadFromFile(ABankB);
-  msP := TMemoryStream.Create;
-  msP.LoadFromFile(APerf);
-
-  DXA := TDX7BankContainer.Create;
-  DXB := TDX7BankContainer.Create;
-  DXAs := TDX7IISupplBankContainer.Create;
-  DXBs := TDX7IISupplBankContainer.Create;
-  DX7II := TDX7IIPerfBankContainer.Create;
-  MDX := TMDXPerformanceContainer.Create;
-
-  msSearchPosition := 0;
-  if FindDX_SixOP_MEM(VMEM, msA, msSearchPosition, msFoundPosition) then
-  begin
-    DXA.LoadBankFromStream(msA, msFoundPosition);
-    WriteLn('');
-    WriteLn('VMEM A loaded from ' + ABankA + ' from position ' +
-      IntToStr(msFoundPosition));
-    {for i := 1 to 32 do
-      WriteLn(DXA.GetVoiceName(i));}
-  end;
-
-  msSearchPosition := 0;
-  if FindDX_SixOP_MEM(VMEM, msB, msSearchPosition, msFoundPosition) then
-  begin
-    DXB.LoadBankFromStream(msB, msFoundPosition);
-    WriteLn('');
-    WriteLn('VMEM B loaded from ' + ABankB + ' from position ' +
-      IntToStr(msFoundPosition));
-    {for i := 1 to 32 do
-      WriteLn(DXB.GetVoiceName(i));}
-  end;
-
-  msSearchPosition := 0;
-  if FindDX_SixOP_MEM(AMEM, msA, msSearchPosition, msFoundPosition) then
-  begin
-    DXAs.LoadSupplBankFromStream(msA, msFoundPosition);
-    WriteLn('');
-    WriteLn('AMEM A loaded from ' + ABankA + ' from position ' +
-      IntToStr(msFoundPosition));
-  end
-  else
-  begin
-    WriteLn('AMEM A not found, using INIT parameters');
-    DXAs.InitSupplBank;
-  end;
-
-  msSearchPosition := 0;
-  if FindDX_SixOP_MEM(AMEM, msB, msSearchPosition, msFoundPosition) then
-  begin
-    DXBs.LoadSupplBankFromStream(msB, msFoundPosition);
-    WriteLn('');
-    WriteLn('AMEM B loaded from ' + ABankB + ' from position ' +
-      IntToStr(msFoundPosition));
-  end
-  else
-  begin
-    WriteLn('AMEM B not found, using INIT parameters');
-    DXBs.InitSupplBank;
-  end;
-
-  msSearchPosition := 0;
-  if FindDX_SixOP_MEM(LMPMEM, msP, msSearchPosition, msFoundPosition) then
-  begin
-    DX7II.LoadPerfBankFromStream(msP, msFoundPosition);
-    WriteLn('');
-    WriteLn('LM_PMEM loaded from ' + APerf + ' from position ' +
-      IntToStr(msFoundPosition));
-    for i := 1 to 32 do
-      WriteLn(DX7II.GetPerformanceName(i));
-  end;
-
-  sPath := ExtractFilePath(APerf);
-  if sPath = '' then sPath := GetCurrentDir;
-  WriteLn('');
-  WriteLn('Writting to the directory ' + sPath);
-  WriteLn('');
-
-  for i := 1 to 32 do
-  begin
-    MDX.InitPerformance;
-    MDX.AllMIDIChToZero;
-    DX7_VCED_A := TDX7VoiceContainer.Create;
-    DX7_VCED_B := TDX7VoiceContainer.Create;
-    DX7II_ACED_A := TDX7IISupplementContainer.Create;
-    DX7II_ACED_B := TDX7IISupplementContainer.Create;
-    DX7II_PCED := TDX7IIPerformanceContainer.Create;
-    MDX_TG1 := TMDXSupplementContainer.Create;
-    MDX_TG2 := TMDXSupplementContainer.Create;
-
-    DX7II.GetPerformance(i, DX7II_PCED);
-    sName := Format('%.6d', [i + ANumber]) + '_' +
-      Trim(GetValidFileName(DX7II.GetPerformanceName(i)));
-    sName := copy(sName, 1, 21);
-
-    MDX.FMDX_Params.General.Name := DX7II.GetPerformanceName(i);
-    MDX.FMDX_Params.General.Category := 'Converted';
-    MDX.FMDX_Params.General.Origin := 'Conversion from DX7II Performances';
-
-    Params := DX7II_PCED.Get_PCED_Params;
-    iVoiceA := Params.VoiceANumber;
-    iVoiceB := Params.VoiceBNumber;
-
-    // 0 - 63 - Internal
-    // 64-127 - Cartridge
-    WriteLn('Voice A ' + IntToStr(iVoiceA) + ' ; ' + 'Voice B ' + IntToStr(iVoiceB));
-    if iVoiceA < 64 then iVoiceA := iVoiceA + 1
-    else
-    if iVoiceA > 63 then iVoiceA := iVoiceA - 63;
-    if iVoiceB < 64 then iVoiceB := iVoiceB + 1
-    else
-    if iVoiceB > 63 then iVoiceB := iVoiceB - 63;
-    //WriteLn('Voice A* ' + IntToStr(iVoiceA) + ' ; ' + 'Voice B* ' + IntToStr(iVoiceB));
-
-    if iVoiceA < 33 then
-    begin
-      WriteLn('1: Bank A, Voice ' + IntToStr(iVoiceA) + ' - ' + DXA.GetVoiceName(iVoiceA));
-      DXA.GetVoice(iVoiceA, DX7_VCED_A);
-      DXAs.GetSupplement(iVoiceA, DX7II_ACED_A);
-      perg := DX7II_ACED_A.Get_ACED_Params.Pitch_EG_Range;
-      ams1 := DX7II_ACED_A.Get_ACED_Params.OP1_AM_Sensitivity;
-      ams2 := DX7II_ACED_A.Get_ACED_Params.OP2_AM_Sensitivity;
-      ams3 := DX7II_ACED_A.Get_ACED_Params.OP3_AM_Sensitivity;
-      ams4 := DX7II_ACED_A.Get_ACED_Params.OP4_AM_Sensitivity;
-      ams5 := DX7II_ACED_A.Get_ACED_Params.OP5_AM_Sensitivity;
-      ams6 := DX7II_ACED_A.Get_ACED_Params.OP6_AM_Sensitivity;
-      DX7_VCED_A.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
-    end
-    else
-    begin
-      WriteLn('1: Bank B, Voice ' + IntToStr(iVoiceA - 32) + ' - ' + DXB.GetVoiceName(iVoiceA - 32));
-      DXB.GetVoice(iVoiceA - 32, DX7_VCED_A);
-      DXBs.GetSupplement(iVoiceA - 32, DX7II_ACED_A);
-      perg := DX7II_ACED_A.Get_ACED_Params.Pitch_EG_Range;
-      ams1 := DX7II_ACED_A.Get_ACED_Params.OP1_AM_Sensitivity;
-      ams2 := DX7II_ACED_A.Get_ACED_Params.OP2_AM_Sensitivity;
-      ams3 := DX7II_ACED_A.Get_ACED_Params.OP3_AM_Sensitivity;
-      ams4 := DX7II_ACED_A.Get_ACED_Params.OP4_AM_Sensitivity;
-      ams5 := DX7II_ACED_A.Get_ACED_Params.OP5_AM_Sensitivity;
-      ams6 := DX7II_ACED_A.Get_ACED_Params.OP6_AM_Sensitivity;
-      DX7_VCED_A.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
-    end;
-    MDX.LoadVoiceToTG(1, DX7_VCED_A.Get_VCED_Params);
-    MDX_TG1.Set_PCEDx_Params(LoadDX7IIACEDPCEDtoPCEDx(True, DX7II_ACED_A, DX7II_PCED));
-    MDX.LoadPCEDxToTG(1, MDX_TG1.Get_PCEDx_Params);
-    if iVoiceA < 33 then
-    begin
-      MDX.FMDX_Params.TG[1].BankNumberLSB := 1;
-      MDX.FMDX_Params.TG[1].VoiceNumber := iVoiceA;
-    end
-    else
-    begin
-      MDX.FMDX_Params.TG[1].BankNumberLSB := 2;
-      MDX.FMDX_Params.TG[1].VoiceNumber := iVoiceA - 32;
-    end;
-    MDX.FMDX_Params.TG[1].MIDIChannel := 1;
-
-    if Params.PerformanceLayerMode <> 0 then
-    begin
-      if iVoiceB < 33 then
-      begin
-        WriteLn('2: Bank A, Voice ' + IntToStr(iVoiceB) + ' - ' + DXA.GetVoiceName(iVoiceB));
-        DXA.GetVoice(iVoiceB, DX7_VCED_B);
-        DXAs.GetSupplement(iVoiceB, DX7II_ACED_B);
-        perg := DX7II_ACED_B.Get_ACED_Params.Pitch_EG_Range;
-        ams1 := DX7II_ACED_B.Get_ACED_Params.OP1_AM_Sensitivity;
-        ams2 := DX7II_ACED_B.Get_ACED_Params.OP2_AM_Sensitivity;
-        ams3 := DX7II_ACED_B.Get_ACED_Params.OP3_AM_Sensitivity;
-        ams4 := DX7II_ACED_B.Get_ACED_Params.OP4_AM_Sensitivity;
-        ams5 := DX7II_ACED_B.Get_ACED_Params.OP5_AM_Sensitivity;
-        ams6 := DX7II_ACED_B.Get_ACED_Params.OP6_AM_Sensitivity;
-        DX7_VCED_B.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
-      end
-      else
-      begin
-        WriteLn('2: Bank B, Voice ' + IntToStr(iVoiceB - 32) + ' - ' + DXA.GetVoiceName(iVoiceB - 32));
-        DXB.GetVoice(iVoiceB - 32, DX7_VCED_B);
-        DXBs.GetSupplement(iVoiceB - 32, DX7II_ACED_B);
-        perg := DX7II_ACED_B.Get_ACED_Params.Pitch_EG_Range;
-        ams1 := DX7II_ACED_B.Get_ACED_Params.OP1_AM_Sensitivity;
-        ams2 := DX7II_ACED_B.Get_ACED_Params.OP2_AM_Sensitivity;
-        ams3 := DX7II_ACED_B.Get_ACED_Params.OP3_AM_Sensitivity;
-        ams4 := DX7II_ACED_B.Get_ACED_Params.OP4_AM_Sensitivity;
-        ams5 := DX7II_ACED_B.Get_ACED_Params.OP5_AM_Sensitivity;
-        ams6 := DX7II_ACED_B.Get_ACED_Params.OP6_AM_Sensitivity;
-        DX7_VCED_B.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
-      end;
-      MDX.LoadVoiceToTG(2, DX7_VCED_B.Get_VCED_Params);
-      MDX_TG2.Set_PCEDx_Params(LoadDX7IIACEDPCEDtoPCEDx(False,
-        DX7II_ACED_B, DX7II_PCED));
-      MDX.LoadPCEDxToTG(2, MDX_TG2.Get_PCEDx_Params);
-      if iVoiceB < 33 then
-      begin
-        MDX.FMDX_Params.TG[2].BankNumberLSB := 1;
-        MDX.FMDX_Params.TG[2].VoiceNumber := iVoiceB;
-      end
-      else
-      begin
-        MDX.FMDX_Params.TG[2].BankNumberLSB := 2;
-        MDX.FMDX_Params.TG[2].VoiceNumber := iVoiceB - 32;
-      end;
-      MDX.FMDX_Params.TG[2].MIDIChannel := 1;
-
-    end;
-
-    WriteLn('Writting ' + sName + '.ini');
-    MDX.SavePerformanceToFile(IncludeTrailingPathDelimiter(sPath) +
-      sName + '.ini', False);
-
-    DX7_VCED_A.Free;
-    DX7_VCED_B.Free;
-    DX7II_ACED_A.Free;
-    DX7II_ACED_B.Free;
-    DX7II_PCED.Free;
-    MDX_TG1.Free;
-    MDX_TG2.Free;
-  end;
-
-  msA.Free;
-  msB.Free;
-  msP.Free;
-  DXA.Free;
-  DXB.Free;
-  DXAs.Free;
-  DXBs.Free;
-  DX7II.Free;
-  MDX.Free;
-end;
-
-procedure ConvertTX802ToMDX(ABankA1, ABankA2, ABankB1, ABankB2, APerf: string; ANumber: integer);
-var
-  msA1: TMemoryStream;
-  msB1: TMemoryStream;
-  msA2: TMemoryStream;
-  msB2: TMemoryStream;
-  msP: TMemoryStream;
-
   DXA1: TDX7BankContainer;
   DXB1: TDX7BankContainer;
   DXA1s: TDX7IISupplBankContainer;
@@ -1105,7 +807,8 @@ var
   iVoice: array [1..8] of integer;
 
   msSearchPosition: integer;
-  msFoundPosition: integer;
+  msFoundPositionV: integer;
+  msFoundPositionA: integer;
 
   i, j, t: integer;
   sName: string;
@@ -1114,18 +817,8 @@ var
   perg, ams1, ams2, ams3, ams4, ams5, ams6: byte;
 
 begin
-  msFoundPosition := 0;
-
-  msA1 := TMemoryStream.Create;
-  msA1.LoadFromFile(ABankA1);
-  msB1 := TMemoryStream.Create;
-  msB1.LoadFromFile(ABankB1);
-  msA2 := TMemoryStream.Create;
-  msA2.LoadFromFile(ABankA2);
-  msB2 := TMemoryStream.Create;
-  msB2.LoadFromFile(ABankB2);
-  msP := TMemoryStream.Create;
-  msP.LoadFromFile(APerf);
+  msFoundPositionV := 0;
+  msFoundPositionA := 0;
 
   DXA1 := TDX7BankContainer.Create;
   DXB1 := TDX7BankContainer.Create;
@@ -1145,97 +838,132 @@ begin
   MDX := TMDXPerformanceContainer.Create;
 
   msSearchPosition := 0;
-  if FindDX_SixOP_MEM(VMEM, msA1, msSearchPosition, msFoundPosition) then
+  if FindDX_SixOP_MEM(VMEM, ms, msSearchPosition, msFoundPositionV) then
   begin
-    DXA1.LoadBankFromStream(msA1, msFoundPosition);
+    DXA1.LoadBankFromStream(ms, msFoundPositionV);
     WriteLn('');
-    WriteLn('VMEM A1 loaded from ' + ABankA1 + ' from position ' +
-      IntToStr(msFoundPosition));
-    for i := 1 to 32 do
-      WriteLn(DXA1.GetVoiceName(i));
+    WriteLn('VMEM A1 loaded from position ' +
+      IntToStr(msFoundPositionV));
+    if AVerbose then
+      for i := 1 to 32 do
+        WriteLn(DXA1.GetVoiceName(i));
   end;
 
   msSearchPosition := 0;
-  if FindDX_SixOP_MEM(AMEM, msA1, msSearchPosition, msFoundPosition) then
+  if FindDX_SixOP_MEM(AMEM, ms, msSearchPosition, msFoundPositionA) then
   begin
-    DXA1s.LoadSupplBankFromStream(msA1, msFoundPosition);
+    DXA1s.LoadSupplBankFromStream(ms, msFoundPositionA);
     WriteLn('');
-    WriteLn('AMEM A1 loaded from ' + ABankA1 + ' from position ' +
-      IntToStr(msFoundPosition));
+    WriteLn('AMEM A1 loaded from position ' +
+      IntToStr(msFoundPositionA));
+  end;
+
+  msSearchPosition := msFoundPositionV;
+  if (msFoundPositionV <> - 1) and (FindDX_SixOP_MEM(VMEM, ms, msSearchPosition, msFoundPositionV)) then
+  begin
+    DXA2.LoadBankFromStream(ms, msFoundPositionV);
+    WriteLn('');
+    WriteLn('VMEM A2 loaded from position ' +
+      IntToStr(msFoundPositionV));
+    if AVerbose then
+      for i := 1 to 32 do
+        WriteLn(DXA2.GetVoiceName(i));
+  end
+  else
+  begin
+    WriteLn('VMEM A2 not found, using INIT parameters');
+    DXA2.InitBank;
+  end;
+
+  msSearchPosition := msFoundPositionA;
+  if (msFoundPositionA <> - 1) and (FindDX_SixOP_MEM(AMEM, ms, msSearchPosition, msFoundPositionA)) then
+  begin
+    DXA2s.LoadSupplBankFromStream(ms, msFoundPositionA);
+    WriteLn('');
+    WriteLn('AMEM A2 loaded from position ' +
+      IntToStr(msFoundPositionA));
+  end
+  else
+  begin
+    WriteLn('AMEM A2 not found, using INIT parameters');
+    DXA2s.InitSupplBank;
+  end;
+
+  msSearchPosition := msFoundPositionV;
+  if (msFoundPositionV <> - 1) and (FindDX_SixOP_MEM(VMEM, ms, msSearchPosition, msFoundPositionV)) then
+  begin
+    DXB1.LoadBankFromStream(ms, msFoundPositionV);
+    WriteLn('');
+    WriteLn('VMEM B1 loaded from position ' +
+      IntToStr(msFoundPositionV));
+    if AVerbose then
+      for i := 1 to 32 do
+        WriteLn(DXB1.GetVoiceName(i));
+  end
+  else
+  begin
+    WriteLn('VMEM B1 not found, using INIT parameters');
+    DXB1.InitBank;
+  end;
+
+  msSearchPosition := msFoundPositionA;
+  if (msFoundPositionA <> - 1) and (FindDX_SixOP_MEM(AMEM, ms, msSearchPosition, msFoundPositionA)) then
+  begin
+    DXB1s.LoadSupplBankFromStream(ms, msFoundPositionA);
+    WriteLn('');
+    WriteLn('AMEM B1 loaded from position ' +
+      IntToStr(msFoundPositionA));
+  end
+  else
+  begin
+    WriteLn('AMEM B1 not found, using INIT parameters');
+    DXB1s.InitSupplBank;
+  end;
+
+  msSearchPosition := msFoundPositionV;
+  if (msFoundPositionV <> - 1) and (FindDX_SixOP_MEM(VMEM, ms, msSearchPosition, msFoundPositionV)) then
+  begin
+    DXB2.LoadBankFromStream(ms, msFoundPositionV);
+    WriteLn('');
+    WriteLn('VMEM B2 loaded from position ' +
+      IntToStr(msFoundPositionV));
+    if AVerbose then
+      for i := 1 to 32 do
+        WriteLn(DXB2.GetVoiceName(i));
+  end
+  else
+  begin
+    WriteLn('VMEM B2 not found, using INIT parameters');
+    DXB2.InitBank;
+  end;
+
+  msSearchPosition := msFoundPositionA;
+  if (msFoundPositionA <> - 1) and (FindDX_SixOP_MEM(AMEM, ms, msSearchPosition, msFoundPositionA)) then
+  begin
+    DXB2s.LoadSupplBankFromStream(ms, msFoundPositionA);
+    WriteLn('');
+    WriteLn('AMEM B2 loaded from position ' +
+      IntToStr(msFoundPositionA));
+  end
+  else
+  begin
+    WriteLn('AMEM B2 not found, using INIT parameters');
+    DXB2s.InitSupplBank;
   end;
 
   msSearchPosition := 0;
-  if FindDX_SixOP_MEM(VMEM, msA2, msSearchPosition, msFoundPosition) then
+  if FindDX_SixOP_MEM(PMEM802, ms, msSearchPosition, msFoundPositionV) then
   begin
-    DXA2.LoadBankFromStream(msA2, msFoundPosition);
+    TX802.LoadPerfBankFromStream(ms, msFoundPositionV);
     WriteLn('');
-    WriteLn('VMEM A2 loaded from ' + ABankA2 + ' from position ' +
-      IntToStr(msFoundPosition));
-    for i := 1 to 32 do
-      WriteLn(DXA2.GetVoiceName(i));
+    WriteLn('PMEM802 loaded from position ' +
+      IntToStr(msFoundPositionV));
+    if AVerbose then
+      for i := 1 to 64 do
+        WriteLn(TX802.GetPerformanceName(i));
   end;
 
-  msSearchPosition := 0;
-  if FindDX_SixOP_MEM(AMEM, msA2, msSearchPosition, msFoundPosition) then
-  begin
-    DXA2s.LoadSupplBankFromStream(msA2, msFoundPosition);
-    WriteLn('');
-    WriteLn('AMEM A2 loaded from ' + ABankA2 + ' from position ' +
-      IntToStr(msFoundPosition));
-  end;
-
-  msSearchPosition := 0;
-  if FindDX_SixOP_MEM(VMEM, msB1, msSearchPosition, msFoundPosition) then
-  begin
-    DXB1.LoadBankFromStream(msB1, msFoundPosition);
-    WriteLn('');
-    WriteLn('VMEM B1 loaded from ' + ABankB1 + ' from position ' +
-      IntToStr(msFoundPosition));
-    for i := 1 to 32 do
-      WriteLn(DXB1.GetVoiceName(i));
-  end;
-
-  msSearchPosition := 0;
-  if FindDX_SixOP_MEM(AMEM, msB1, msSearchPosition, msFoundPosition) then
-  begin
-    DXB1s.LoadSupplBankFromStream(msB1, msFoundPosition);
-    WriteLn('');
-    WriteLn('AMEM B1 loaded from ' + ABankB1 + ' from position ' +
-      IntToStr(msFoundPosition));
-  end;
-
-  msSearchPosition := 0;
-  if FindDX_SixOP_MEM(VMEM, msB2, msSearchPosition, msFoundPosition) then
-  begin
-    DXB2.LoadBankFromStream(msB2, msFoundPosition);
-    WriteLn('');
-    WriteLn('VMEM B2 loaded from ' + ABankB2 + ' from position ' +
-      IntToStr(msFoundPosition));
-    for i := 1 to 32 do
-      WriteLn(DXB2.GetVoiceName(i));
-  end;
-
-  msSearchPosition := 0;
-  if FindDX_SixOP_MEM(AMEM, msB2, msSearchPosition, msFoundPosition) then
-  begin
-    DXB2s.LoadSupplBankFromStream(msB2, msFoundPosition);
-    WriteLn('');
-    WriteLn('AMEM B2 loaded from ' + ABankB2 + ' from position ' +
-      IntToStr(msFoundPosition));
-  end;
-
-  msSearchPosition := 0;
-  if FindDX_SixOP_MEM(PMEM802, msP, msSearchPosition, msFoundPosition) then
-  begin
-    TX802.LoadPerfBankFromStream(msP, msFoundPosition);
-    WriteLn('');
-    WriteLn('PMEM802 loaded from ' + APerf + ' from position ' +
-      IntToStr(msFoundPosition));
-    for i := 1 to 64 do
-      WriteLn(TX802.GetPerformanceName(i));
-  end;
-
-  sPath := ExtractFilePath(APerf);
+  sPath := ExtractFilePath(APath);
   if sPath = '' then sPath := GetCurrentDir;
   WriteLn('');
   WriteLn('Writting to the directory ' + sPath);
@@ -1277,6 +1005,27 @@ begin
     // 192 - 255 - Preset B
     for j := 1 to 8 do
     begin
+      if (iVoice[j] >= 0) and (iVoice[j] < 32) then
+      begin
+        //voice is from bank single bank file
+        t := iVoice[j];
+        iVoice[j] := iVoice[j] + 1;
+        DXA1.GetVoice(iVoice[j], DX7_VCED);
+        DXA1s.GetSupplement(iVoice[j], DX7II_ACED);
+        perg := DX7II_ACED.Get_ACED_Params.Pitch_EG_Range;
+        ams1 := DX7II_ACED.Get_ACED_Params.OP1_AM_Sensitivity;
+        ams2 := DX7II_ACED.Get_ACED_Params.OP2_AM_Sensitivity;
+        ams3 := DX7II_ACED.Get_ACED_Params.OP3_AM_Sensitivity;
+        ams4 := DX7II_ACED.Get_ACED_Params.OP4_AM_Sensitivity;
+        ams5 := DX7II_ACED.Get_ACED_Params.OP5_AM_Sensitivity;
+        ams6 := DX7II_ACED.Get_ACED_Params.OP6_AM_Sensitivity;
+        DX7_VCED.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
+        MDX.LoadVoiceToTG(j, DX7_VCED.Get_VCED_Params);
+        MDX_TG.Set_PCEDx_Params(LoadTX802toPCEDx(DX7II_ACED, TX802_PCED, j));
+        MDX.LoadPCEDxToTG(j, MDX_TG.Get_PCEDx_Params);
+        MDX.FMDX_Params.TG[j].BankNumberLSB := 1;
+        WriteLn('Voice ' + IntToStr(j) + ' - File:' + IntToStr(iVoice[j]) + '(' + IntToStr(t) + ') :' + DX7_VCED.GetVoiceName);
+      end;
       if (iVoice[j] > 127) and (iVoice[j] < 160) then
       begin
         //voice is from bank A1
@@ -1384,11 +1133,6 @@ begin
     MDX_TG.Free;
   end;
 
-  msA1.Free;
-  msB1.Free;
-  msA2.Free;
-  msB2.Free;
-  msP.Free;
   DXA1.Free;
   DXB1.Free;
   DXA1s.Free;
@@ -1401,7 +1145,7 @@ begin
   MDX.Free;
 end;
 
-procedure ConvertBigDX7IItoMDX(ABankA: string; ANumber: integer);
+procedure ConvertBigDX7IItoMDX(var ms: TMemoryStream; APath: string; ANumber: integer; AVerbose: boolean);
 var
   msA: TMemoryStream;
   msB: TMemoryStream;
@@ -1438,11 +1182,11 @@ begin
   msFoundPosition := 0;
 
   msA := TMemoryStream.Create;
-  msA.LoadFromFile(ABankA);
+  msA.LoadFromStream(ms);
   msB := TMemoryStream.Create;
-  msB.LoadFromFile(ABankA);
+  msB.LoadFromStream(ms);
   msP := TMemoryStream.Create;
-  msP.LoadFromFile(ABankA);
+  msP.LoadFromStream(ms);
 
   DXA := TDX7BankContainer.Create;
   DXB := TDX7BankContainer.Create;
@@ -1456,10 +1200,11 @@ begin
   begin
     DXA.LoadBankFromStream(msA, msFoundPosition);
     WriteLn('');
-    WriteLn('VMEM A loaded from ' + ABankA + ' from position ' +
+    WriteLn('VMEM A loaded from ' + APath + ' from position ' +
       IntToStr(msFoundPosition));
-    {for i := 1 to 32 do
-      WriteLn(DXA.GetVoiceName(i)); }
+    if AVerbose then
+      for i := 1 to 32 do
+        WriteLn(DXA.GetVoiceName(i));
   end;
 
   msSearchPosition := msFoundPosition;
@@ -1467,10 +1212,11 @@ begin
   begin
     DXB.LoadBankFromStream(msB, msFoundPosition);
     WriteLn('');
-    WriteLn('VMEM B loaded from ' + ABankA + ' from position ' +
+    WriteLn('VMEM B loaded from ' + APath + ' from position ' +
       IntToStr(msFoundPosition));
-    {for i := 1 to 32 do
-      WriteLn(DXB.GetVoiceName(i));}
+    if AVerbose then
+      for i := 1 to 32 do
+        WriteLn(DXB.GetVoiceName(i));
   end
   else
   begin
@@ -1484,7 +1230,7 @@ begin
   begin
     DXAs.LoadSupplBankFromStream(msA, msFoundPosition);
     WriteLn('');
-    WriteLn('AMEM A loaded from ' + ABankA + ' from position ' +
+    WriteLn('AMEM A loaded from ' + APath + ' from position ' +
       IntToStr(msFoundPosition));
   end
   else
@@ -1499,7 +1245,7 @@ begin
   begin
     DXBs.LoadSupplBankFromStream(msB, msFoundPosition);
     WriteLn('');
-    WriteLn('AMEM B loaded from ' + ABankA + ' from position ' +
+    WriteLn('AMEM B loaded from ' + APath + ' from position ' +
       IntToStr(msFoundPosition));
   end
   else
@@ -1514,13 +1260,14 @@ begin
   begin
     DX7II.LoadPerfBankFromStream(msP, msFoundPosition);
     WriteLn('');
-    WriteLn('LM_PMEM loaded from ' + ABankA + ' from position ' +
+    WriteLn('LM_PMEM loaded from ' + APath + ' from position ' +
       IntToStr(msFoundPosition));
-    {for i := 1 to 32 do
-      WriteLn(DX7II.GetPerformanceName(i));}
+    if AVerbose then
+      for i := 1 to 32 do
+        WriteLn(DX7II.GetPerformanceName(i));
   end;
 
-  sPath := ExtractFilePath(ABankA);
+  sPath := ExtractFilePath(APath);
   if sPath = '' then sPath := GetCurrentDir;
   WriteLn('');
   WriteLn('Writting to the directory ' + sPath);
@@ -1677,12 +1424,10 @@ begin
   MDX.Free;
 end;
 
-procedure Convert2BigDX7IItoMDX(ABankA, ABankB: string; ANumber: integer);
+procedure Convert2BigDX7IItoMDX(var msA1, msB1: TMemoryStream; APathA, APathB: string; ANumber: integer; AVerbose: boolean);
 var
   msA: TMemoryStream;
   msB: TMemoryStream;
-  msPA: TMemoryStream;
-  msPB: TMemoryStream;
   DXA32: TDX7BankContainer;
   DXA64: TDX7BankContainer;
   DXB32: TDX7BankContainer;
@@ -1720,13 +1465,9 @@ begin
   msFoundPosition := 0;
 
   msA := TMemoryStream.Create;
-  msA.LoadFromFile(ABankA);
+  msA.LoadFromStream(msA1);
   msB := TMemoryStream.Create;
-  msB.LoadFromFile(ABankB);
-  msPA := TMemoryStream.Create;
-  msPA.LoadFromFile(ABankA);
-  msPB := TMemoryStream.Create;
-  msPB.LoadFromFile(ABankB);
+  msB.LoadFromStream(msB1);
 
   DXA32 := TDX7BankContainer.Create;
   DXA64 := TDX7BankContainer.Create;
@@ -1745,7 +1486,7 @@ begin
   begin
     DXA32.LoadBankFromStream(msA, msFoundPosition);
     WriteLn('');
-    WriteLn('VMEM A 01-32 loaded from ' + ABankA + ' from position ' +
+    WriteLn('VMEM A 01-32 loaded from ' + APathA + ' from position ' +
       IntToStr(msFoundPosition));
   end;
 
@@ -1754,7 +1495,7 @@ begin
   begin
     DXA64.LoadBankFromStream(msA, msFoundPosition);
     WriteLn('');
-    WriteLn('VMEM A 33-64 loaded from ' + ABankA + ' from position ' +
+    WriteLn('VMEM A 33-64 loaded from ' + APathA + ' from position ' +
       IntToStr(msFoundPosition));
   end
   else
@@ -1768,7 +1509,7 @@ begin
   begin
     DXA32s.LoadSupplBankFromStream(msA, msFoundPosition);
     WriteLn('');
-    WriteLn('AMEM A 01-32 loaded from ' + ABankA + ' from position ' +
+    WriteLn('AMEM A 01-32 loaded from ' + APathA + ' from position ' +
       IntToStr(msFoundPosition));
   end
   else
@@ -1782,7 +1523,7 @@ begin
   begin
     DXA64s.LoadSupplBankFromStream(msA, msFoundPosition);
     WriteLn('');
-    WriteLn('AMEM A 33-64 loaded from ' + ABankA + ' from position ' +
+    WriteLn('AMEM A 33-64 loaded from ' + APathA + ' from position ' +
       IntToStr(msFoundPosition));
   end
   else
@@ -1792,11 +1533,11 @@ begin
   end;
 
   msSearchPosition := 0;
-  if FindDX_SixOP_MEM(LMPMEM, msPA, msSearchPosition, msFoundPosition) then
+  if FindDX_SixOP_MEM(LMPMEM, msA, msSearchPosition, msFoundPosition) then
   begin
-    DX7IIA.LoadPerfBankFromStream(msPA, msFoundPosition);
+    DX7IIA.LoadPerfBankFromStream(msA, msFoundPosition);
     WriteLn('');
-    WriteLn('LM_PMEM loaded from ' + ABankA + ' from position ' +
+    WriteLn('LM_PMEM loaded from ' + APathA + ' from position ' +
       IntToStr(msFoundPosition));
   end;
 
@@ -1807,7 +1548,7 @@ begin
   begin
     DXB32.LoadBankFromStream(msB, msFoundPosition);
     WriteLn('');
-    WriteLn('VMEM B 01-32 loaded from ' + ABankB + ' from position ' +
+    WriteLn('VMEM B 01-32 loaded from ' + APathB + ' from position ' +
       IntToStr(msFoundPosition));
   end;
 
@@ -1816,7 +1557,7 @@ begin
   begin
     DXB64.LoadBankFromStream(msB, msFoundPosition);
     WriteLn('');
-    WriteLn('VMEM B 33-64 loaded from ' + ABankB + ' from position ' +
+    WriteLn('VMEM B 33-64 loaded from ' + APathB + ' from position ' +
       IntToStr(msFoundPosition));
   end
   else
@@ -1830,7 +1571,7 @@ begin
   begin
     DXB32s.LoadSupplBankFromStream(msB, msFoundPosition);
     WriteLn('');
-    WriteLn('AMEM B 01-32 loaded from ' + ABankB + ' from position ' +
+    WriteLn('AMEM B 01-32 loaded from ' + APathB + ' from position ' +
       IntToStr(msFoundPosition));
   end
   else
@@ -1844,7 +1585,7 @@ begin
   begin
     DXB64s.LoadSupplBankFromStream(msB, msFoundPosition);
     WriteLn('');
-    WriteLn('AMEM B 33-64 loaded from ' + ABankB + ' from position ' +
+    WriteLn('AMEM B 33-64 loaded from ' + APathB + ' from position ' +
       IntToStr(msFoundPosition));
   end
   else
@@ -1854,15 +1595,15 @@ begin
   end;
 
   msSearchPosition := 0;
-  if FindDX_SixOP_MEM(LMPMEM, msPB, msSearchPosition, msFoundPosition) then
+  if FindDX_SixOP_MEM(LMPMEM, msB, msSearchPosition, msFoundPosition) then
   begin
-    DX7IIB.LoadPerfBankFromStream(msPB, msFoundPosition);
+    DX7IIB.LoadPerfBankFromStream(msB, msFoundPosition);
     WriteLn('');
-    WriteLn('LM_PMEM loaded from ' + ABankB + ' from position ' +
+    WriteLn('LM_PMEM loaded from ' + APathB + ' from position ' +
       IntToStr(msFoundPosition));
   end;
 
-  sPath := ExtractFilePath(ABankA);
+  sPath := ExtractFilePath(APathA);
   if sPath = '' then sPath := GetCurrentDir;
   WriteLn('');
   WriteLn('Writting to the directory ' + sPath);
@@ -1894,8 +1635,8 @@ begin
     iVoiceA := Params.VoiceANumber;
     iVoiceB := Params.VoiceBNumber;
 
-    // 0 - 63 - Internal
-    // 64-127 - Cartridge
+    // 000 - 063 - Internal
+    // 064 - 127 - Cartridge
     WriteLn('Voice A ' + IntToStr(iVoiceA) + ' ; ' + 'Voice B ' + IntToStr(iVoiceB));
 
     if iVoiceA < 32 then
@@ -2189,8 +1930,6 @@ begin
 
   msA.Free;
   msB.Free;
-  msPA.Free;
-  msPB.Free;
   DXA32.Free;
   DXA64.Free;
   DXB32.Free;

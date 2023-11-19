@@ -24,9 +24,7 @@ uses
   CustApp,
   untDispatcher,
   untConverter,
-  untDXUtils,
-  untTX802PerformanceBank;
-
+  untDXUtils;
 
 type
 
@@ -56,16 +54,18 @@ type
     msInputFile: TMemoryStream;
     i: integer;
     iStartPos: integer;
+    bVerbose: boolean;
   begin
     fVoiceA1 := '';
     fVoiceB1 := '';
     fVoiceA2 := '';
     fVoiceB2 := '';
     fPerf := '';
+    bVerbose := False;
     // quick check parameters
     CaseSensitiveOptions := True;
-    ErrorMsg := CheckOptions('hica:b:A:B:p:n:',
-      'help info convert voiceA1: voiceB1: voiceA2: voiceB2: perf: numbering:');
+    ErrorMsg := CheckOptions('hica:b:A:B:p:n:v',
+      'help info convert voiceA1: voiceB1: voiceA2: voiceB2: perf: numbering: verbose');
 
     if ErrorMsg <> '' then
     begin
@@ -81,6 +81,8 @@ type
       Terminate;
       Exit;
     end;
+
+    if HasOption('v', 'verbose') then bVerbose := True;
 
     if HasOption('n', 'numbering') then
       iNumbering := (StrToIntDef(GetOptionValue('n', 'numbering'), 1) -1) else iNumbering := 0;
@@ -251,22 +253,22 @@ type
         if FileExists(fVoiceA1) and FileExists(fVoiceB1) and
           FileExists(fVoiceA2) and FileExists(fVoiceB2) and FileExists(fPerf) then
         begin
-          DispatchCheck(fVoiceA1, fVoiceB1, fVoiceA2, fVoiceB2, fPerf, iNumbering);
+          DispatchCheck(fVoiceA1, fVoiceB1, fVoiceA2, fVoiceB2, fPerf, iNumbering, bVerbose);
         end
         else
         if FileExists(fVoiceA1) and FileExists(fVoiceB1) and FileExists(fPerf) then
         begin
-          DispatchCheck(fVoiceA1, fVoiceB1, fPerf, iNumbering);
+          DispatchCheck(fVoiceA1, fVoiceB1, fPerf, iNumbering, bVerbose);
         end
         else
         if FileExists(fVoiceA1) and FileExists(fVoiceB1) then
         begin
-          DispatchCheck(fVoiceA1, fVoiceB1, iNumbering);
+          DispatchCheck(fVoiceA1, fVoiceB1, iNumbering, bVerbose);
         end
         else
         if FileExists(fVoiceA1) then
         begin
-          DispatchCheck(fVoiceA1, iNumbering);
+          DispatchCheck(fVoiceA1, iNumbering, bVerbose);
         end;
       end;
     end;
@@ -298,6 +300,7 @@ type
     writeln('       -h               --help                This help message');
     writeln('       -i               --info                Information');
     writeln('       -c               --convert             Convert to MiniDexed INI file');
+    writeln('       -v               --verbose             more info while converting');
     writeln('');
     writeln('       -a (filename)    --voiceA1=(filename)  Path to voice bank A1');
     writeln('       -b (filename)    --voiceB1=(filename)  Path to voice bank B1');

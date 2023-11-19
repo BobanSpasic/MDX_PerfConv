@@ -35,6 +35,8 @@ uses
 type
   TDX7_VMEM_Dump = array [0..127] of byte;
   TDX7_VCED_Dump = array [0..155] of byte;
+  TAMS = array [0..7] of byte;              //needed for translating DX7II voices
+  TPEGR = array [0..3] of single;           //needed for translating DX7II voices
 
 type
   TDX7_VCED_Params = packed record
@@ -185,8 +187,8 @@ type
         LFO_AMP_MOD_DEPTH: byte;          //       0-99
         LFO_SYNC: byte;                   //       0-1
         LFO_WAVEFORM: byte;               //       0-5, (data sheet claims 9-4 ?!?)
-        //       0:TR, 1:SD, 2:SU,
-        //       3:SQ, 4:SI, 5:SH
+                                          //       0:TR, 1:SD, 2:SU,
+                                          //       3:SQ, 4:SI, 5:SH
         PITCH_MOD_SENSITIVITY: byte;      //       0-7
         TRANSPOSE: byte;                  //       0-48   12 = C2
         VOICE_NAME_CHAR_1: byte;          //       ASCII
@@ -200,7 +202,7 @@ type
         VOICE_NAME_CHAR_9: byte;          //       ASCII
         VOICE_NAME_CHAR_10: byte;         //       ASCII
         OPERATOR_ON_OFF: byte;            //       bit6 = 0 / bit 5: OP1 / .. .
-        //       ... / bit 0: OP6
+                                          //       ... / bit 0: OP6
       );
   end;
 
@@ -368,6 +370,7 @@ type
     function HasNullInName: boolean;
     procedure Normalize;
     procedure Mk2ToMk1(aPEGR, aAMS1, aAMS2, aAMS3, aAMS4, aAMS5, aAMS6: byte);
+    procedure Mk2ToMk1(aPEGR, aAMS1, aAMS2, aAMS3, aAMS4, aAMS5, aAMS6: byte; aAMS_table: TAMS; aPEGR_table: TPEGR); overload;
   end;
 
 function VCEDtoVMEM(aPar: TDX7_VCED_Params): TDX7_VMEM_Params;
@@ -1027,59 +1030,67 @@ begin
 end;
 
 procedure TDX7VoiceContainer.Mk2ToMk1(aPEGR, aAMS1, aAMS2, aAMS3, aAMS4, aAMS5, aAMS6: byte);
-const
-  ams: array[0..7] of byte = (0,1,2,3,3,3,3,3);
 var
-  peg: integer;
-  //pegr: byte;
-  pegr: single;
+  FAMS: TAMS = (0,1,2,3,3,3,3,3);
+  PEG: integer;
+  //FPEGR: TPEGR = (50,32,16,8); // used by DXConvert
+  FPEGR: TPEGR = (50,25,6.25,3.125);
+  PEGR: single;
 begin
   // Pitch EG Level correction
-  {//DXConvert
-  case aPEGR of
-    0: pegr := 50;    //8 octaves
-    1: pegr := 32;    //4 octaves
-    2: pegr := 16;    //1 octave
-    3: pegr := 8;     //0.5 octave
-  end; }
-  case aPEGR of
-    0: pegr := 50;
-    1: pegr := 25;
-    2: pegr := 6.25;
-    3: pegr := 3.125;
-  end;
-  {//DXConvert
-  peg := FDX7_VCED_Params.PITCH_EG_LEVEL_1;
-  FDX7_VCED_Params.PITCH_EG_LEVEL_1 := byte((peg - 50) * pegr div 50) + 50;
+  PEGR := FPEGR[aPEGR];
 
-  peg := FDX7_VCED_Params.PITCH_EG_LEVEL_2;
-  FDX7_VCED_Params.PITCH_EG_LEVEL_2 := byte((peg - 50) * pegr div 50) + 50;
+  PEG := FDX7_VCED_Params.PITCH_EG_LEVEL_1;
+  FDX7_VCED_Params.PITCH_EG_LEVEL_1 := byte(floor((PEG - 50) * PEGR/50) + 50);
 
-  peg := FDX7_VCED_Params.PITCH_EG_LEVEL_3;
-  FDX7_VCED_Params.PITCH_EG_LEVEL_3 := byte((peg - 50) * pegr div 50) + 50;
+  PEG := FDX7_VCED_Params.PITCH_EG_LEVEL_2;
+  FDX7_VCED_Params.PITCH_EG_LEVEL_2 := byte(floor((PEG - 50) * PEGR/50) + 50);
 
-  peg := FDX7_VCED_Params.PITCH_EG_LEVEL_4;
-  FDX7_VCED_Params.PITCH_EG_LEVEL_4 := byte((peg - 50) * pegr div 50) + 50;  }
+  PEG := FDX7_VCED_Params.PITCH_EG_LEVEL_3;
+  FDX7_VCED_Params.PITCH_EG_LEVEL_3 := byte(floor((PEG - 50) * PEGR/50) + 50);
 
-  peg := FDX7_VCED_Params.PITCH_EG_LEVEL_1;
-  FDX7_VCED_Params.PITCH_EG_LEVEL_1 := byte(floor((peg - 50) * pegr/50) + 50);
-
-  peg := FDX7_VCED_Params.PITCH_EG_LEVEL_2;
-  FDX7_VCED_Params.PITCH_EG_LEVEL_2 := byte(floor((peg - 50) * pegr/50) + 50);
-
-  peg := FDX7_VCED_Params.PITCH_EG_LEVEL_3;
-  FDX7_VCED_Params.PITCH_EG_LEVEL_3 := byte(floor((peg - 50) * pegr/50) + 50);
-
-  peg := FDX7_VCED_Params.PITCH_EG_LEVEL_4;
-  FDX7_VCED_Params.PITCH_EG_LEVEL_4 := byte(floor((peg - 50) * pegr/50) + 50);
+  PEG := FDX7_VCED_Params.PITCH_EG_LEVEL_4;
+  FDX7_VCED_Params.PITCH_EG_LEVEL_4 := byte(floor((PEG - 50) * PEGR/50) + 50);
 
   // Amplitude Modulation Sensitivity correction
-  if aAMS1 <> 0 then FDX7_VCED_Params.OP1_AMP_MOD_SENSITIVITY := ams[aAMS1];
-  if aAMS2 <> 0 then FDX7_VCED_Params.OP2_AMP_MOD_SENSITIVITY := ams[aAMS2];
-  if aAMS3 <> 0 then FDX7_VCED_Params.OP3_AMP_MOD_SENSITIVITY := ams[aAMS3];
-  if aAMS4 <> 0 then FDX7_VCED_Params.OP4_AMP_MOD_SENSITIVITY := ams[aAMS4];
-  if aAMS5 <> 0 then FDX7_VCED_Params.OP5_AMP_MOD_SENSITIVITY := ams[aAMS5];
-  if aAMS6 <> 0 then FDX7_VCED_Params.OP6_AMP_MOD_SENSITIVITY := ams[aAMS6];
+  if aAMS1 <> 0 then FDX7_VCED_Params.OP1_AMP_MOD_SENSITIVITY := FAMS[aAMS1];
+  if aAMS2 <> 0 then FDX7_VCED_Params.OP2_AMP_MOD_SENSITIVITY := FAMS[aAMS2];
+  if aAMS3 <> 0 then FDX7_VCED_Params.OP3_AMP_MOD_SENSITIVITY := FAMS[aAMS3];
+  if aAMS4 <> 0 then FDX7_VCED_Params.OP4_AMP_MOD_SENSITIVITY := FAMS[aAMS4];
+  if aAMS5 <> 0 then FDX7_VCED_Params.OP5_AMP_MOD_SENSITIVITY := FAMS[aAMS5];
+  if aAMS6 <> 0 then FDX7_VCED_Params.OP6_AMP_MOD_SENSITIVITY := FAMS[aAMS6];
+
+  FDX7_VMEM_Params := VCEDtoVMEM(FDX7_VCED_Params);
+end;
+
+
+procedure TDX7VoiceContainer.Mk2ToMk1(aPEGR, aAMS1, aAMS2, aAMS3, aAMS4, aAMS5, aAMS6: byte; aAMS_table: TAMS; aPEGR_table: TPEGR); overload;
+var
+  PEG: integer;
+  PEGR: single;
+begin
+  // Pitch EG Level correction
+  PEGR := aPEGR_table[aPEGR];
+
+  PEG := FDX7_VCED_Params.PITCH_EG_LEVEL_1;
+  FDX7_VCED_Params.PITCH_EG_LEVEL_1 := byte(floor((PEG - 50) * PEGR/50) + 50);
+
+  PEG := FDX7_VCED_Params.PITCH_EG_LEVEL_2;
+  FDX7_VCED_Params.PITCH_EG_LEVEL_2 := byte(floor((PEG - 50) * PEGR/50) + 50);
+
+  PEG := FDX7_VCED_Params.PITCH_EG_LEVEL_3;
+  FDX7_VCED_Params.PITCH_EG_LEVEL_3 := byte(floor((PEG - 50) * PEGR/50) + 50);
+
+  PEG := FDX7_VCED_Params.PITCH_EG_LEVEL_4;
+  FDX7_VCED_Params.PITCH_EG_LEVEL_4 := byte(floor((PEG - 50) * PEGR/50) + 50);
+
+  // Amplitude Modulation Sensitivity correction
+  if aAMS1 <> 0 then FDX7_VCED_Params.OP1_AMP_MOD_SENSITIVITY := aAMS_table[aAMS1];
+  if aAMS2 <> 0 then FDX7_VCED_Params.OP2_AMP_MOD_SENSITIVITY := aAMS_table[aAMS2];
+  if aAMS3 <> 0 then FDX7_VCED_Params.OP3_AMP_MOD_SENSITIVITY := aAMS_table[aAMS3];
+  if aAMS4 <> 0 then FDX7_VCED_Params.OP4_AMP_MOD_SENSITIVITY := aAMS_table[aAMS4];
+  if aAMS5 <> 0 then FDX7_VCED_Params.OP5_AMP_MOD_SENSITIVITY := aAMS_table[aAMS5];
+  if aAMS6 <> 0 then FDX7_VCED_Params.OP6_AMP_MOD_SENSITIVITY := aAMS_table[aAMS6];
 
   FDX7_VMEM_Params := VCEDtoVMEM(FDX7_VCED_Params);
 end;

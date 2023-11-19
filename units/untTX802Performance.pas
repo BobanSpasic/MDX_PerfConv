@@ -28,7 +28,7 @@ type
     case boolean of
       True: (params: TTX802_PCED_Dump);
       False: (
-        VoiceChannelOffset1: byte;        // 0-7
+        VoiceChannelOffset1: byte;        // 0-7   0 if voice is linked, "<--" on display
         VoiceChannelOffset2: byte;        // 0-7
         VoiceChannelOffset3: byte;        // 0-7
         VoiceChannelOffset4: byte;        // 0-7
@@ -151,8 +151,8 @@ type
       case boolean of
         True: (params: TTX802_PMEM_Dump);
         False: (
-          VCHOFS_RXCH1: byte;               //        |    VCHOFS    |        RXCH       |
-          VCHOFS_RXCH2: byte;               //        |    |    |    |    |    |    |    |
+          VCHOFS_RXCH1: byte;               //        |    VCHOFS    |           RXCH         |
+          VCHOFS_RXCH2: byte;               //        |    |    |    |    |    |    |    |    |
           VCHOFS_RXCH3: byte;               //
           VCHOFS_RXCH4: byte;               //
           VCHOFS_RXCH5: byte;               //
@@ -260,22 +260,22 @@ function PMEMtoPCED(aPar: TTX802_PMEM_Params): TTX802_PCED_Params;
 var
   t: TTX802_PCED_Params;
 begin
-  t.VoiceChannelOffset1 := (aPar.VCHOFS_RXCH1 shr 4) and 7;
-  t.VoiceChannelOffset2 := (aPar.VCHOFS_RXCH2 shr 4) and 7;
-  t.VoiceChannelOffset3 := (aPar.VCHOFS_RXCH3 shr 4) and 7;
-  t.VoiceChannelOffset4 := (aPar.VCHOFS_RXCH4 shr 4) and 7;
-  t.VoiceChannelOffset5 := (aPar.VCHOFS_RXCH5 shr 4) and 7;
-  t.VoiceChannelOffset6 := (aPar.VCHOFS_RXCH6 shr 4) and 7;
-  t.VoiceChannelOffset7 := (aPar.VCHOFS_RXCH7 shr 4) and 7;
-  t.VoiceChannelOffset8 := (aPar.VCHOFS_RXCH8 shr 4) and 7;
-  t.RXChannel1 := aPar.VCHOFS_RXCH1 and 15;
-  t.RXChannel2 := aPar.VCHOFS_RXCH2 and 15;
-  t.RXChannel3 := aPar.VCHOFS_RXCH3 and 15;
-  t.RXChannel4 := aPar.VCHOFS_RXCH4 and 15;
-  t.RXChannel5 := aPar.VCHOFS_RXCH5 and 15;
-  t.RXChannel6 := aPar.VCHOFS_RXCH6 and 15;
-  t.RXChannel7 := aPar.VCHOFS_RXCH7 and 15;
-  t.RXChannel8 := aPar.VCHOFS_RXCH8 and 15;
+  t.VoiceChannelOffset1 := (aPar.VCHOFS_RXCH1 shr 5) and 7;
+  t.VoiceChannelOffset2 := (aPar.VCHOFS_RXCH2 shr 5) and 7;
+  t.VoiceChannelOffset3 := (aPar.VCHOFS_RXCH3 shr 5) and 7;
+  t.VoiceChannelOffset4 := (aPar.VCHOFS_RXCH4 shr 5) and 7;
+  t.VoiceChannelOffset5 := (aPar.VCHOFS_RXCH5 shr 5) and 7;
+  t.VoiceChannelOffset6 := (aPar.VCHOFS_RXCH6 shr 5) and 7;
+  t.VoiceChannelOffset7 := (aPar.VCHOFS_RXCH7 shr 5) and 7;
+  t.VoiceChannelOffset8 := (aPar.VCHOFS_RXCH8 shr 5) and 7;
+  t.RXChannel1 := aPar.VCHOFS_RXCH1 and 31;
+  t.RXChannel2 := aPar.VCHOFS_RXCH2 and 31;
+  t.RXChannel3 := aPar.VCHOFS_RXCH3 and 31;
+  t.RXChannel4 := aPar.VCHOFS_RXCH4 and 31;
+  t.RXChannel5 := aPar.VCHOFS_RXCH5 and 31;
+  t.RXChannel6 := aPar.VCHOFS_RXCH6 and 31;
+  t.RXChannel7 := aPar.VCHOFS_RXCH7 and 31;
+  t.RXChannel8 := aPar.VCHOFS_RXCH8 and 31;
   t.VoiceNumber1:= aPar.VoiceNumber1;
   t.VoiceNumber2:= aPar.VoiceNumber2;
   t.VoiceNumber3:= aPar.VoiceNumber3;
