@@ -10,6 +10,7 @@ Usage:
        -h               --help                This help message  
        -i               --info                Information  
        -c               --convert             Convert to MiniDexed INI file  
+       -v               --verbose             More info while converting
   
        -a (filename)    --voiceA1=(filename)  Path to voice bank A1  
        -b (filename)    --voiceB1=(filename)  Path to voice bank B1    
