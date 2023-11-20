@@ -7,18 +7,20 @@ Usage:
 
   Parameters (short and long form): 
   
-       -h               --help                This help message  
-       -i               --info                Information  
-       -c               --convert             Convert to MiniDexed INI file  
-       -v               --verbose             More info while converting
-  
-       -a (filename)    --voiceA1=(filename)  Path to voice bank A1  
-       -b (filename)    --voiceB1=(filename)  Path to voice bank B1    
-       -A (filename)    --voiceA2=(filename)  Path to voice bank A2  
-       -B (filename)    --voiceB2=(filename)  Path to voice bank B2  
-       -p (filename)    --perf=(filename)     Path to performance file  
+       -h               --help                This help message
+       -i               --info                Information
+       -c               --convert             Convert to MiniDexed INI file
+       -v               --verbose             Detailed info
+
+       -a (filename)    --voiceA1=(filename)  Path to voice bank A1
+       -b (filename)    --voiceB1=(filename)  Path to voice bank B1
+       -A (filename)    --voiceA2=(filename)  Path to voice bank A2
+       -B (filename)    --voiceB2=(filename)  Path to voice bank B2
+       -p (filename)    --perf=(filename)     Path to performance file
        -n (number)      --numbering=(number)  First number for filenames
                                               of the output performances
+       -o (path)        --output=(path)       Output directory
+       -s (filename)    --settings=(filename) Use settings file (see separate doc.)
 
   Parameters are CASE-SENSITIVE
 
