@@ -19,14 +19,14 @@ interface
 uses
   Classes, SysUtils, TypInfo, untdxutils, untConverter;
 
-procedure DispatchCheck(ABank: string; ANumber: integer; AVerbose: boolean);  //TX7 and DX7II
-procedure DispatchCheck(ABankA, ABankB: string; ANumber: integer; AVerbose: boolean); overload; //DX7II big dump
-procedure DispatchCheck(ABankA, ABankB, APerf: string; ANumber: integer; AVerbose: boolean); overload; //DX7II with Performance
-procedure DispatchCheck(ABankA1, ABankB1, ABankA2, ABankB2, APerf: string; ANumber: integer; AVerbose: boolean); overload; //DX1 and DX5
+procedure DispatchCheck(ABank: string; ANumber: integer; AVerbose: boolean; AOutput, ASettings: string);  //TX7 and DX7II
+procedure DispatchCheck(ABankA, ABankB: string; ANumber: integer; AVerbose: boolean; AOutput, ASettings: string); overload; //DX7II big dump
+procedure DispatchCheck(ABankA, ABankB, APerf: string; ANumber: integer; AVerbose: boolean; AOutput, ASettings: string); overload; //DX7II with Performance
+procedure DispatchCheck(ABankA1, ABankB1, ABankA2, ABankB2, APerf: string; ANumber: integer; AVerbose: boolean; AOutput, ASettings: string); overload; //DX1 and DX5
 
 implementation
 
-procedure DispatchCheck(ABank: string; ANumber: integer; AVerbose: boolean);
+procedure DispatchCheck(ABank: string; ANumber: integer; AVerbose: boolean; AOutput, ASettings: string);
 var
   msBank: TMemoryStream;
   ms: MemSet;
@@ -41,7 +41,7 @@ begin
     begin
       WriteLn('It is a DX7II bank with supplement');
       if AVerbose then WriteLn('Using ConvertDX7IItoMDX with one stream');
-      ConvertDX7IItoMDX(msBank, ABank, ANumber, AVerbose);
+      ConvertDX7IItoMDX(msBank, AOutput, ANumber, AVerbose, ASettings);
     end;
   end;
   if (VMEM in ms) and (PMEM in ms) and not ((AMEM in ms) or (LMPMEM in ms)) then
@@ -50,7 +50,7 @@ begin
     begin
       WriteLn('It is a TX7 bank with function');
       if AVerbose then WriteLn('Using ConvertTX7toMDX with one stream');
-      ConvertTX7toMDX(msBank, ABank, ANumber, AVerbose);
+      ConvertTX7toMDX(msBank, AOutput, ANumber, AVerbose);
     end;
   end;
   if (VMEM in ms) and (LMPMEM in ms) and (AMEM in ms) then
@@ -59,7 +59,7 @@ begin
     begin
       WriteLn('It is a DX7II All dump');
       if AVerbose then WriteLn('Using ConvertBigDX7IItoMDX with one stream');
-      ConvertBigDX7IItoMDX(msBank, ABank, ANumber, AVerbose);
+      ConvertBigDX7IItoMDX(msBank, AOutput, ANumber, AVerbose, ASettings);
     end;
   end;
   if (VMEM in ms) and (LMPMEM in ms) and not (AMEM in ms) then
@@ -69,7 +69,7 @@ begin
       WriteLn('It is a INCOMPLETE DX7II All dump');
       WriteLn('Do not expect wonders from this conversion');
       if AVerbose then WriteLn('Using ConvertBigDX7IItoMDX with one stream');
-      ConvertBigDX7IItoMDX(msBank, ABank, ANumber, AVerbose);
+      ConvertBigDX7IItoMDX(msBank, AOutput, ANumber, AVerbose, ASettings);
     end;
   end;
   if (VMEM in ms) and (PMEM802 in ms) and (AMEM in ms) then
@@ -78,13 +78,13 @@ begin
     begin
       WriteLn('It is a TX802 All dump');
       if AVerbose then WriteLn('Using ConvertTX802ToMDX with one stream');
-      ConvertTX802ToMDX(msBank, ABank, ANumber, AVerbose);
+      ConvertTX802ToMDX(msBank, AOutput, ANumber, AVerbose, ASettings);
     end;
   end;
   msBank.Free;
 end;
 
-procedure DispatchCheck(ABankA, ABankB: string; ANumber: integer; AVerbose: boolean); overload;
+procedure DispatchCheck(ABankA, ABankB: string; ANumber: integer; AVerbose: boolean; AOutput, ASettings: string); overload;
 var
   msBankA: TMemoryStream;
   msBankB: TMemoryStream;
@@ -108,7 +108,7 @@ begin
     WriteLn('It is a DX7II set');
     WriteLn('Be sure to use Internal as Bank A1 and Cartridge as Bank B1 files');
     if AVerbose then WriteLn('Using Convert2BigDX7IItoMDX with two streams');
-    Convert2BigDX7IItoMDX(msBankA, msBankB, ABankA, ABankB, ANumber, AVerbose);
+    Convert2BigDX7IItoMDX(msBankA, msBankB, AOutput, ANumber, AVerbose, ASettings);
   end;
 
   if (VMEM in msA) and (AMEM in msA) and (LMPMEM in msB) and not ((VMEM in msB) or (AMEM in msB) or (LMPMEM in msA)) then
@@ -116,7 +116,7 @@ begin
     //VMEM+AMEM in one file, PMEM in other file
     WriteLn('It is a DX7II set');
     if AVerbose then WriteLn('Using ConvertBigDX7IItoMDX with one stream');
-    ConvertBigDX7IItoMDX(msAll, ABankB, ANumber, AVerbose);
+    ConvertBigDX7IItoMDX(msAll, AOutput, ANumber, AVerbose, ASettings);
   end;
 
   if (VMEM in msA) and (AMEM in msA) and (PMEM802 in msB) then
@@ -124,7 +124,7 @@ begin
     //VMEM+AMEM in one file, PMEM in other file
     WriteLn('It is a TX802 set');
     if AVerbose then WriteLn('Using ConvertTX802ToMDX with one stream');
-    ConvertTX802ToMDX(msAll, ABankB, ANumber, AVerbose);
+    ConvertTX802ToMDX(msAll, ABankB, ANumber, AVerbose, ASettings);
   end;
 
   msBankA.Free;
@@ -132,7 +132,7 @@ begin
   msAll.Free;
 end;
 
-procedure DispatchCheck(ABankA, ABankB, APerf: string; ANumber: integer; AVerbose: boolean);
+procedure DispatchCheck(ABankA, ABankB, APerf: string; ANumber: integer; AVerbose: boolean; AOutput, ASettings: string);
 var
   msBankA: TMemoryStream;
   msBankB: TMemoryStream;
@@ -162,7 +162,7 @@ begin
   begin
     WriteLn('It is a DX7II performance set');
     if AVerbose then WriteLn('Using ConvertBigDX7IItoMDX with one stream');
-    ConvertBigDX7IItoMDX(msAll, APerf, ANumber, AVerbose);
+    ConvertBigDX7IItoMDX(msAll, AOutput, ANumber, AVerbose, ASettings);
   end;
 
   if (VMEM in msA) and (VMEM in msB) and (LMPMEM in msP) and not ((AMEM in msA) or (AMEM in msB)) then
@@ -170,7 +170,7 @@ begin
     WriteLn('It is a INCOMPLETE DX7II performance set without AMEM data');
     WriteLn('Do not expect wonders from this conversion');
     if AVerbose then WriteLn('Using ConvertBigDX7IItoMDX with one stream');
-    ConvertBigDX7IItoMDX(msAll, APerf, ANumber, AVerbose);
+    ConvertBigDX7IItoMDX(msAll, AOutput, ANumber, AVerbose, ASettings);
   end;
 
   msBankA.Free;
@@ -179,7 +179,7 @@ begin
   msAll.Free;
 end;
 
-procedure DispatchCheck(ABankA1, ABankB1, ABankA2, ABankB2, APerf: string; ANumber: integer; AVerbose: boolean);
+procedure DispatchCheck(ABankA1, ABankB1, ABankA2, ABankB2, APerf: string; ANumber: integer; AVerbose: boolean; AOutput, ASettings: string);
 var
   msBankA1: TMemoryStream;
   msBankB1: TMemoryStream;
@@ -222,15 +222,14 @@ begin
   begin
     WriteLn('It is a DX5 performance set');
     if AVerbose then WriteLn('Using ConvertDX5toMDX with one stream');
-    ConvertDX5toMDX(msAll, APerf, ANumber, AVerbose);
-    //ConvertDX5toMDX(ABankA1, ABankB1, ABankA2, ABankB2, APerf, ANumber);
+    ConvertDX5toMDX(msAll, AOutput, ANumber, AVerbose);
   end;
 
   if (VMEM in msA1) and (VMEM in msB1) and (VMEM in msA2) and (VMEM in msA2) and (AMEM in msA1) and (AMEM in msB1) and (AMEM in msA2) and (AMEM in msA2) and (PMEM802 in msP) then
   begin
     WriteLn('It is a TX802 performance set');
     if AVerbose then WriteLn('Using ConvertTX802ToMDX with one stream');
-    ConvertTX802ToMDX(msAll, APerf, ANumber, AVerbose);
+    ConvertTX802ToMDX(msAll, AOutput, ANumber, AVerbose, ASettings);
   end;
 
   if (VMEM in msA1) and (VMEM in msB1) and (VMEM in msA2) and (VMEM in msA2) and not ((AMEM in msA1) and (AMEM in msB1) and (AMEM in msA2) and (AMEM in msA2)) and (PMEM802 in msP) then
@@ -238,7 +237,7 @@ begin
     WriteLn('It is a INCOMPLETE TX802 performance set without AMEM data');
     WriteLn('Do not expect wonders from this conversion');
     if AVerbose then WriteLn('Using ConvertTX802ToMDX with one stream');
-    ConvertTX802ToMDX(msAll, APerf, ANumber, AVerbose);
+    ConvertTX802ToMDX(msAll, AOutput, ANumber, AVerbose, ASettings);
   end;
 
   msBankA1.Free;

@@ -23,6 +23,8 @@ uses
 type
   TValMatrix = (fMin, fMax, fInit);
   TTypeMatrix = (DX7, DX7II, DX7IIP, TX7, MDX, V50VCED, V50ACED, V50ACED2, V50ACED3, DS55, YS);
+  TAMS = array [0..7] of byte;              //needed for translating DX7II to DX7 voices
+  TPEGR = array [0..3] of single;           //needed for translating DX7II to DX7 voices
 
 const
   V50_VCED_NAMES: array[0..93, 0..1] of string = (

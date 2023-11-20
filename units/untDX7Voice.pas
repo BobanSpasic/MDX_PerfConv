@@ -35,8 +35,6 @@ uses
 type
   TDX7_VMEM_Dump = array [0..127] of byte;
   TDX7_VCED_Dump = array [0..155] of byte;
-  TAMS = array [0..7] of byte;              //needed for translating DX7II voices
-  TPEGR = array [0..3] of single;           //needed for translating DX7II voices
 
 type
   TDX7_VCED_Params = packed record

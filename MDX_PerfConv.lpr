@@ -48,6 +48,8 @@ type
     fVoiceB1: string;
     fVoiceA2: string;
     fVoiceB2: string;
+    fOutput: string;
+    fSettings: string;
     iNumbering: integer;
     fPerf: string;
     slReport: TStringList;
@@ -64,8 +66,8 @@ type
     bVerbose := False;
     // quick check parameters
     CaseSensitiveOptions := True;
-    ErrorMsg := CheckOptions('hica:b:A:B:p:n:v',
-      'help info convert voiceA1: voiceB1: voiceA2: voiceB2: perf: numbering: verbose');
+    ErrorMsg := CheckOptions('hica:b:A:B:p:n:vo:s:',
+      'help info convert voiceA1: voiceB1: voiceA2: voiceB2: perf: numbering: verbose output: settings:');
 
     if ErrorMsg <> '' then
     begin
@@ -83,6 +85,28 @@ type
     end;
 
     if HasOption('v', 'verbose') then bVerbose := True;
+
+    if HasOption('o', 'output') then
+    begin
+      fOutput := GetOptionValue('o', 'output');
+      fOutput := IncludeTrailingPathDelimiter(fOutput);
+      fOutput := ExpandFileName(fOutput);
+      if bVerbose then WriteLn('Output directory: ' + fOutput);
+      if not DirectoryExists(fOutput) then CreateDir(fOutput);
+    end
+    else
+    begin
+      fOutput := GetOptionValue('a', 'voicea1');
+      fOutput := ExpandFileName(fOutput);
+      if bVerbose then WriteLn('Output directory: ' + fOutput);
+      fOutput := IncludeTrailingPathDelimiter(ExtractFileDir(fOutput));
+    end;
+
+    if HasOption('s', 'settings') then
+    begin
+      fSettings := GetOptionValue('s', 'settings');
+      fSettings := ExpandFileName(fSettings);
+    end;
 
     if HasOption('n', 'numbering') then
       iNumbering := (StrToIntDef(GetOptionValue('n', 'numbering'), 1) -1) else iNumbering := 0;
@@ -253,22 +277,22 @@ type
         if FileExists(fVoiceA1) and FileExists(fVoiceB1) and
           FileExists(fVoiceA2) and FileExists(fVoiceB2) and FileExists(fPerf) then
         begin
-          DispatchCheck(fVoiceA1, fVoiceB1, fVoiceA2, fVoiceB2, fPerf, iNumbering, bVerbose);
+          DispatchCheck(fVoiceA1, fVoiceB1, fVoiceA2, fVoiceB2, fPerf, iNumbering, bVerbose, fOutput, fSettings);
         end
         else
         if FileExists(fVoiceA1) and FileExists(fVoiceB1) and FileExists(fPerf) then
         begin
-          DispatchCheck(fVoiceA1, fVoiceB1, fPerf, iNumbering, bVerbose);
+          DispatchCheck(fVoiceA1, fVoiceB1, fPerf, iNumbering, bVerbose, fOutput, fSettings);
         end
         else
         if FileExists(fVoiceA1) and FileExists(fVoiceB1) then
         begin
-          DispatchCheck(fVoiceA1, fVoiceB1, iNumbering, bVerbose);
+          DispatchCheck(fVoiceA1, fVoiceB1, iNumbering, bVerbose, fOutput, fSettings);
         end
         else
         if FileExists(fVoiceA1) then
         begin
-          DispatchCheck(fVoiceA1, iNumbering, bVerbose);
+          DispatchCheck(fVoiceA1, iNumbering, bVerbose, fOutput, fSettings);
         end;
       end;
     end;
@@ -300,7 +324,7 @@ type
     writeln('       -h               --help                This help message');
     writeln('       -i               --info                Information');
     writeln('       -c               --convert             Convert to MiniDexed INI file');
-    writeln('       -v               --verbose             more info while converting');
+    writeln('       -v               --verbose             Detailed info');
     writeln('');
     writeln('       -a (filename)    --voiceA1=(filename)  Path to voice bank A1');
     writeln('       -b (filename)    --voiceB1=(filename)  Path to voice bank B1');
@@ -309,6 +333,8 @@ type
     writeln('       -p (filename)    --perf=(filename)     Path to performance file');
     writeln('       -n (number)      --numbering=(number)  First number for filenames');
     writeln('                                              of the output performances');
+    writeln('       -o (path)        --output=(path)       Output directory');
+    writeln('       -s (filename)    --settings=(filename) Use settings file (see separate doc.)');
     writeLn('');
     writeLn('  Parameters are CASE-SENSITIVE');
     writeLn('');

@@ -19,14 +19,15 @@ uses
   Classes, SysUtils, untDX7Bank, untDX7Voice, untDX7IISupplBank,
   untDX7IISupplement, untTX7FunctBank, untTX7Function, untMDXPerformance,
   untMDXSupplement, untDX7IIPerformance, untDX7IIPerformanceBank,
-  untDXUtils, untParConst, Math, untUtils, untTX802Performance, untTX802PerformanceBank;
+  untDXUtils, untParConst, Math, untUtils, untTX802Performance, untTX802PerformanceBank, IniFiles;
 
-procedure ConvertTX7toMDX(var ms: TMemoryStream; APath: string; ANumber: integer; AVerbose: boolean);                        // VMEM + PMEM 1-32
-procedure ConvertDX7IItoMDX(var ms: TMemoryStream; APath: string; ANumber: integer; AVerbose: boolean);                      // VMEM + AMEM 1-32
-procedure ConvertDX5toMDX(var ms: TMemoryStream; APath: string; ANumber: integer; AVerbose: boolean);                        // 4xVMEM, PMEM
-procedure ConvertTX802ToMDX(var ms: TMemoryStream; APath: string; ANumber: integer; AVerbose: boolean);                      // 4xVMEM, 4xAMEM, 2xPMEM
-procedure ConvertBigDX7IItoMDX(var ms: TMemoryStream; APath: string; ANumber: integer; AVerbose: boolean);                   // 2xVMEM, 2xAMEM, 1xPMEM
-procedure Convert2BigDX7IItoMDX(var msA1, msB1: TMemoryStream; APathA, APathB: string; ANumber: integer; AVerbose: boolean); // 4xVMEM, 4xAMEM, 2xPMEM
+procedure ConvertTX7toMDX(var ms: TMemoryStream; APath: string; ANumber: integer; AVerbose: boolean);                               // VMEM + PMEM 1-32
+procedure ConvertDX7IItoMDX(var ms: TMemoryStream; APath: string; ANumber: integer; AVerbose: boolean; ASettings: string);           // VMEM + AMEM 1-32
+procedure ConvertDX5toMDX(var ms: TMemoryStream; APath: string; ANumber: integer; AVerbose: boolean);                                // 4xVMEM, PMEM
+procedure ConvertTX802ToMDX(var ms: TMemoryStream; APath: string; ANumber: integer; AVerbose: boolean; ASettings: string);           // 4xVMEM, 4xAMEM, 2xPMEM
+procedure ConvertBigDX7IItoMDX(var ms: TMemoryStream; APath: string; ANumber: integer; AVerbose: boolean; ASettings: string);        // 2xVMEM, 2xAMEM, 1xPMEM
+procedure Convert2BigDX7IItoMDX(var msA1, msB1: TMemoryStream; APath: string; ANumber: integer; AVerbose: boolean; ASettings: string); // 4xVMEM, 4xAMEM, 2xPMEM
+function GetSettingsFromFile(ASettings: string; var aAMS_table: TAMS; var aPEGR_table: TPEGR): boolean;
 
 implementation
 
@@ -444,7 +445,6 @@ var
 
   i, j: integer;
   sName: string;
-  sPath: string;
 begin
   msSearchPosition := 0;
   msFoundPosition := 0;
@@ -470,12 +470,6 @@ begin
         WriteLn(TX7.GetFunctionName(i));
   end;
 
-  sPath := ExtractFilePath(APath);
-  if sPath = '' then sPath := GetCurrentDir;
-  WriteLn('');
-  WriteLn('Writting to the directory ' + sPath);
-  WriteLn('');
-
   for i := 0 to 3 do
   begin
     MDX.InitPerformance;
@@ -500,7 +494,7 @@ begin
       MDX_TG.Set_PCEDx_Params(LoadTX7PCEDtoPCEDx(TX7_PCED));
       MDX.LoadPCEDxToTG(j, MDX_TG.Get_PCEDx_Params);
       MDX.FMDX_Params.TG[j].MIDIChannel := j;
-      MDX.SavePerformanceToFile(IncludeTrailingPathDelimiter(sPath) +
+      MDX.SavePerformanceToFile(IncludeTrailingPathDelimiter(APath) +
         sName + '.ini', False);
 
       DX7_VCED.Free;
@@ -514,7 +508,7 @@ begin
   MDX.Free;
 end;
 
-procedure ConvertDX7IItoMDX(var ms: TMemoryStream; APath: string; ANumber: integer; AVerbose: boolean);
+procedure ConvertDX7IItoMDX(var ms: TMemoryStream; APath: string; ANumber: integer; AVerbose: boolean; ASettings: string);
 var
   DX7: TDX7BankContainer;
   DX7II: TDX7IISupplBankContainer;
@@ -529,10 +523,10 @@ var
 
   i, j: integer;
   sName: string;
-  sPath: string;
 
   perg, ams1, ams2, ams3, ams4, ams5, ams6: byte;
-
+  AMS_table: TAMS;
+  PEGR_table: TPEGR;
 begin
   msSearchPosition := 0;
   msFoundPosition := 0;
@@ -554,12 +548,6 @@ begin
     DX7II.LoadSupplBankFromStream(ms, msFoundPosition);
     WriteLn('AMEM loaded from ' + IntToStr(msFoundPosition));
   end;
-
-  sPath := ExtractFilePath(APath);
-  if sPath = '' then sPath := GetCurrentDir;
-  WriteLn('');
-  WriteLn('Writting to the directory ' + sPath);
-  WriteLn('');
 
   for i := 0 to 3 do
   begin
@@ -589,12 +577,15 @@ begin
       ams4 := DX7II_ACED.Get_ACED_Params.OP4_AM_Sensitivity;
       ams5 := DX7II_ACED.Get_ACED_Params.OP5_AM_Sensitivity;
       ams6 := DX7II_ACED.Get_ACED_Params.OP6_AM_Sensitivity;
-      DX7_VCED.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
+      if GetSettingsFromFile(ASettings, AMS_table, PEGR_table) = True then
+        DX7_VCED.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6, AMS_table, PEGR_table)
+      else
+        DX7_VCED.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
       MDX.LoadVoiceToTG(j, DX7_VCED.Get_VCED_Params);
       MDX_TG.Set_PCEDx_Params(LoadDX7IIACEDtoPCEDx(DX7II_ACED));
       MDX.LoadPCEDxToTG(j, MDX_TG.Get_PCEDx_Params);
       MDX.FMDX_Params.TG[j].MIDIChannel := j;
-      MDX.SavePerformanceToFile(IncludeTrailingPathDelimiter(sPath) +
+      MDX.SavePerformanceToFile(IncludeTrailingPathDelimiter(APath) +
         sName + '.ini', False);
 
       DX7_VCED.Free;
@@ -628,7 +619,6 @@ var
 
   i: integer;
   sName: string;
-  sPath: string;
 begin
   msFoundPosition := 0;
 
@@ -689,10 +679,6 @@ begin
         WriteLn(TX7.GetFunctionName(i));
   end;
 
-  sPath := ExtractFilePath(APath);
-  if sPath = '' then sPath := GetCurrentDir;
-  WriteLn('Writting to the directory ' + sPath);
-
   WriteLn('Writting A1,B1');
   //Banks A1 and B1, performances 1 to 32
   for i := 1 to 32 do
@@ -727,7 +713,7 @@ begin
     end;
 
     WriteLn('Writting ' + sName + '.ini');
-    MDX.SavePerformanceToFile(IncludeTrailingPathDelimiter(sPath) +
+    MDX.SavePerformanceToFile(IncludeTrailingPathDelimiter(APath) +
       sName + '.ini', False);
 
     DX7_VCED.Free;
@@ -767,7 +753,7 @@ begin
     end;
 
     WriteLn('Writting ' + sName + '.ini');
-    MDX.SavePerformanceToFile(IncludeTrailingPathDelimiter(sPath) +
+    MDX.SavePerformanceToFile(IncludeTrailingPathDelimiter(APath) +
       sName + '.ini', False);
 
     DX7_VCED.Free;
@@ -784,7 +770,7 @@ begin
   MDX.Free;
 end;
 
-procedure ConvertTX802ToMDX(var ms: TMemoryStream; APath: string; ANumber: integer; AVerbose: boolean);
+procedure ConvertTX802ToMDX(var ms: TMemoryStream; APath: string; ANumber: integer; AVerbose: boolean; ASettings: string);
 var
   DXA1: TDX7BankContainer;
   DXB1: TDX7BankContainer;
@@ -812,10 +798,10 @@ var
 
   i, j, t: integer;
   sName: string;
-  sPath: string;
 
   perg, ams1, ams2, ams3, ams4, ams5, ams6: byte;
-
+  AMS_table: TAMS;
+  PEGR_table: TPEGR;
 begin
   msFoundPositionV := 0;
   msFoundPositionA := 0;
@@ -859,7 +845,7 @@ begin
   end;
 
   msSearchPosition := msFoundPositionV;
-  if (msFoundPositionV <> - 1) and (FindDX_SixOP_MEM(VMEM, ms, msSearchPosition, msFoundPositionV)) then
+  if (msFoundPositionV <> -1) and (FindDX_SixOP_MEM(VMEM, ms, msSearchPosition, msFoundPositionV)) then
   begin
     DXA2.LoadBankFromStream(ms, msFoundPositionV);
     WriteLn('');
@@ -876,7 +862,7 @@ begin
   end;
 
   msSearchPosition := msFoundPositionA;
-  if (msFoundPositionA <> - 1) and (FindDX_SixOP_MEM(AMEM, ms, msSearchPosition, msFoundPositionA)) then
+  if (msFoundPositionA <> -1) and (FindDX_SixOP_MEM(AMEM, ms, msSearchPosition, msFoundPositionA)) then
   begin
     DXA2s.LoadSupplBankFromStream(ms, msFoundPositionA);
     WriteLn('');
@@ -890,7 +876,7 @@ begin
   end;
 
   msSearchPosition := msFoundPositionV;
-  if (msFoundPositionV <> - 1) and (FindDX_SixOP_MEM(VMEM, ms, msSearchPosition, msFoundPositionV)) then
+  if (msFoundPositionV <> -1) and (FindDX_SixOP_MEM(VMEM, ms, msSearchPosition, msFoundPositionV)) then
   begin
     DXB1.LoadBankFromStream(ms, msFoundPositionV);
     WriteLn('');
@@ -907,7 +893,7 @@ begin
   end;
 
   msSearchPosition := msFoundPositionA;
-  if (msFoundPositionA <> - 1) and (FindDX_SixOP_MEM(AMEM, ms, msSearchPosition, msFoundPositionA)) then
+  if (msFoundPositionA <> -1) and (FindDX_SixOP_MEM(AMEM, ms, msSearchPosition, msFoundPositionA)) then
   begin
     DXB1s.LoadSupplBankFromStream(ms, msFoundPositionA);
     WriteLn('');
@@ -921,7 +907,7 @@ begin
   end;
 
   msSearchPosition := msFoundPositionV;
-  if (msFoundPositionV <> - 1) and (FindDX_SixOP_MEM(VMEM, ms, msSearchPosition, msFoundPositionV)) then
+  if (msFoundPositionV <> -1) and (FindDX_SixOP_MEM(VMEM, ms, msSearchPosition, msFoundPositionV)) then
   begin
     DXB2.LoadBankFromStream(ms, msFoundPositionV);
     WriteLn('');
@@ -938,7 +924,7 @@ begin
   end;
 
   msSearchPosition := msFoundPositionA;
-  if (msFoundPositionA <> - 1) and (FindDX_SixOP_MEM(AMEM, ms, msSearchPosition, msFoundPositionA)) then
+  if (msFoundPositionA <> -1) and (FindDX_SixOP_MEM(AMEM, ms, msSearchPosition, msFoundPositionA)) then
   begin
     DXB2s.LoadSupplBankFromStream(ms, msFoundPositionA);
     WriteLn('');
@@ -962,12 +948,6 @@ begin
       for i := 1 to 64 do
         WriteLn(TX802.GetPerformanceName(i));
   end;
-
-  sPath := ExtractFilePath(APath);
-  if sPath = '' then sPath := GetCurrentDir;
-  WriteLn('');
-  WriteLn('Writting to the directory ' + sPath);
-  WriteLn('');
 
   for i := 1 to 64 do
   begin
@@ -1019,7 +999,10 @@ begin
         ams4 := DX7II_ACED.Get_ACED_Params.OP4_AM_Sensitivity;
         ams5 := DX7II_ACED.Get_ACED_Params.OP5_AM_Sensitivity;
         ams6 := DX7II_ACED.Get_ACED_Params.OP6_AM_Sensitivity;
-        DX7_VCED.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
+        if GetSettingsFromFile(ASettings, AMS_table, PEGR_table) = True then
+          DX7_VCED.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6, AMS_table, PEGR_table)
+        else
+          DX7_VCED.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
         MDX.LoadVoiceToTG(j, DX7_VCED.Get_VCED_Params);
         MDX_TG.Set_PCEDx_Params(LoadTX802toPCEDx(DX7II_ACED, TX802_PCED, j));
         MDX.LoadPCEDxToTG(j, MDX_TG.Get_PCEDx_Params);
@@ -1040,7 +1023,10 @@ begin
         ams4 := DX7II_ACED.Get_ACED_Params.OP4_AM_Sensitivity;
         ams5 := DX7II_ACED.Get_ACED_Params.OP5_AM_Sensitivity;
         ams6 := DX7II_ACED.Get_ACED_Params.OP6_AM_Sensitivity;
-        DX7_VCED.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
+        if GetSettingsFromFile(ASettings, AMS_table, PEGR_table) = True then
+          DX7_VCED.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6, AMS_table, PEGR_table)
+        else
+          DX7_VCED.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
         MDX.LoadVoiceToTG(j, DX7_VCED.Get_VCED_Params);
         MDX_TG.Set_PCEDx_Params(LoadTX802toPCEDx(DX7II_ACED, TX802_PCED, j));
         MDX.LoadPCEDxToTG(j, MDX_TG.Get_PCEDx_Params);
@@ -1061,7 +1047,10 @@ begin
         ams4 := DX7II_ACED.Get_ACED_Params.OP4_AM_Sensitivity;
         ams5 := DX7II_ACED.Get_ACED_Params.OP5_AM_Sensitivity;
         ams6 := DX7II_ACED.Get_ACED_Params.OP6_AM_Sensitivity;
-        DX7_VCED.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
+        if GetSettingsFromFile(ASettings, AMS_table, PEGR_table) = True then
+          DX7_VCED.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6, AMS_table, PEGR_table)
+        else
+          DX7_VCED.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
         MDX.LoadVoiceToTG(j, DX7_VCED.Get_VCED_Params);
         MDX_TG.Set_PCEDx_Params(LoadTX802toPCEDx(DX7II_ACED, TX802_PCED, j));
         MDX.LoadPCEDxToTG(j, MDX_TG.Get_PCEDx_Params);
@@ -1082,7 +1071,10 @@ begin
         ams4 := DX7II_ACED.Get_ACED_Params.OP4_AM_Sensitivity;
         ams5 := DX7II_ACED.Get_ACED_Params.OP5_AM_Sensitivity;
         ams6 := DX7II_ACED.Get_ACED_Params.OP6_AM_Sensitivity;
-        DX7_VCED.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
+        if GetSettingsFromFile(ASettings, AMS_table, PEGR_table) = True then
+          DX7_VCED.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6, AMS_table, PEGR_table)
+        else
+          DX7_VCED.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
         MDX.LoadVoiceToTG(j, DX7_VCED.Get_VCED_Params);
         MDX_TG.Set_PCEDx_Params(LoadTX802toPCEDx(DX7II_ACED, TX802_PCED, j));
         MDX.LoadPCEDxToTG(j, MDX_TG.Get_PCEDx_Params);
@@ -1103,7 +1095,10 @@ begin
         ams4 := DX7II_ACED.Get_ACED_Params.OP4_AM_Sensitivity;
         ams5 := DX7II_ACED.Get_ACED_Params.OP5_AM_Sensitivity;
         ams6 := DX7II_ACED.Get_ACED_Params.OP6_AM_Sensitivity;
-        DX7_VCED.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
+        if GetSettingsFromFile(ASettings, AMS_table, PEGR_table) = True then
+          DX7_VCED.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6, AMS_table, PEGR_table)
+        else
+          DX7_VCED.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
         MDX.LoadVoiceToTG(j, DX7_VCED.Get_VCED_Params);
         MDX_TG.Set_PCEDx_Params(LoadTX802toPCEDx(DX7II_ACED, TX802_PCED, j));
         MDX.LoadPCEDxToTG(j, MDX_TG.Get_PCEDx_Params);
@@ -1124,7 +1119,7 @@ begin
     end;
 
     WriteLn('Writting ' + sName + '.ini');
-    MDX.SavePerformanceToFile(IncludeTrailingPathDelimiter(sPath) +
+    MDX.SavePerformanceToFile(IncludeTrailingPathDelimiter(APath) +
       sName + '.ini', False);
 
     DX7_VCED.Free;
@@ -1145,7 +1140,7 @@ begin
   MDX.Free;
 end;
 
-procedure ConvertBigDX7IItoMDX(var ms: TMemoryStream; APath: string; ANumber: integer; AVerbose: boolean);
+procedure ConvertBigDX7IItoMDX(var ms: TMemoryStream; APath: string; ANumber: integer; AVerbose: boolean; ASettings: string);
 var
   msA: TMemoryStream;
   msB: TMemoryStream;
@@ -1174,10 +1169,10 @@ var
 
   i: integer;
   sName: string;
-  sPath: string;
 
   perg, ams1, ams2, ams3, ams4, ams5, ams6: byte;
-
+  AMS_table: TAMS;
+  PEGR_table: TPEGR;
 begin
   msFoundPosition := 0;
 
@@ -1267,12 +1262,6 @@ begin
         WriteLn(DX7II.GetPerformanceName(i));
   end;
 
-  sPath := ExtractFilePath(APath);
-  if sPath = '' then sPath := GetCurrentDir;
-  WriteLn('');
-  WriteLn('Writting to the directory ' + sPath);
-  WriteLn('');
-
   for i := 1 to 32 do
   begin
     MDX.InitPerformance;
@@ -1321,7 +1310,10 @@ begin
       ams4 := DX7II_ACED_A.Get_ACED_Params.OP4_AM_Sensitivity;
       ams5 := DX7II_ACED_A.Get_ACED_Params.OP5_AM_Sensitivity;
       ams6 := DX7II_ACED_A.Get_ACED_Params.OP6_AM_Sensitivity;
-      DX7_VCED_A.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
+      if GetSettingsFromFile(ASettings, AMS_table, PEGR_table) = True then
+        DX7_VCED_A.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6, AMS_table, PEGR_table)
+      else
+        DX7_VCED_A.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
     end
     else
     begin
@@ -1335,7 +1327,10 @@ begin
       ams4 := DX7II_ACED_A.Get_ACED_Params.OP4_AM_Sensitivity;
       ams5 := DX7II_ACED_A.Get_ACED_Params.OP5_AM_Sensitivity;
       ams6 := DX7II_ACED_A.Get_ACED_Params.OP6_AM_Sensitivity;
-      DX7_VCED_A.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
+      if GetSettingsFromFile(ASettings, AMS_table, PEGR_table) = True then
+        DX7_VCED_A.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6, AMS_table, PEGR_table)
+      else
+        DX7_VCED_A.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
     end;
     MDX.LoadVoiceToTG(1, DX7_VCED_A.Get_VCED_Params);
     MDX_TG1.Set_PCEDx_Params(LoadDX7IIACEDPCEDtoPCEDx(True, DX7II_ACED_A, DX7II_PCED));
@@ -1366,7 +1361,10 @@ begin
         ams4 := DX7II_ACED_B.Get_ACED_Params.OP4_AM_Sensitivity;
         ams5 := DX7II_ACED_B.Get_ACED_Params.OP5_AM_Sensitivity;
         ams6 := DX7II_ACED_B.Get_ACED_Params.OP6_AM_Sensitivity;
-        DX7_VCED_B.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
+        if GetSettingsFromFile(ASettings, AMS_table, PEGR_table) = True then
+          DX7_VCED_B.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6, AMS_table, PEGR_table)
+        else
+          DX7_VCED_B.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
       end
       else
       begin
@@ -1380,7 +1378,10 @@ begin
         ams4 := DX7II_ACED_B.Get_ACED_Params.OP4_AM_Sensitivity;
         ams5 := DX7II_ACED_B.Get_ACED_Params.OP5_AM_Sensitivity;
         ams6 := DX7II_ACED_B.Get_ACED_Params.OP6_AM_Sensitivity;
-        DX7_VCED_B.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
+        if GetSettingsFromFile(ASettings, AMS_table, PEGR_table) = True then
+          DX7_VCED_B.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6, AMS_table, PEGR_table)
+        else
+          DX7_VCED_B.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
       end;
       MDX.LoadVoiceToTG(2, DX7_VCED_B.Get_VCED_Params);
       MDX_TG2.Set_PCEDx_Params(LoadDX7IIACEDPCEDtoPCEDx(False,
@@ -1401,7 +1402,7 @@ begin
     end;
 
     WriteLn('Writting ' + sName + '.ini');
-    MDX.SavePerformanceToFile(IncludeTrailingPathDelimiter(sPath) +
+    MDX.SavePerformanceToFile(IncludeTrailingPathDelimiter(APath) +
       sName + '.ini', False);
     WriteLn('=================================');
     DX7_VCED_A.Free;
@@ -1424,7 +1425,7 @@ begin
   MDX.Free;
 end;
 
-procedure Convert2BigDX7IItoMDX(var msA1, msB1: TMemoryStream; APathA, APathB: string; ANumber: integer; AVerbose: boolean);
+procedure Convert2BigDX7IItoMDX(var msA1, msB1: TMemoryStream; APath: string; ANumber: integer; AVerbose: boolean; ASettings: string);
 var
   msA: TMemoryStream;
   msB: TMemoryStream;
@@ -1457,10 +1458,10 @@ var
 
   i: integer;
   sName: string;
-  sPath: string;
 
   perg, ams1, ams2, ams3, ams4, ams5, ams6: byte;
-
+  AMS_table: TAMS;
+  PEGR_table: TPEGR;
 begin
   msFoundPosition := 0;
 
@@ -1486,8 +1487,11 @@ begin
   begin
     DXA32.LoadBankFromStream(msA, msFoundPosition);
     WriteLn('');
-    WriteLn('VMEM A 01-32 loaded from ' + APathA + ' from position ' +
+    WriteLn('VMEM A 01-32 loaded from file A, from position ' +
       IntToStr(msFoundPosition));
+    if AVerbose then
+      for i := 1 to 32 do
+        WriteLn(DXA32.GetVoiceName(i));
   end;
 
   msSearchPosition := msFoundPosition;
@@ -1495,8 +1499,11 @@ begin
   begin
     DXA64.LoadBankFromStream(msA, msFoundPosition);
     WriteLn('');
-    WriteLn('VMEM A 33-64 loaded from ' + APathA + ' from position ' +
+    WriteLn('VMEM A 33-64 loaded from file A, from position ' +
       IntToStr(msFoundPosition));
+    if AVerbose then
+      for i := 1 to 32 do
+        WriteLn(DXA64.GetVoiceName(i));
   end
   else
   begin
@@ -1509,7 +1516,7 @@ begin
   begin
     DXA32s.LoadSupplBankFromStream(msA, msFoundPosition);
     WriteLn('');
-    WriteLn('AMEM A 01-32 loaded from ' + APathA + ' from position ' +
+    WriteLn('AMEM A 01-32 loaded from file A, from position ' +
       IntToStr(msFoundPosition));
   end
   else
@@ -1523,7 +1530,7 @@ begin
   begin
     DXA64s.LoadSupplBankFromStream(msA, msFoundPosition);
     WriteLn('');
-    WriteLn('AMEM A 33-64 loaded from ' + APathA + ' from position ' +
+    WriteLn('AMEM A 33-64 loaded from file A from position ' +
       IntToStr(msFoundPosition));
   end
   else
@@ -1537,8 +1544,11 @@ begin
   begin
     DX7IIA.LoadPerfBankFromStream(msA, msFoundPosition);
     WriteLn('');
-    WriteLn('LM_PMEM loaded from ' + APathA + ' from position ' +
+    WriteLn('LM_PMEM loaded from file A, from position ' +
       IntToStr(msFoundPosition));
+    if AVerbose then
+      for i := 1 to 32 do
+        WriteLn(DX7IIA.GetPerformanceName(i));
   end;
 
   //=================== Bank B =====================
@@ -1548,8 +1558,11 @@ begin
   begin
     DXB32.LoadBankFromStream(msB, msFoundPosition);
     WriteLn('');
-    WriteLn('VMEM B 01-32 loaded from ' + APathB + ' from position ' +
+    WriteLn('VMEM B 01-32 loaded from file B, from position ' +
       IntToStr(msFoundPosition));
+    if AVerbose then
+      for i := 1 to 32 do
+        WriteLn(DXB32.GetVoiceName(i));
   end;
 
   msSearchPosition := msFoundPosition;
@@ -1557,8 +1570,11 @@ begin
   begin
     DXB64.LoadBankFromStream(msB, msFoundPosition);
     WriteLn('');
-    WriteLn('VMEM B 33-64 loaded from ' + APathB + ' from position ' +
+    WriteLn('VMEM B 33-64 loaded from file B, from position ' +
       IntToStr(msFoundPosition));
+    if AVerbose then
+      for i := 1 to 32 do
+        WriteLn(DXB64.GetVoiceName(i));
   end
   else
   begin
@@ -1571,7 +1587,7 @@ begin
   begin
     DXB32s.LoadSupplBankFromStream(msB, msFoundPosition);
     WriteLn('');
-    WriteLn('AMEM B 01-32 loaded from ' + APathB + ' from position ' +
+    WriteLn('AMEM B 01-32 loaded from file B, from position ' +
       IntToStr(msFoundPosition));
   end
   else
@@ -1585,7 +1601,7 @@ begin
   begin
     DXB64s.LoadSupplBankFromStream(msB, msFoundPosition);
     WriteLn('');
-    WriteLn('AMEM B 33-64 loaded from ' + APathB + ' from position ' +
+    WriteLn('AMEM B 33-64 loaded from file B, from position ' +
       IntToStr(msFoundPosition));
   end
   else
@@ -1599,15 +1615,12 @@ begin
   begin
     DX7IIB.LoadPerfBankFromStream(msB, msFoundPosition);
     WriteLn('');
-    WriteLn('LM_PMEM loaded from ' + APathB + ' from position ' +
+    WriteLn('LM_PMEM loaded from file B, from position ' +
       IntToStr(msFoundPosition));
+    if AVerbose then
+      for i := 1 to 32 do
+        WriteLn(DX7IIB.GetPerformanceName(i));
   end;
-
-  sPath := ExtractFilePath(APathA);
-  if sPath = '' then sPath := GetCurrentDir;
-  WriteLn('');
-  WriteLn('Writting to the directory ' + sPath);
-  WriteLn('');
 
   //================== Performance A ======================
   for i := 1 to 32 do
@@ -1725,7 +1738,7 @@ begin
     end;
 
     WriteLn('Writting ' + sName + '.ini');
-    MDX.SavePerformanceToFile(IncludeTrailingPathDelimiter(sPath) +
+    MDX.SavePerformanceToFile(IncludeTrailingPathDelimiter(APath) +
       sName + '.ini', False);
     WriteLn('=================================');
     DX7_VCED_A.Free;
@@ -1779,7 +1792,10 @@ begin
       ams4 := DX7II_ACED_A.Get_ACED_Params.OP4_AM_Sensitivity;
       ams5 := DX7II_ACED_A.Get_ACED_Params.OP5_AM_Sensitivity;
       ams6 := DX7II_ACED_A.Get_ACED_Params.OP6_AM_Sensitivity;
-      DX7_VCED_A.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
+      if GetSettingsFromFile(ASettings, AMS_table, PEGR_table) = True then
+        DX7_VCED_A.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6, AMS_table, PEGR_table)
+      else
+        DX7_VCED_A.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
     end;
     if (iVoiceA > 31) and (iVoiceA < 64) then
     begin
@@ -1793,7 +1809,10 @@ begin
       ams4 := DX7II_ACED_A.Get_ACED_Params.OP4_AM_Sensitivity;
       ams5 := DX7II_ACED_A.Get_ACED_Params.OP5_AM_Sensitivity;
       ams6 := DX7II_ACED_A.Get_ACED_Params.OP6_AM_Sensitivity;
-      DX7_VCED_A.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
+      if GetSettingsFromFile(ASettings, AMS_table, PEGR_table) = True then
+        DX7_VCED_A.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6, AMS_table, PEGR_table)
+      else
+        DX7_VCED_A.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
     end;
     if (iVoiceA > 63) and (iVoiceA < 96) then
     begin
@@ -1807,7 +1826,10 @@ begin
       ams4 := DX7II_ACED_A.Get_ACED_Params.OP4_AM_Sensitivity;
       ams5 := DX7II_ACED_A.Get_ACED_Params.OP5_AM_Sensitivity;
       ams6 := DX7II_ACED_A.Get_ACED_Params.OP6_AM_Sensitivity;
-      DX7_VCED_A.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
+      if GetSettingsFromFile(ASettings, AMS_table, PEGR_table) = True then
+        DX7_VCED_A.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6, AMS_table, PEGR_table)
+      else
+        DX7_VCED_A.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
     end;
     if (iVoiceA > 95) and (iVoiceA < 128) then
     begin
@@ -1821,7 +1843,10 @@ begin
       ams4 := DX7II_ACED_A.Get_ACED_Params.OP4_AM_Sensitivity;
       ams5 := DX7II_ACED_A.Get_ACED_Params.OP5_AM_Sensitivity;
       ams6 := DX7II_ACED_A.Get_ACED_Params.OP6_AM_Sensitivity;
-      DX7_VCED_A.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
+      if GetSettingsFromFile(ASettings, AMS_table, PEGR_table) = True then
+        DX7_VCED_A.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6, AMS_table, PEGR_table)
+      else
+        DX7_VCED_A.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
     end;
 
     MDX.LoadVoiceToTG(1, DX7_VCED_A.Get_VCED_Params);
@@ -1853,7 +1878,10 @@ begin
         ams4 := DX7II_ACED_B.Get_ACED_Params.OP4_AM_Sensitivity;
         ams5 := DX7II_ACED_B.Get_ACED_Params.OP5_AM_Sensitivity;
         ams6 := DX7II_ACED_B.Get_ACED_Params.OP6_AM_Sensitivity;
-        DX7_VCED_B.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
+        if GetSettingsFromFile(ASettings, AMS_table, PEGR_table) = True then
+          DX7_VCED_B.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6, AMS_table, PEGR_table)
+        else
+          DX7_VCED_B.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
       end;
       if (iVoiceB > 31) and (iVoiceB < 64) then
       begin
@@ -1867,7 +1895,10 @@ begin
         ams4 := DX7II_ACED_B.Get_ACED_Params.OP4_AM_Sensitivity;
         ams5 := DX7II_ACED_B.Get_ACED_Params.OP5_AM_Sensitivity;
         ams6 := DX7II_ACED_B.Get_ACED_Params.OP6_AM_Sensitivity;
-        DX7_VCED_B.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
+        if GetSettingsFromFile(ASettings, AMS_table, PEGR_table) = True then
+          DX7_VCED_B.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6, AMS_table, PEGR_table)
+        else
+          DX7_VCED_B.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
       end;
       if (iVoiceB > 63) and (iVoiceB < 96) then
       begin
@@ -1881,7 +1912,10 @@ begin
         ams4 := DX7II_ACED_B.Get_ACED_Params.OP4_AM_Sensitivity;
         ams5 := DX7II_ACED_B.Get_ACED_Params.OP5_AM_Sensitivity;
         ams6 := DX7II_ACED_B.Get_ACED_Params.OP6_AM_Sensitivity;
-        DX7_VCED_B.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
+        if GetSettingsFromFile(ASettings, AMS_table, PEGR_table) = True then
+          DX7_VCED_B.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6, AMS_table, PEGR_table)
+        else
+          DX7_VCED_B.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
       end;
       if (iVoiceB > 95) and (iVoiceB < 128) then
       begin
@@ -1895,7 +1929,10 @@ begin
         ams4 := DX7II_ACED_B.Get_ACED_Params.OP4_AM_Sensitivity;
         ams5 := DX7II_ACED_B.Get_ACED_Params.OP5_AM_Sensitivity;
         ams6 := DX7II_ACED_B.Get_ACED_Params.OP6_AM_Sensitivity;
-        DX7_VCED_B.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
+        if GetSettingsFromFile(ASettings, AMS_table, PEGR_table) = True then
+          DX7_VCED_B.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6, AMS_table, PEGR_table)
+        else
+          DX7_VCED_B.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
       end;
 
       MDX.LoadVoiceToTG(2, DX7_VCED_B.Get_VCED_Params);
@@ -1916,7 +1953,7 @@ begin
     end;
 
     WriteLn('Writting ' + sName + '.ini');
-    MDX.SavePerformanceToFile(IncludeTrailingPathDelimiter(sPath) +
+    MDX.SavePerformanceToFile(IncludeTrailingPathDelimiter(APath) +
       sName + '.ini', False);
     WriteLn('=================================');
     DX7_VCED_A.Free;
@@ -1941,6 +1978,39 @@ begin
   DX7IIA.Free;
   DX7IIB.Free;
   MDX.Free;
+end;
+
+function GetSettingsFromFile(ASettings: string; var aAMS_table: TAMS; var aPEGR_table: TPEGR): boolean;
+var
+  ini: TIniFile;
+begin
+  if FileExists(ASettings) then
+  begin
+    try
+      try
+        ini := TIniFile.Create(ASettings);
+        aAMS_Table[0] := byte(ini.ReadInteger('AMS', 'AMS0', 0));
+        aAMS_Table[1] := byte(ini.ReadInteger('AMS', 'AMS1', 1));
+        aAMS_Table[2] := byte(ini.ReadInteger('AMS', 'AMS2', 2));
+        aAMS_Table[3] := byte(ini.ReadInteger('AMS', 'AMS3', 3));
+        aAMS_Table[4] := byte(ini.ReadInteger('AMS', 'AMS4', 3));
+        aAMS_Table[5] := byte(ini.ReadInteger('AMS', 'AMS5', 3));
+        aAMS_Table[6] := byte(ini.ReadInteger('AMS', 'AMS6', 3));
+        aAMS_Table[7] := byte(ini.ReadInteger('AMS', 'AMS7', 3));
+        aPEGR_table[0] := single(ini.ReadFloat('PEGR', 'PEGR0', 50));
+        aPEGR_table[1] := single(ini.ReadFloat('PEGR', 'PEGR1', 25));
+        aPEGR_table[2] := single(ini.ReadFloat('PEGR', 'PEGR2', 6.25));
+        aPEGR_table[3] := single(ini.ReadFloat('PEGR', 'PEGR3', 3.125));
+      finally
+        ini.Free;
+        Result := True;
+      end;
+    except
+      on e: Exception do Result := False;
+    end;
+  end
+  else
+    Result := False;
 end;
 
 end.
