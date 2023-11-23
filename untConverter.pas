@@ -21,8 +21,9 @@ uses
   untMDXSupplement, untDX7IIPerformance, untDX7IIPerformanceBank,
   untDXUtils, untParConst, Math, untUtils, untTX802Performance, untTX802PerformanceBank, IniFiles;
 
-procedure ConvertTX7toMDX(var ms: TMemoryStream; APath: string; ANumber: integer; AVerbose: boolean);                               // VMEM + PMEM 1-32
+procedure ConvertTX7toMDX(var ms: TMemoryStream; APath: string; ANumber: integer; AVerbose: boolean);                                // VMEM + PMEM 1-32
 procedure ConvertDX7IItoMDX(var ms: TMemoryStream; APath: string; ANumber: integer; AVerbose: boolean; ASettings: string);           // VMEM + AMEM 1-32
+procedure ConvertMultiDX7IItoMDX(var ms: TMemoryStream; APath: string; ANumber: integer; AVerbose: boolean; ASettings: string);      // multiple VMEM + AMEM 1-32
 procedure ConvertDX5toMDX(var ms: TMemoryStream; APath: string; ANumber: integer; AVerbose: boolean);                                // 4xVMEM, PMEM
 procedure ConvertTX802ToMDX(var ms: TMemoryStream; APath: string; ANumber: integer; AVerbose: boolean; ASettings: string);           // 4xVMEM, 4xAMEM, 2xPMEM
 procedure ConvertBigDX7IItoMDX(var ms: TMemoryStream; APath: string; ANumber: integer; AVerbose: boolean; ASettings: string);        // 2xVMEM, 2xAMEM, 1xPMEM
@@ -597,6 +598,110 @@ begin
   DX7.Free;
   DX7II.Free;
   MDX.Free;
+end;
+
+procedure ConvertMultiDX7IItoMDX(var ms: TMemoryStream; APath: string; ANumber: integer; AVerbose: boolean; ASettings: string);
+var
+  DX7: TDX7BankContainer;
+  DX7II: TDX7IISupplBankContainer;
+  MDX: TMDXPerformanceContainer;
+
+  DX7_VCED: TDX7VoiceContainer;
+  DX7II_ACED: TDX7IISupplementContainer;
+  MDX_TG: TMDXSupplementContainer;
+
+  msSearchPositionV: integer;
+  msFoundPositionV: integer;
+  msSearchPositionA: integer;
+  msFoundPositionA: integer;
+
+  i, j: integer;
+  sName: string;
+  bank_counter: integer;
+
+  perg, ams1, ams2, ams3, ams4, ams5, ams6: byte;
+  AMS_table: TAMS;
+  PEGR_table: TPEGR;
+begin
+  msSearchPositionV := 0;
+  msFoundPositionV := 0;
+  msSearchPositionA := 0;
+  msFoundPositionA := 0;
+  bank_counter := 0;
+
+  while FindDX_SixOP_MEM(VMEM, ms, msSearchPositionV, msFoundPositionV) do
+  begin
+
+    DX7 := TDX7BankContainer.Create;
+    DX7II := TDX7IISupplBankContainer.Create;
+    MDX := TMDXPerformanceContainer.Create;
+    if FindDX_SixOP_MEM(VMEM, ms, msSearchPositionV, msFoundPositionV) then
+    begin
+      DX7.LoadBankFromStream(ms, msFoundPositionV);
+      WriteLn('VMEM loaded from ' + IntToStr(msFoundPositionV));
+      if AVerbose then
+        for i := 1 to 32 do
+          WriteLn(DX7.GetVoiceName(i));
+    end;
+    msSearchPositionV := msFoundPositionV;
+
+    if FindDX_SixOP_MEM(AMEM, ms, msSearchPositionA, msFoundPositionA) then
+    begin
+      DX7II.LoadSupplBankFromStream(ms, msFoundPositionA);
+      WriteLn('AMEM loaded from ' + IntToStr(msFoundPositionA));
+    end;
+    msSearchPositionA := msFoundPositionA;
+
+    for i := 0 to 3 do
+    begin
+      MDX.InitPerformance;
+      MDX.AllMIDIChToZero;
+      MDX.FMDX_Params.General.Name :=
+        'Voices ' + IntToStr(i * 8) + ' to ' + IntToStr((i + 1) * 8 - 1);
+      MDX.FMDX_Params.General.Category := 'Converted';
+      MDX.FMDX_Params.General.Origin := 'Conversion from DX7II Voices';
+
+      sName := Format('%.6d', [i + ANumber + bank_counter + 1]) + '_' +
+        Trim(ExtractFileNameWithoutExt(ExtractFileName(APath)));
+      sName := copy(sName, 1, 19) + '_' + IntToStr(i + bank_counter);
+
+      for j := 1 to 8 do
+      begin
+        DX7_VCED := TDX7VoiceContainer.Create;
+        DX7II_ACED := TDX7IISupplementContainer.Create;
+        MDX_TG := TMDXSupplementContainer.Create;
+
+        DX7.GetVoice(i * 8 + j, DX7_VCED);
+        DX7II.GetSupplement(i * 8 + j, DX7II_ACED);
+        perg := DX7II_ACED.Get_ACED_Params.Pitch_EG_Range;
+        ams1 := DX7II_ACED.Get_ACED_Params.OP1_AM_Sensitivity;
+        ams2 := DX7II_ACED.Get_ACED_Params.OP2_AM_Sensitivity;
+        ams3 := DX7II_ACED.Get_ACED_Params.OP3_AM_Sensitivity;
+        ams4 := DX7II_ACED.Get_ACED_Params.OP4_AM_Sensitivity;
+        ams5 := DX7II_ACED.Get_ACED_Params.OP5_AM_Sensitivity;
+        ams6 := DX7II_ACED.Get_ACED_Params.OP6_AM_Sensitivity;
+        if GetSettingsFromFile(ASettings, AMS_table, PEGR_table) = True then
+          DX7_VCED.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6, AMS_table, PEGR_table)
+        else
+          DX7_VCED.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
+        MDX.LoadVoiceToTG(j, DX7_VCED.Get_VCED_Params);
+        MDX_TG.Set_PCEDx_Params(LoadDX7IIACEDtoPCEDx(DX7II_ACED));
+        MDX.LoadPCEDxToTG(j, MDX_TG.Get_PCEDx_Params);
+        MDX.FMDX_Params.TG[j].MIDIChannel := j;
+        MDX.SavePerformanceToFile(IncludeTrailingPathDelimiter(APath) +
+          sName + '.ini', False);
+
+        DX7_VCED.Free;
+        DX7II_ACED.Free;
+        MDX_TG.Free;
+      end;
+    end;
+    inc(bank_counter, 4);
+
+    DX7.Free;
+    DX7II.Free;
+    MDX.Free;
+  end;
 end;
 
 procedure ConvertDX5toMDX(var ms: TMemoryStream; APath: string; ANumber: integer; AVerbose: boolean);

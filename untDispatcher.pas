@@ -35,13 +35,22 @@ begin
   msBank.LoadFromFile(ABank);
   ms := ContainsDX_SixOP_MemSet(msBank);
 
-  if (VMEM in ms) and (AMEM in ms) and not ((PMEM in ms) or (LMPMEM in ms)) then
+  if (VMEM in ms) and (AMEM in ms) and not ((PMEM in ms) or (LMPMEM in ms) or (D_VMEM in ms) or (D_AMEM in ms)) then
   begin
     if msBank.Size >= 5232 then
     begin
       WriteLn('It is a DX7II bank with supplement');
       if AVerbose then WriteLn('Using ConvertDX7IItoMDX with one stream');
       ConvertDX7IItoMDX(msBank, AOutput, ANumber, AVerbose, ASettings);
+    end;
+  end;
+  if (VMEM in ms) and (AMEM in ms) and (D_VMEM in ms) and (D_AMEM in ms) and not ((PMEM in ms) or (LMPMEM in ms)) then
+  begin
+    if msBank.Size >= 5232 then
+    begin
+      WriteLn('It is a multiple DX7II bank with supplement');
+      if AVerbose then WriteLn('Using ConvertMultiDX7IItoMDX with one stream');
+      ConvertMultiDX7IItoMDX(msBank, AOutput, ANumber, AVerbose, ASettings);
     end;
   end;
   if (VMEM in ms) and (PMEM in ms) and not ((AMEM in ms) or (LMPMEM in ms)) then

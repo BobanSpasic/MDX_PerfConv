@@ -98,7 +98,8 @@ type
   end;
 
 type
-  MEMS6 = (VMEM, AMEM, PMEM, LMPMEM, PMEM802);
+  // D=double, T=triple, Q=quadruple
+  MEMS6 = (VMEM, AMEM, PMEM, LMPMEM, PMEM802, D_VMEM, D_AMEM, T_VMEM, T_AMEM, Q_VMEM, Q_AMEM);
   CEDS6 = (VCED, ACED, PCED);
 
 type
@@ -326,9 +327,19 @@ begin
           if rHeader.f = $02 then
             Result := Result + [PMEM];
           if rHeader.f = $06 then
+          begin
+            if T_AMEM in Result then Result := Result + [Q_AMEM];
+            if D_AMEM in Result then Result := Result + [T_AMEM];
+            if AMEM in Result then Result := Result + [D_AMEM];
             Result := Result + [AMEM];
+          end;
           if rHeader.f = $09 then
+          begin
+            if T_VMEM in Result then Result := Result + [Q_VMEM];
+            if D_VMEM in Result then Result := Result + [T_VMEM];
+            if VMEM in Result then Result := Result + [D_VMEM];
             Result := Result + [VMEM];
+          end;
           if rHeader.f = $7E then
           begin
             if (dmp.Position + 10) <= dmp.Size then
@@ -350,10 +361,14 @@ begin
           iRep := iDumpEnd + 1;
         end
         else
+        if iDumpStart > -1 then iRep := iDumpStart + 1
+        else
           Inc(iRep);
         //exit;
       end;
-    end;
+    end
+    else
+      Inc(iRep);
   end;
 end;
 
