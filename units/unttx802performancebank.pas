@@ -35,6 +35,7 @@ type
     function SetPerformance(aFunctionNr: integer;
       var FTX802Performance: TTX802PerformanceContainer): boolean;
     function GetPerformanceName(aNr: integer): string;
+    procedure AppendSysExPerformanceBankToStream(aCh: integer; var aStream: TMemoryStream);
   end;
 
 implementation
@@ -118,6 +119,21 @@ begin
     Result := FTX802PerfBankParams[aNr].GetPerformanceName
   else
     Result := '';
+end;
+
+procedure TTX802PerfBankContainer.AppendSysExPerformanceBankToStream(aCh: integer; var aStream: TMemoryStream);
+var
+  i: integer;
+  FCh: byte;
+begin
+  FCh := aCh -1;
+  aStream.WriteByte($F0);
+  aStream.WriteByte($43);
+  aStream.WriteByte($00 + FCh);
+  aStream.WriteByte($7E);
+  for i := 1 to 64 do
+    FTX802PerfBankParams[i].Save_Perf_ToStream(aStream);
+  aStream.WriteByte($F7);
 end;
 
 end.

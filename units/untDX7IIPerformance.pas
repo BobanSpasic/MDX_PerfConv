@@ -93,6 +93,7 @@ type
     function Get_PCED_Params: TDX7II_PCED_Params;
     function Set_PCED_Params(aParams: TDX7II_PCED_Params): boolean;
     function Save_PCED_ToStream(var aStream: TMemoryStream): boolean;
+    function GetChecksumPart: integer;
     function GetPerformanceName: string;
   end;
 
@@ -148,6 +149,22 @@ begin
   end
   else
     Result := False;
+end;
+
+function TDX7IIPerformanceContainer.GetChecksumPart: integer;
+var
+  checksum: integer;
+  i: integer;
+  tmpStream: TMemoryStream;
+begin
+  checksum := 0;
+  tmpStream := TMemoryStream.Create;
+  Save_PCED_ToStream(tmpStream);
+  tmpStream.Position := 0;
+  for i := 0 to tmpStream.Size - 1 do
+    checksum := checksum + tmpStream.ReadByte;
+  Result := checksum;
+  tmpStream.Free;
 end;
 
 function TDX7IIPerformanceContainer.GetPerformanceName: string;

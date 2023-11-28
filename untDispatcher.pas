@@ -64,7 +64,7 @@ begin
   end;
   if (VMEM in ms) and (LMPMEM in ms) and (AMEM in ms) then
   begin
-    if msBank.Size >= 12128 then
+    if msBank.Size >= 12114 then
     begin
       WriteLn('It is a DX7II All dump');
       if AVerbose then WriteLn('Using ConvertBigDX7IItoMDX with one stream');
@@ -83,7 +83,7 @@ begin
   end;
   if (VMEM in ms) and (PMEM802 in ms) and (AMEM in ms) then
   begin
-    if msBank.Size >= 16828 then
+    if msBank.Size >= 16821 then
     begin
       WriteLn('It is a TX802 All dump');
       if AVerbose then WriteLn('Using ConvertTX802ToMDX with one stream');

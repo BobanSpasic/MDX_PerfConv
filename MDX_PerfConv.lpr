@@ -24,6 +24,8 @@ uses
   CustApp,
   untDispatcher,
   untConverter,
+  untConvFunct,
+  untExtract,
   untDXUtils;
 
 type
@@ -66,8 +68,8 @@ type
     bVerbose := False;
     // quick check parameters
     CaseSensitiveOptions := True;
-    ErrorMsg := CheckOptions('hica:b:A:B:p:n:vo:s:',
-      'help info convert voiceA1: voiceB1: voiceA2: voiceB2: perf: numbering: verbose output: settings:');
+    ErrorMsg := CheckOptions('hica:b:A:B:p:n:vo:s:e:',
+      'help info convert voiceA1: voiceB1: voiceA2: voiceB2: perf: numbering: verbose output: settings: extract:');
 
     if ErrorMsg <> '' then
     begin
@@ -148,7 +150,7 @@ type
         (not FileExists(fVoiceA2)) and (not FileExists(fVoiceB2)) and
         (not FileExists(fPerf)) then
       begin
-        WriteLn('Please specify at least one of the parameters -a, -b -A, -B or -p');
+        WriteLn('Please specify at least one target file');
         Terminate;
         Exit;
       end
@@ -268,7 +270,7 @@ type
         (not FileExists(fVoiceA2)) and (not FileExists(fVoiceB2)) and
         (not FileExists(fPerf)) then
       begin
-        WriteLn('Please specify the parameters -a or -a, -b, -A, -B  and -p');
+        WriteLn('Please specify at least one target file');
         Terminate;
         Exit;
       end
@@ -295,6 +297,13 @@ type
           DispatchCheck(fVoiceA1, iNumbering, bVerbose, fOutput, fSettings);
         end;
       end;
+    end;
+
+    if HasOption('e', 'extract') then
+    begin
+      fPerf := GetOptionValue('e', 'extract');
+      fPerf := ExpandFileName(fPerf);
+      ExtractDispatch(fPerf, bVerbose);
     end;
 
     Terminate;
@@ -335,6 +344,8 @@ type
     writeln('                                              of the output performances');
     writeln('       -o (path)        --output=(path)       Output directory');
     writeln('       -s (filename)    --settings=(filename) Use settings file (see separate doc.)');
+    writeLn('');
+    writeln('       -e (filename)    --extract=(filename)  extract data from libraries (see separate doc.)');
     writeLn('');
     writeLn('  Parameters are CASE-SENSITIVE');
     writeLn('');

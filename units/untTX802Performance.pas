@@ -250,6 +250,7 @@ type
     function Get_PMEM_Params: TTX802_PMEM_Params;
     function Set_PMEM_Params(aParams: TTX802_PMEM_Params): boolean;
     function GetPerformanceName: string;
+    function Save_Perf_ToStream(var aStream: TMemoryStream): boolean;
   end;
 
 function PMEMtoPCED(aPar: TTX802_PMEM_Params): TTX802_PCED_Params;
@@ -456,6 +457,40 @@ begin
   s := s + Printable(chr(FTX802_PCED_Params.PerfName19));
   s := s + Printable(chr(FTX802_PCED_Params.PerfName20));
   Result := s;
+end;
+
+//   $4C, $4D, $20, $20, $38, $39, $35, $32, $50, $45
+function TTX802PerformanceContainer.Save_Perf_ToStream(var aStream: TMemoryStream): boolean;
+var
+  i: integer;
+  sByte: string;
+begin
+  //dont clear the stream here or else bulk dump won't work
+  if Assigned(aStream) then
+  begin
+    aStream.WriteByte($01);
+    aStream.WriteByte($28);
+    aStream.WriteByte($4C);
+    aStream.WriteByte($4D);
+    aStream.WriteByte($20);
+    aStream.WriteByte($20);
+    aStream.WriteByte($38);
+    aStream.WriteByte($39);
+    aStream.WriteByte($35);
+    aStream.WriteByte($32);
+    aStream.WriteByte($50);
+    aStream.WriteByte($4D);
+    for i := 0 to 83 do
+      begin
+        sByte := IntToHex(FTX802_PMEM_Params.params[i], 2);
+        aStream.WriteByte(Ord(sByte[1]));
+        aStream.WriteByte(Ord(sByte[2]));
+      end;
+    aStream.WriteByte(0); //checksum should go here
+    Result := True;
+  end
+  else
+    Result := False;
 end;
 
 end.

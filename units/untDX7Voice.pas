@@ -205,7 +205,7 @@ type
   end;
 
   TDX7_VMEM_Params = packed record
-    case asArray: boolean of
+    case boolean of
       True: (params: TDX7_VMEM_Dump);
       False: (
         OP6_EG_rate_1: byte;              //       0-99
@@ -380,9 +380,6 @@ function VCEDtoVMEM(aPar: TDX7_VCED_Params): TDX7_VMEM_Params;
 var
   t: TDX7_VMEM_Params;
 begin
-  Result.asArray := False;
-  t.asArray := False;
-
   //first the parameters without conversion
   t.OP6_EG_rate_1 := aPar.OP6_EG_rate_1 and 127;
   t.OP6_EG_rate_2 := aPar.OP6_EG_rate_2 and 127;
@@ -751,7 +748,6 @@ begin
   else
     Exit;
   try
-    FDX7_VMEM_Params.asArray := True;
     for i := 0 to 127 do
       FDX7_VMEM_Params.params[i] := aStream.ReadByte and 127;
 
@@ -893,7 +889,6 @@ begin
   //dont clear the stream here or else bulk dump won't work
   if Assigned(aStream) then
   begin
-    FDX7_VMEM_Params.asArray := True;
     for i := 0 to 127 do
       aStream.WriteByte(FDX7_VMEM_Params.params[i]);
     Result := True;
