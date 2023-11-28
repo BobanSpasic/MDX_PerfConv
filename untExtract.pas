@@ -199,7 +199,7 @@ begin
           dxtb.SetPerformance(p, dxt);
           Inc(p);
         end;
-        if p = 65 then
+        if p = 33 then
         begin
           msO := TMemoryStream.Create;
           dxtb.AppendSysExPerformanceBankToStream(1, msO);
@@ -232,7 +232,7 @@ begin
   if msAll.Size > 0 then
   begin
     WriteLn('Writting: ' + aName + '.ALL.syx');
-    msAll.SaveToFile(aName + '.ALL.sys');
+    msAll.SaveToFile(aName + '.ALL.syx');
   end;
 
   ms.Free;

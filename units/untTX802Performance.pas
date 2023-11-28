@@ -184,8 +184,8 @@ type
           OutputVolume7: byte;              // 0-99
           OutputVolume8: byte;              // 0-99
           Detune_KASG_Outch1: byte;         //        |    |    |    |    |    |    |    |
-          Detune_KASG_Outch2: byte;         //        | -  |    Detune    |KASG|OutChAssg|   Yamaha manual
-          Detune_KASG_Outch3: byte;         //        |    |        Detune     |OutChAssg|   Tim
+          Detune_KASG_Outch2: byte;         //        |       Detune      |KASG|OutChAssg|   Yamaha manual
+          Detune_KASG_Outch3: byte;         //
           Detune_KASG_Outch4: byte;         //
           Detune_KASG_Outch5: byte;         //
           Detune_KASG_Outch6: byte;         //
@@ -285,14 +285,14 @@ begin
   t.VoiceNumber6:= aPar.VoiceNumber6;
   t.VoiceNumber7:= aPar.VoiceNumber7;
   t.VoiceNumber8:= aPar.VoiceNumber8;
-  t.Detune1 := (aPar.Detune_KASG_Outch1 shr 2) and 15;
-  t.Detune2 := (aPar.Detune_KASG_Outch2 shr 2) and 15;
-  t.Detune3 := (aPar.Detune_KASG_Outch3 shr 2) and 15;
-  t.Detune4 := (aPar.Detune_KASG_Outch4 shr 2) and 15;
-  t.Detune5 := (aPar.Detune_KASG_Outch5 shr 2) and 15;
-  t.Detune6 := (aPar.Detune_KASG_Outch6 shr 2) and 15;
-  t.Detune7 := (aPar.Detune_KASG_Outch7 shr 2) and 15;
-  t.Detune8 := (aPar.Detune_KASG_Outch8 shr 2) and 15;
+  t.Detune1 := (aPar.Detune_KASG_Outch1 shr 3) and 15;
+  t.Detune2 := (aPar.Detune_KASG_Outch2 shr 3) and 15;
+  t.Detune3 := (aPar.Detune_KASG_Outch3 shr 3) and 15;
+  t.Detune4 := (aPar.Detune_KASG_Outch4 shr 3) and 15;
+  t.Detune5 := (aPar.Detune_KASG_Outch5 shr 3) and 15;
+  t.Detune6 := (aPar.Detune_KASG_Outch6 shr 3) and 15;
+  t.Detune7 := (aPar.Detune_KASG_Outch7 shr 3) and 15;
+  t.Detune8 := (aPar.Detune_KASG_Outch8 shr 3) and 15;
   t.OutputVolume1 := aPar.OutputVolume1 and 127;
   t.OutputVolume2 := aPar.OutputVolume2 and 127;
   t.OutputVolume3 := aPar.OutputVolume3 and 127;

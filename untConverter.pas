@@ -297,7 +297,7 @@ begin
         MDX_TG.Free;
       end;
     end;
-    inc(bank_counter, 4);
+    Inc(bank_counter, 4);
 
     DX7.Free;
     DX7II.Free;
@@ -693,7 +693,7 @@ begin
     begin
       if (iVoice[j] >= 0) and (iVoice[j] < 32) then
       begin
-        //voice is from bank single bank file
+        //voice is from single bank file
         t := iVoice[j];
         iVoice[j] := iVoice[j] + 1;
         DXA1.GetVoice(iVoice[j], DX7_VCED);
@@ -713,8 +713,33 @@ begin
         MDX_TG.Set_PCEDx_Params(LoadTX802toPCEDx(DX7II_ACED, TX802_PCED, j));
         MDX.LoadPCEDxToTG(j, MDX_TG.Get_PCEDx_Params);
         MDX.FMDX_Params.TG[j].BankNumberLSB := 1;
-        WriteLn('Voice ' + IntToStr(j) + ' - File:' + IntToStr(iVoice[j]) + '(' + IntToStr(t) + ') :' + DX7_VCED.GetVoiceName);
+        WriteLn('Voice ' + IntToStr(j) + ' - File A:' + IntToStr(iVoice[j]) + '(' + IntToStr(t) + ') :' + DX7_VCED.GetVoiceName);
       end;
+      if (iVoice[j] > 31) and (iVoice[j] < 64) then
+      begin
+        //voice is from bank A2
+        t := iVoice[j];
+        iVoice[j] := iVoice[j] - 31;
+        DXA2.GetVoice(iVoice[j], DX7_VCED);
+        DXA2s.GetSupplement(iVoice[j], DX7II_ACED);
+        perg := DX7II_ACED.Get_ACED_Params.Pitch_EG_Range;
+        ams1 := DX7II_ACED.Get_ACED_Params.OP1_AM_Sensitivity;
+        ams2 := DX7II_ACED.Get_ACED_Params.OP2_AM_Sensitivity;
+        ams3 := DX7II_ACED.Get_ACED_Params.OP3_AM_Sensitivity;
+        ams4 := DX7II_ACED.Get_ACED_Params.OP4_AM_Sensitivity;
+        ams5 := DX7II_ACED.Get_ACED_Params.OP5_AM_Sensitivity;
+        ams6 := DX7II_ACED.Get_ACED_Params.OP6_AM_Sensitivity;
+        if GetSettingsFromFile(ASettings, AMS_table, PEGR_table) = True then
+          DX7_VCED.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6, AMS_table, PEGR_table)
+        else
+          DX7_VCED.Mk2ToMk1(perg, ams1, ams2, ams3, ams4, ams5, ams6);
+        MDX.LoadVoiceToTG(j, DX7_VCED.Get_VCED_Params);
+        MDX_TG.Set_PCEDx_Params(LoadTX802toPCEDx(DX7II_ACED, TX802_PCED, j));
+        MDX.LoadPCEDxToTG(j, MDX_TG.Get_PCEDx_Params);
+        MDX.FMDX_Params.TG[j].BankNumberLSB := 1;
+        WriteLn('Voice ' + IntToStr(j) + ' - File B:' + IntToStr(iVoice[j]) + '(' + IntToStr(t) + ') :' + DX7_VCED.GetVoiceName);
+      end;
+
       if (iVoice[j] > 127) and (iVoice[j] < 160) then
       begin
         //voice is from bank A1
@@ -813,15 +838,23 @@ begin
       end;
       MDX.FMDX_Params.TG[j].VoiceNumber := iVoice[j];
       case j of
-        1: MDX.FMDX_Params.TG[j].MIDIChannel := Params.RXChannel1;
-        2: MDX.FMDX_Params.TG[j].MIDIChannel := Params.RXChannel2;
-        3: MDX.FMDX_Params.TG[j].MIDIChannel := Params.RXChannel3;
-        4: MDX.FMDX_Params.TG[j].MIDIChannel := Params.RXChannel4;
-        5: MDX.FMDX_Params.TG[j].MIDIChannel := Params.RXChannel5;
-        6: MDX.FMDX_Params.TG[j].MIDIChannel := Params.RXChannel6;
-        7: MDX.FMDX_Params.TG[j].MIDIChannel := Params.RXChannel7;
-        8: MDX.FMDX_Params.TG[j].MIDIChannel := Params.RXChannel8;
+        1: MDX.FMDX_Params.TG[j].MIDIChannel := Params.RXChannel1 + 1;
+        2: MDX.FMDX_Params.TG[j].MIDIChannel := Params.RXChannel2 + 1;
+        3: MDX.FMDX_Params.TG[j].MIDIChannel := Params.RXChannel3 + 1;
+        4: MDX.FMDX_Params.TG[j].MIDIChannel := Params.RXChannel4 + 1;
+        5: MDX.FMDX_Params.TG[j].MIDIChannel := Params.RXChannel5 + 1;
+        6: MDX.FMDX_Params.TG[j].MIDIChannel := Params.RXChannel6 + 1;
+        7: MDX.FMDX_Params.TG[j].MIDIChannel := Params.RXChannel7 + 1;
+        8: MDX.FMDX_Params.TG[j].MIDIChannel := Params.RXChannel8 + 1;
       end;
+      //simulate linked channels
+      if params.VoiceChannelOffset2 = 0 then MDX.FMDX_Params.TG[2].MIDIChannel := 0;
+      if params.VoiceChannelOffset3 = 0 then MDX.FMDX_Params.TG[3].MIDIChannel := 0;
+      if params.VoiceChannelOffset4 = 0 then MDX.FMDX_Params.TG[4].MIDIChannel := 0;
+      if params.VoiceChannelOffset5 = 0 then MDX.FMDX_Params.TG[5].MIDIChannel := 0;
+      if params.VoiceChannelOffset6 = 0 then MDX.FMDX_Params.TG[6].MIDIChannel := 0;
+      if params.VoiceChannelOffset7 = 0 then MDX.FMDX_Params.TG[7].MIDIChannel := 0;
+      if params.VoiceChannelOffset8 = 0 then MDX.FMDX_Params.TG[8].MIDIChannel := 0;
     end;
 
     WriteLn('Writting ' + sName + '.ini');

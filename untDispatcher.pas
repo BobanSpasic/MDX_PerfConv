@@ -182,6 +182,14 @@ begin
     ConvertBigDX7IItoMDX(msAll, AOutput, ANumber, AVerbose, ASettings);
   end;
 
+  if (VMEM in msA) and (VMEM in msB) and (AMEM in msA) and (AMEM in msB) and
+    (PMEM802 in msP) then
+  begin
+    WriteLn('It is a TX802 performance set');
+    if AVerbose then WriteLn('Using ConvertTX802ToMDX with one stream');
+    ConvertTX802ToMDX(msAll, AOutput, ANumber, AVerbose, ASettings);
+  end;
+
   msBankA.Free;
   msBankB.Free;
   msPerf.Free;

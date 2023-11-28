@@ -299,6 +299,12 @@ begin
       sup.NoteShift := txp.NoteShift1;
       sup.NoteLimitLow := txp.NoteLimitLow1;
       sup.NoteLimitHigh := txp.NoteLimitHigh1;
+      case txp.OutputAssign1 of
+        1: sup.Pan := 0;
+        2: sup.Pan := 127;
+        else
+          sup.Pan := 64;
+      end;
       if txp.Detune1 > 7 then
       begin
         sup.DetuneSGN := 0;
@@ -315,6 +321,12 @@ begin
       sup.NoteShift := txp.NoteShift2;
       sup.NoteLimitLow := txp.NoteLimitLow2;
       sup.NoteLimitHigh := txp.NoteLimitHigh2;
+      case txp.OutputAssign2 of
+        1: sup.Pan := 0;
+        2: sup.Pan := 127;
+        else
+          sup.Pan := 64;
+        end;
       if txp.Detune2 > 7 then
       begin
         sup.DetuneSGN := 0;
@@ -331,6 +343,12 @@ begin
       sup.NoteShift := txp.NoteShift3;
       sup.NoteLimitLow := txp.NoteLimitLow3;
       sup.NoteLimitHigh := txp.NoteLimitHigh3;
+      case txp.OutputAssign3 of
+        1: sup.Pan := 0;
+        2: sup.Pan := 127;
+        else
+          sup.Pan := 64;
+        end;
       if txp.Detune3 > 7 then
       begin
         sup.DetuneSGN := 0;
@@ -347,6 +365,12 @@ begin
       sup.NoteShift := txp.NoteShift4;
       sup.NoteLimitLow := txp.NoteLimitLow4;
       sup.NoteLimitHigh := txp.NoteLimitHigh4;
+      case txp.OutputAssign4 of
+        1: sup.Pan := 0;
+        2: sup.Pan := 127;
+        else
+          sup.Pan := 64;
+        end;
       if txp.Detune4 > 7 then
       begin
         sup.DetuneSGN := 0;
@@ -363,6 +387,12 @@ begin
       sup.NoteShift := txp.NoteShift5;
       sup.NoteLimitLow := txp.NoteLimitLow5;
       sup.NoteLimitHigh := txp.NoteLimitHigh5;
+      case txp.OutputAssign5 of
+        1: sup.Pan := 0;
+        2: sup.Pan := 127;
+        else
+          sup.Pan := 64;
+        end;
       if txp.Detune5 > 7 then
       begin
         sup.DetuneSGN := 0;
@@ -379,6 +409,12 @@ begin
       sup.NoteShift := txp.NoteShift6;
       sup.NoteLimitLow := txp.NoteLimitLow6;
       sup.NoteLimitHigh := txp.NoteLimitHigh6;
+      case txp.OutputAssign6 of
+        1: sup.Pan := 0;
+        2: sup.Pan := 127;
+        else
+          sup.Pan := 64;
+        end;
       if txp.Detune6 > 7 then
       begin
         sup.DetuneSGN := 0;
@@ -395,6 +431,12 @@ begin
       sup.NoteShift := txp.NoteShift7;
       sup.NoteLimitLow := txp.NoteLimitLow7;
       sup.NoteLimitHigh := txp.NoteLimitHigh7;
+      case txp.OutputAssign7 of
+        1: sup.Pan := 0;
+        2: sup.Pan := 127;
+        else
+          sup.Pan := 64;
+        end;
       if txp.Detune7 > 7 then
       begin
         sup.DetuneSGN := 0;
@@ -411,6 +453,12 @@ begin
       sup.NoteShift := txp.NoteShift8;
       sup.NoteLimitLow := txp.NoteLimitLow8;
       sup.NoteLimitHigh := txp.NoteLimitHigh8;
+      case txp.OutputAssign8 of
+        1: sup.Pan := 0;
+        2: sup.Pan := 127;
+        else
+          sup.Pan := 64;
+        end;
       if txp.Detune8 > 7 then
       begin
         sup.DetuneSGN := 0;
@@ -428,4 +476,3 @@ begin
 end;
 
 end.
-
