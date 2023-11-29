@@ -5,22 +5,26 @@ MiniDexed performance converter - convert TX7, DX7II, DX5 etc. function and perf
 Usage:
 ``` MDX_PerfConv.exe -parameters ```
 
-  Parameters (short and long form): 
-  
-       -h               --help                This help message
-       -i               --info                Information
-       -c               --convert             Convert to MiniDexed INI file
-       -v               --verbose             Detailed info
+  Parameters (short and long form):
+       -h               --help                 This help message
+       -i               --info                 Information
+       -c               --convert              Convert to MiniDexed INI file
+       -v               --verbose              Detailed info
 
-       -a (filename)    --voiceA1=(filename)  Path to voice bank A1
-       -b (filename)    --voiceB1=(filename)  Path to voice bank B1
-       -A (filename)    --voiceA2=(filename)  Path to voice bank A2
-       -B (filename)    --voiceB2=(filename)  Path to voice bank B2
-       -p (filename)    --perf=(filename)     Path to performance file
-       -n (number)      --numbering=(number)  First number for filenames
-                                              of the output performances
-       -o (path)        --output=(path)       Output directory
-       -s (filename)    --settings=(filename) Use settings file (see separate doc.)
+       -a (filename)    --voiceA1=(filename)   Path to voice bank A1
+       -b (filename)    --voiceB1=(filename)   Path to voice bank B1
+       -A (filename)    --voiceA2=(filename)   Path to voice bank A2
+       -B (filename)    --voiceB2=(filename)   Path to voice bank B2
+       -p (filename)    --perf=(filename)      Path to performance file
+       -n (number)      --numbering=(number)   First number for filenames
+                                               of the output performances
+       -o (path)        --output=(path)        Output directory
+       -s (filename)    --settings=(filename)  Use settings file (see separate doc.)
+
+       -e (filename)    --extract=(filename)   Extract data from libraries (see separate doc.)
+
+       -r (path)        --renumber=(path)      Re-number the performance INI files in a directory
+                                               To be used in combination with -n
 
   Parameters are CASE-SENSITIVE
 
