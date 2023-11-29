@@ -74,14 +74,16 @@
       <Unit>
         <Filename Value="MDX_PerfConv.lpr"/>
         <IsPartOfProject Value="True"/>
-        <CursorPos X="107" Y="348"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="335"/>
+        <CursorPos X="56" Y="358"/>
         <UsageCount Value="202"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="untDispatcher.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="4"/>
         <TopLine Value="165"/>
         <CursorPos X="54" Y="189"/>
         <UsageCount Value="202"/>
@@ -90,34 +92,40 @@
       <Unit>
         <Filename Value="untConverter.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="4"/>
-        <TopLine Value="757"/>
-        <CursorPos X="25" Y="718"/>
+        <EditorIndex Value="5"/>
+        <CursorPos X="58" Y="668"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="untConvFunct.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="6"/>
-        <TopLine Value="389"/>
+        <EditorIndex Value="7"/>
+        <TopLine Value="443"/>
         <CursorPos X="13" Y="412"/>
-        <UsageCount Value="50"/>
+        <UsageCount Value="55"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="untExtract.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="6"/>
         <TopLine Value="184"/>
         <CursorPos X="18" Y="202"/>
-        <UsageCount Value="47"/>
+        <UsageCount Value="52"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="untRenumber.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="1"/>
+        <CursorPos X="65" Y="31"/>
+        <UsageCount Value="21"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="units\untTX802Performance.pas"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="2"/>
         <TopLine Value="171"/>
         <CursorPos X="61" Y="187"/>
         <UsageCount Value="100"/>
@@ -125,9 +133,9 @@
       </Unit>
       <Unit>
         <Filename Value="units\untTX802PerformanceBank.pas"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="3"/>
         <CursorPos X="7"/>
-        <UsageCount Value="99"/>
+        <UsageCount Value="101"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -147,28 +155,29 @@
       </Unit>
       <Unit>
         <Filename Value="units\untUtils.pas"/>
-        <EditorIndex Value="16"/>
-        <CursorPos X="3"/>
+        <EditorIndex Value="17"/>
+        <TopLine Value="99"/>
+        <CursorPos X="3" Y="103"/>
         <UsageCount Value="195"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="units\untDXUtils.pas"/>
-        <EditorIndex Value="18"/>
+        <EditorIndex Value="19"/>
         <CursorPos X="5"/>
         <UsageCount Value="100"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="units\untDX7IIPerformance.pas"/>
-        <EditorIndex Value="8"/>
+        <EditorIndex Value="9"/>
         <CursorPos X="3"/>
         <UsageCount Value="101"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="units\untDX7IIPerformanceBank.pas"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="8"/>
         <CursorPos X="70"/>
         <UsageCount Value="101"/>
         <Loaded Value="True"/>
@@ -196,49 +205,49 @@
       </Unit>
       <Unit>
         <Filename Value="units\untDX7Voice.pas"/>
-        <EditorIndex Value="20"/>
+        <EditorIndex Value="21"/>
         <CursorPos X="8"/>
         <UsageCount Value="100"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="units\untTX7Function.pas"/>
-        <EditorIndex Value="15"/>
+        <EditorIndex Value="16"/>
         <CursorPos X="36"/>
         <UsageCount Value="100"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="units\untDX7Bank.pas"/>
-        <EditorIndex Value="19"/>
+        <EditorIndex Value="20"/>
         <CursorPos X="3"/>
         <UsageCount Value="101"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="units\untParConst.pas"/>
-        <EditorIndex Value="17"/>
+        <EditorIndex Value="18"/>
         <CursorPos X="83"/>
         <UsageCount Value="100"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="units\untMDXPerformance.pas"/>
-        <EditorIndex Value="14"/>
+        <EditorIndex Value="15"/>
         <CursorPos X="43"/>
         <UsageCount Value="100"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="units\untMDXSupplement.pas"/>
-        <EditorIndex Value="9"/>
+        <EditorIndex Value="10"/>
         <CursorPos X="18"/>
         <UsageCount Value="100"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="units\untTX7FunctBank.pas"/>
-        <EditorIndex Value="13"/>
+        <EditorIndex Value="14"/>
         <UsageCount Value="100"/>
         <Loaded Value="True"/>
       </Unit>
@@ -252,22 +261,22 @@
       </Unit>
       <Unit>
         <Filename Value="units\untMiniINI.pas"/>
-        <EditorIndex Value="12"/>
+        <EditorIndex Value="13"/>
         <TopLine Value="193"/>
         <CursorPos X="5"/>
-        <UsageCount Value="98"/>
+        <UsageCount Value="100"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="units\untDX7IISupplement.pas"/>
-        <EditorIndex Value="10"/>
-        <UsageCount Value="84"/>
+        <EditorIndex Value="11"/>
+        <UsageCount Value="86"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="units\untDX7IISupplBank.pas"/>
-        <EditorIndex Value="11"/>
-        <UsageCount Value="74"/>
+        <EditorIndex Value="12"/>
+        <UsageCount Value="76"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -300,14 +309,6 @@
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="units\untDX7IIPerformanceBank.pas"/>
-        <Caret Line="135" Column="47" TopLine="114"/>
-      </Position>
-      <Position>
-        <Filename Value="units\untDX7IIPerformanceBank.pas"/>
-        <Caret Line="37" Column="86" TopLine="13"/>
-      </Position>
       <Position>
         <Filename Value="units\untDX7IIPerformanceBank.pas"/>
         <Caret Line="149" TopLine="128"/>
@@ -419,6 +420,14 @@
       <Position>
         <Filename Value="untConvFunct.pas"/>
         <Caret Line="377" Column="71" TopLine="360"/>
+      </Position>
+      <Position>
+        <Filename Value="untRenumber.pas"/>
+        <Caret Line="19" Column="8"/>
+      </Position>
+      <Position>
+        <Filename Value="units\untUtils.pas"/>
+        <Caret Line="24" Column="11" TopLine="6"/>
       </Position>
     </JumpHistory>
     <RunParams>

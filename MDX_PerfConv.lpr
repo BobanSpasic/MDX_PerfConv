@@ -26,7 +26,7 @@ uses
   untConverter,
   untConvFunct,
   untExtract,
-  untDXUtils;
+  untDXUtils, untRenumber;
 
 type
 
@@ -52,6 +52,7 @@ type
     fVoiceB2: string;
     fOutput: string;
     fSettings: string;
+    fDirectory: string;
     iNumbering: integer;
     fPerf: string;
     slReport: TStringList;
@@ -64,12 +65,13 @@ type
     fVoiceB1 := '';
     fVoiceA2 := '';
     fVoiceB2 := '';
+    fDirectory := '';
     fPerf := '';
     bVerbose := False;
     // quick check parameters
     CaseSensitiveOptions := True;
-    ErrorMsg := CheckOptions('hica:b:A:B:p:n:vo:s:e:',
-      'help info convert voiceA1: voiceB1: voiceA2: voiceB2: perf: numbering: verbose output: settings: extract:');
+    ErrorMsg := CheckOptions('hica:b:A:B:p:n:vo:s:e:r:',
+      'help info convert voiceA1: voiceB1: voiceA2: voiceB2: perf: numbering: verbose output: settings: extract: renumber:');
 
     if ErrorMsg <> '' then
     begin
@@ -298,6 +300,12 @@ type
         end;
       end;
     end;
+    if HasOption('r', 'renumber') and HasOption('n', 'numbering') then
+    begin
+      fDirectory := GetOptionValue('r', 'renumber');
+      if DirectoryExists(fDirectory) then
+        Renumber(fDirectory, iNumbering + 1);
+    end;
 
     if HasOption('e', 'extract') then
     begin
@@ -330,22 +338,25 @@ type
     writeln('');
     writeln('Usage: ', ExtractFileName(ExeName), ' -parameters');
     writeln('  Parameters (short and long form):');
-    writeln('       -h               --help                This help message');
-    writeln('       -i               --info                Information');
-    writeln('       -c               --convert             Convert to MiniDexed INI file');
-    writeln('       -v               --verbose             Detailed info');
+    writeln('       -h               --help                 This help message');
+    writeln('       -i               --info                 Information');
+    writeln('       -c               --convert              Convert to MiniDexed INI file');
+    writeln('       -v               --verbose              Detailed info');
     writeln('');
-    writeln('       -a (filename)    --voiceA1=(filename)  Path to voice bank A1');
-    writeln('       -b (filename)    --voiceB1=(filename)  Path to voice bank B1');
-    writeln('       -A (filename)    --voiceA2=(filename)  Path to voice bank A2');
-    writeln('       -B (filename)    --voiceB2=(filename)  Path to voice bank B2');
-    writeln('       -p (filename)    --perf=(filename)     Path to performance file');
-    writeln('       -n (number)      --numbering=(number)  First number for filenames');
-    writeln('                                              of the output performances');
-    writeln('       -o (path)        --output=(path)       Output directory');
-    writeln('       -s (filename)    --settings=(filename) Use settings file (see separate doc.)');
+    writeln('       -a (filename)    --voiceA1=(filename)   Path to voice bank A1');
+    writeln('       -b (filename)    --voiceB1=(filename)   Path to voice bank B1');
+    writeln('       -A (filename)    --voiceA2=(filename)   Path to voice bank A2');
+    writeln('       -B (filename)    --voiceB2=(filename)   Path to voice bank B2');
+    writeln('       -p (filename)    --perf=(filename)      Path to performance file');
+    writeln('       -n (number)      --numbering=(number)   First number for filenames');
+    writeln('                                               of the output performances');
+    writeln('       -o (path)        --output=(path)        Output directory');
+    writeln('       -s (filename)    --settings=(filename)  Use settings file (see separate doc.)');
     writeLn('');
-    writeln('       -e (filename)    --extract=(filename)  extract data from libraries (see separate doc.)');
+    writeln('       -e (filename)    --extract=(filename)   Extract data from libraries (see separate doc.)');
+    writeLn('');
+    writeln('       -r (path)        --renumber=(path)      Re-number the performance INI files in a directory');
+    writeln('                                               To be used in combination with -n');
     writeLn('');
     writeLn('  Parameters are CASE-SENSITIVE');
     writeLn('');
