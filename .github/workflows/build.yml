@@ -16,6 +16,7 @@ jobs:
 
     - name: Install dependencies and build
       run: |
+        set -ex
         # A newer FreePascal compiler is needed than what ships with Ubuntu 20.04
         wget -q "https://downloads.sourceforge.net/project/freepascal/Linux/3.2.2/fpc-3.2.2.x86_64-linux.tar"
         tar xfv fpc-3.2.2.x86_64-linux.tar
