@@ -184,7 +184,7 @@ type
           OutputVolume7: byte;              // 0-99
           OutputVolume8: byte;              // 0-99
           Detune_KASG_Outch1: byte;         //        |    |    |    |    |    |    |    |
-          Detune_KASG_Outch2: byte;         //        |       Detune      |KASG|OutChAssg|   Yamaha manual
+          Detune_KASG_Outch2: byte;         //        |       Detune      |KASG|OutChAssg|  not like in the Yamaha manual
           Detune_KASG_Outch3: byte;         //
           Detune_KASG_Outch4: byte;         //
           Detune_KASG_Outch5: byte;         //
@@ -293,6 +293,14 @@ begin
   t.Detune6 := (aPar.Detune_KASG_Outch6 shr 3) and 15;
   t.Detune7 := (aPar.Detune_KASG_Outch7 shr 3) and 15;
   t.Detune8 := (aPar.Detune_KASG_Outch8 shr 3) and 15;
+  t.KeyAssignGroup1 := (aPar.Detune_KASG_Outch1 shr 2) and 1;
+  t.KeyAssignGroup2 := (aPar.Detune_KASG_Outch2 shr 2) and 1;
+  t.KeyAssignGroup3 := (aPar.Detune_KASG_Outch3 shr 2) and 1;
+  t.KeyAssignGroup4 := (aPar.Detune_KASG_Outch4 shr 2) and 1;
+  t.KeyAssignGroup5 := (aPar.Detune_KASG_Outch5 shr 2) and 1;
+  t.KeyAssignGroup6 := (aPar.Detune_KASG_Outch6 shr 2) and 1;
+  t.KeyAssignGroup7 := (aPar.Detune_KASG_Outch7 shr 2) and 1;
+  t.KeyAssignGroup8 := (aPar.Detune_KASG_Outch8 shr 2) and 1;
   t.OutputVolume1 := aPar.OutputVolume1 and 127;
   t.OutputVolume2 := aPar.OutputVolume2 and 127;
   t.OutputVolume3 := aPar.OutputVolume3 and 127;
@@ -341,14 +349,6 @@ begin
   t.EGForcedDamp6 := (aPar.FDAMP_NoteShift6 shr 5) and 1;
   t.EGForcedDamp7 := (aPar.FDAMP_NoteShift7 shr 5) and 1;
   t.EGForcedDamp8 := (aPar.FDAMP_NoteShift8 shr 5) and 1;
-  t.KeyAssignGroup1 := 2;
-  t.KeyAssignGroup2 := 2;
-  t.KeyAssignGroup3 := 2;
-  t.KeyAssignGroup4 := 2;
-  t.KeyAssignGroup5 := 2;
-  t.KeyAssignGroup6 := 2;
-  t.KeyAssignGroup7 := 2;
-  t.KeyAssignGroup8 := 2;
   t.MicroTuningTable1 := aPar.MicroTuningTable1;
   t.MicroTuningTable2 := aPar.MicroTuningTable2;
   t.MicroTuningTable3 := aPar.MicroTuningTable3;

@@ -41,7 +41,7 @@ begin
     begin
       WriteLn('It is a DX7II bank with supplement');
       if AVerbose then WriteLn('Using ConvertDX7IItoMDX with one stream');
-      ConvertDX7IItoMDX(msBank, AOutput, ANumber, AVerbose, ASettings);
+      ConvertDX7IItoMDX(msBank, ABank, AOutput, ANumber, AVerbose, ASettings);
     end;
   end;
   if (VMEM in ms) and (AMEM in ms) and (D_VMEM in ms) and (D_AMEM in ms) and not ((PMEM in ms) or (LMPMEM in ms)) then
@@ -50,7 +50,7 @@ begin
     begin
       WriteLn('It is a multiple DX7II bank with supplement');
       if AVerbose then WriteLn('Using ConvertMultiDX7IItoMDX with one stream');
-      ConvertMultiDX7IItoMDX(msBank, AOutput, ANumber, AVerbose, ASettings);
+      ConvertMultiDX7IItoMDX(msBank, ABank, AOutput, ANumber, AVerbose, ASettings);
     end;
   end;
   if (VMEM in ms) and (PMEM in ms) and not ((AMEM in ms) or (LMPMEM in ms)) then

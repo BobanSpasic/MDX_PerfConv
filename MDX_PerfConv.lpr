@@ -300,6 +300,7 @@ type
         end;
       end;
     end;
+
     if HasOption('r', 'renumber') and HasOption('n', 'numbering') then
     begin
       fDirectory := GetOptionValue('r', 'renumber');
@@ -332,7 +333,7 @@ type
   begin
     writeln('');
     writeln('');
-    writeln('MDX_PerfConv 1.0 - Performance converter from TX7, DX7II, DX1 and DX5 to MiniDexed');
+    writeln('MDX Performance Converter 1.5 - Performance converter from TX7, DX7II, DX1 and DX5 to MiniDexed');
     writeln('Author: Boban Spasic');
     writeln('https://github.com/BobanSpasic/MDX_PerfConv');
     writeln('');
@@ -392,7 +393,7 @@ var
 
 begin
   Application := TMDX_PerfConv.Create(nil);
-  Application.Title := 'MDX_PerfConv';
+  Application.Title := 'MDX Performance Converter';
   Application.Run;
   Application.Free;
 end.

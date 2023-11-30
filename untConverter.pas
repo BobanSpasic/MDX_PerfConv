@@ -22,8 +22,8 @@ uses
   untDXUtils, untParConst, untUtils, untTX802Performance, untTX802PerformanceBank, IniFiles, untConvFunct;
 
 procedure ConvertTX7toMDX(var ms: TMemoryStream; APath: string; ANumber: integer; AVerbose: boolean);                                // VMEM + PMEM 1-32
-procedure ConvertDX7IItoMDX(var ms: TMemoryStream; APath: string; ANumber: integer; AVerbose: boolean; ASettings: string);           // VMEM + AMEM 1-32
-procedure ConvertMultiDX7IItoMDX(var ms: TMemoryStream; APath: string; ANumber: integer; AVerbose: boolean; ASettings: string);      // multiple VMEM + AMEM 1-32
+procedure ConvertDX7IItoMDX(var ms: TMemoryStream; AName, APath: string; ANumber: integer; AVerbose: boolean; ASettings: string);           // VMEM + AMEM 1-32
+procedure ConvertMultiDX7IItoMDX(var ms: TMemoryStream; AName, APath: string; ANumber: integer; AVerbose: boolean; ASettings: string);      // multiple VMEM + AMEM 1-32
 procedure ConvertDX5toMDX(var ms: TMemoryStream; APath: string; ANumber: integer; AVerbose: boolean);                                // 4xVMEM, PMEM
 procedure ConvertTX802ToMDX(var ms: TMemoryStream; APath: string; ANumber: integer; AVerbose: boolean; ASettings: string);           // 4xVMEM, 4xAMEM, 2xPMEM
 procedure ConvertBigDX7IItoMDX(var ms: TMemoryStream; APath: string; ANumber: integer; AVerbose: boolean; ASettings: string);        // 2xVMEM, 2xAMEM, 1xPMEM
@@ -110,7 +110,7 @@ begin
   MDX.Free;
 end;
 
-procedure ConvertDX7IItoMDX(var ms: TMemoryStream; APath: string; ANumber: integer; AVerbose: boolean; ASettings: string);
+procedure ConvertDX7IItoMDX(var ms: TMemoryStream; AName, APath: string; ANumber: integer; AVerbose: boolean; ASettings: string);
 var
   DX7: TDX7BankContainer;
   DX7II: TDX7IISupplBankContainer;
@@ -161,7 +161,7 @@ begin
     MDX.FMDX_Params.General.Origin := 'Conversion from DX7II Voices';
 
     sName := Format('%.6d', [i + ANumber + 1]) + '_' +
-      Trim(ExtractFileNameWithoutExt(ExtractFileName(APath)));
+      Trim(ExtractFileNameWithoutExt(ExtractFileName(AName)));
     sName := copy(sName, 1, 19) + '_' + IntToStr(i);
 
     for j := 1 to 8 do
@@ -201,7 +201,7 @@ begin
   MDX.Free;
 end;
 
-procedure ConvertMultiDX7IItoMDX(var ms: TMemoryStream; APath: string; ANumber: integer; AVerbose: boolean; ASettings: string);
+procedure ConvertMultiDX7IItoMDX(var ms: TMemoryStream; AName, APath: string; ANumber: integer; AVerbose: boolean; ASettings: string);
 var
   DX7: TDX7BankContainer;
   DX7II: TDX7IISupplBankContainer;
@@ -263,7 +263,7 @@ begin
       MDX.FMDX_Params.General.Origin := 'Conversion from DX7II Voices';
 
       sName := Format('%.6d', [i + ANumber + bank_counter + 1]) + '_' +
-        Trim(ExtractFileNameWithoutExt(ExtractFileName(APath)));
+        Trim(ExtractFileNameWithoutExt(ExtractFileName(AName)));
       sName := copy(sName, 1, 19) + '_' + IntToStr(i + bank_counter);
 
       for j := 1 to 8 do

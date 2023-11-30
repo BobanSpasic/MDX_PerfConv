@@ -7,5 +7,5 @@
 ..\bin\Win_x64\MDX_PerfConv.exe -c -a DX7II_Yamaha_Freeware\dx711i.syx -n 193 -v
 ..\bin\Win_x64\MDX_PerfConv.exe -c -a DX7II_Yamaha_Freeware\dx7wx.syx -n 225 -v
 ..\bin\Win_x64\MDX_PerfConv.exe -c -a DX7II_Yamaha_Freeware\dx711g.syx -n 257 -v
-..\bin\Win_x64\MDX_PerfConv.exe -c -a DX7II_Yamaha_Freeware\dx711h.syx -n 261 -v
+..\bin\Win_x64\MDX_PerfConv.exe -c -a DX7II_Yamaha_Freeware\dx711h.syx -n 265 -v
 pause
