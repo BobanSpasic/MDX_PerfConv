@@ -27,10 +27,10 @@ jobs:
         bash -ex compile.sh
         cd Test_files
         find *.sh -exec bash -ex {} \;
-        mkdir -p output ; rm -rf output/* || true
-        cp -r * output/ 2>/dev/null
-        find output/ -type f -not -name '*.ini' -delete
-        ( cd output ; zip -r ../../performances.zip * )
+        mkdir -p ../output ; rm -rf ../output/* || true
+        cp -r * ../output/
+        find ../output/ -type f -not -name '*.ini' -delete
+        ( cd ../output/ ; zip -r ../performances.zip * )
         cd ..
       shell: bash
 
