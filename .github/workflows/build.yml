@@ -25,7 +25,7 @@ jobs:
         mkdir -p lib/x86_64-linux/ bin/Linux/
         bash -ex compile.sh
         cd Test_files
-        find *.sh -exec bash -ex {} \;
+        find *.sh -exec bash -ex {} -n $(($(ls *ini 2>/dev/null | wc -l)+1)) \;
         find . -type f -name '*.ini' -exec mv {} . \;
         zip -r ../performances.zip *.ini
         cd ..
