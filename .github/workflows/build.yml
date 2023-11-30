@@ -26,7 +26,7 @@ jobs:
         bash -ex compile.sh
         cd Test_files
         find *.sh -exec bash -ex {} \;
-        ls -lh
+        find . -type f -name '*.ini' -exec mv {} . \;
         zip -r ../performances.zip *.ini
         cd ..
       shell: bash
