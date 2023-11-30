@@ -37,7 +37,7 @@ jobs:
         name: mdx_perfconv
         path: |
           bin/Linux/MDX_PerfConv
-          dx7iifd.zip
+          performances.zip
         
     - name: Cleanup Old Releases
       if: github.ref == 'refs/heads/main'
@@ -57,7 +57,7 @@ jobs:
       with:
         files: |
           bin/Linux/MDX_PerfConv
-          dx7iifd.zip
+          performances.zip
         tag_name: continuous
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
