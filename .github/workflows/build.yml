@@ -16,6 +16,7 @@ jobs:
 
     - name: Install dependencies and build
       run: |
+        set -ex
         # A newer FreePascal compiler is needed than what ships with Ubuntu 20.04
         wget -q "https://downloads.sourceforge.net/project/freepascal/Linux/3.2.2/fpc-3.2.2.x86_64-linux.tar"
         tar xfv fpc-3.2.2.x86_64-linux.tar
@@ -24,29 +25,13 @@ jobs:
         cd ..
         mkdir -p lib/x86_64-linux/ bin/Linux/
         bash -ex compile.sh
-        # Convert dx7ii performances for testing
-        wget -q "https://github.com/asb2m10/dexed/files/10782404/DX7IIfd.ROM1A.zip" # https://github.com/asb2m10/dexed/issues/165#issuecomment-1436586010
-        unzip DX7IIfd.ROM1A.zip
-        # TODO: Use "DX7IIfd ROM1A 1-32.syx" and "DX7IIfd ROM1A 33-64.syx" AMEM
-        wget -q "https://yamahablackboxes.com/patches/dx7ii/voices/dx7iifdvoice32.syx"
-        wget -q "https://yamahablackboxes.com/patches/dx7ii/voices/dx7iifdvoice64.syx"
-        wget -q "https://yamahablackboxes.com/patches/dx7ii/performances/dx7iifdperf.syx"
-        bin/Linux/MDX_PerfConv --info -a dx7iifdvoice32.syx -b dx7iifdvoice64.syx -p dx7iifdperf.syx
-        bin/Linux/MDX_PerfConv -c -a dx7iifdvoice32.syx -b dx7iifdvoice64.syx -p dx7iifdperf.syx
-        wget -q "https://yamahablackboxes.com/patches/dx7ii/voices/dx7iifdvoice32b.syx"
-        wget -q "https://yamahablackboxes.com/patches/dx7ii/voices/dx7iifdvoice64b.syx"
-        wget -q "https://yamahablackboxes.com/patches/dx7ii/performances/dx7iifdperfb.syx"
-        bin/Linux/MDX_PerfConv --info -a dx7iifdvoice32b.syx -b dx7iifdvoice64b.syx -p dx7iifdperfb.syx
-        bin/Linux/MDX_PerfConv -c -n 33 -a dx7iifdvoice32b.syx -b dx7iifdvoice64b.syx -p dx7iifdperfb.syx
-        # TODO: Convert TX802 performances for testing
-        # wget -q "http://hsjp.eu/downloads/Dexed/Dexed_cart_1.0.zip"
-        # unzip -q Dexed_cart_1.0.zip
-        # bin/Linux/MDX_PerfConv --info -a "./Dexed_cart_1.0/Original Yamaha/TX802/TX802BankA1.SYX" -b "./Dexed_cart_1.0/Original Yamaha/TX802/TX802BankB1.SYX" -p "./Dexed_cart_1.0/Original Yamaha/TX802/TX802_Factory_Performances.syx"
-        # bin/Linux/MDX_PerfConv -c -n 65 -a "./Dexed_cart_1.0/Original Yamaha/TX802/TX802BankA1.SYX" -b "./Dexed_cart_1.0/Original Yamaha/TX802/TX802BankB1.SYX" -p "./Dexed_cart_1.0/Original Yamaha/TX802/TX802_Factory_Performances.syx"
-        # wget "https://github.com/asb2m10/dexed/files/5360597/tx802bankb-fixed.zip"
-        # unzip tx802bankb-fixed.zip
-        ls -lh
-        zip -r dx7iifd.zip *.ini
+        cd Test_files
+        find *.sh -exec bash -ex {} \;
+        mkdir -p ../output ; rm -rf ../output/* || true
+        cp -r * ../output/
+        find ../output/ -type f -not -name '*.ini' -delete
+        ( cd ../output/ ; zip -r ../performances.zip * )
+        cd ..
       shell: bash
 
     - name: Upload binary to artifacts
@@ -55,7 +40,7 @@ jobs:
         name: mdx_perfconv
         path: |
           bin/Linux/MDX_PerfConv
-          dx7iifd.zip
+          performances.zip
         
     - name: Cleanup Old Releases
       if: github.ref == 'refs/heads/main'
@@ -75,7 +60,7 @@ jobs:
       with:
         files: |
           bin/Linux/MDX_PerfConv
-          dx7iifd.zip
+          performances.zip
         tag_name: continuous
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
