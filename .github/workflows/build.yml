@@ -24,10 +24,11 @@ jobs:
         cd ..
         mkdir -p lib/x86_64-linux/ bin/Linux/
         bash -ex compile.sh
-        # Test_files/DX7IIFD_Factory
-        bin/Linux/MDX_PerfConv -c -a "Test_files/DX7IIFD_Factory/INTERNAL.syx" -b "Test_files/DX7IIFD_Factory/CART.syx" -v
+        cd Test_files
+        find *.sh -exec bash -ex {} \;
         ls -lh
-        zip -r dx7iifd.zip *.ini
+        zip -r ../performances.zip *.ini
+        cd ..
       shell: bash
 
     - name: Upload binary to artifacts
