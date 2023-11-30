@@ -23,6 +23,8 @@ uses
 type
   TValMatrix = (fMin, fMax, fInit);
   TTypeMatrix = (DX7, DX7II, DX7IIP, TX7, MDX, V50VCED, V50ACED, V50ACED2, V50ACED3, DS55, YS);
+  TAMS = array [0..7] of byte;              //needed for translating DX7II to DX7 voices
+  TPEGR = array [0..3] of single;           //needed for translating DX7II to DX7 voices
 
 const
   V50_VCED_NAMES: array[0..93, 0..1] of string = (
@@ -1209,7 +1211,7 @@ const
     ('Res_20', 'RES')
     );
 
-  MDX_PCEDx_MIN_MAX_INT: array [0..52, 0..2] of byte = (
+  MDX_PCEDx_MIN_MAX_INT: array [0..52, 0..2] of integer = (
     (0, 127, 100),
     (0, 127, 64),
     (0, 1, 0),
@@ -1331,10 +1333,10 @@ const
   abLM6Type: array [0..9, 0..9] of byte = (
     ($4C, $4D, $20, $20, $38, $39, $37, $33, $50, $45),    //LM  8973PE
     ($4C, $4D, $20, $20, $38, $39, $37, $33, $50, $4D),    //LM  8973PM
-    ($4C, $4D, $20, $20, $38, $39, $37, $33, $41, $20),    //LM  8973S_
+    ($4C, $4D, $20, $20, $38, $39, $37, $33, $53, $20),    //LM  8973S_
     ($4C, $4D, $20, $20, $4D, $43, $52, $59, $45, $20),    //LM  MCRYE_
-    ($4C, $4D, $20, $20, $4D, $43, $52, $59, $4D, $30),    //LM  MCRYM0
-    ($4C, $4D, $20, $20, $4D, $43, $52, $59, $4D, $31),    //LM  MCRYM1
+    ($4C, $4D, $20, $20, $4D, $43, $52, $59, $4D, $00),    //LM  MCRYM0
+    ($4C, $4D, $20, $20, $4D, $43, $52, $59, $4D, $01),    //LM  MCRYM1
     ($4C, $4D, $20, $20, $4D, $43, $52, $59, $43, $20),    //LM  MCRYC_
     ($4C, $4D, $20, $20, $46, $4B, $41, $59, $45, $20),    //LM  FKSYE_
     ($4C, $4D, $20, $20, $46, $4B, $41, $59, $43, $20),    //LM  FKSYC_

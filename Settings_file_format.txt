@@ -1,0 +1,55 @@
+For backporting DX7II voices to DX7, a converions of Amplitude Modulation Sensitivity (AMS) and Pitch EG Rate (PEGR) parameters is needed.
+MDX_PerfConv uses translation tables for the conversion factors.
+
+AMS conversion table translates DX7II's 0-7 values into DX7 0-3 values.
+
+PEGR conversion table contains the coefficients for calculating the DX7 PEG values from PEG+PEGR DX7II values.
+DX7 PEG values are related to the span of 8 octaves.
+DX7II PEGR parameter defines the span for the PEG parameter. It can be 8 ocatves, 4 octaves, 1 octave or 1/2 octave.
+At backporting the voice, we need to re-calculate the Pitch EG Levels (-50 to +50, written in data-form as 0 to 99) according to the PEGR parameter of DX7II voice.
+
+The PEGR translation table contains the translation of, what a value of 50 from DX7II is in a DX7, for every PEGR setting.
+The used formula is:
+PEG(DX7) := floor((PEG(DX7II) - 50) * PEGR/50) + 50
+Pascal floor function crops the number to a integer (decimals are cut out).
+The formula is a bit complicated because the values need to be calculated related to the 0 cent, which is at the value of 50.
+
+The settings file has a form of INI file with two sections (the lines are not a part of the file-format).
+
+====================
+
+[AMS]
+AMS0 = 0
+AMS1 = 1
+AMS2 = 2
+AMS3 = 3
+AMS4 = 3
+AMS5 = 3
+AMS6 = 3
+AMS7 = 3
+
+[PEGR]
+PEGR0 = 50
+PEGR1 = 25
+PEGR2 = 6.25
+PEGR3 = 3.125
+
+====================
+
+The left parts are the DX7II values. The right parts the translations/coefficients.
+
+For example, AMS6 = 3 means DX7II's AMS of 6 translates to 3 for DX7.
+For example, PEGR2 = 6.25 means - if PEGR on DX7II is set to one octave, we need to use just 6.25 percents of the DX7II levels, so that the values are appropriate for DX7's 8-octave PEG.
+The table above can be explained as follows:
+
+PEGR0 = 50    -->  If DX7II PEGR is 8 octaves, then the PEG of 50 translates to 50 for DX7.
+PEGR1 = 25    -->  If DX7II PEGR is 4 octaves, then the PEG of 50 translates to 25 for DX7.
+PEGR2 = 6.25  -->  If DX7II PEGR is 1 octave, then the PEG of 50 translates to 6.25 for DX7.
+PEGR3 = 3.125 -->  If DX7II PEGR is 1/2 octaves, then the PEG of 50 translates to 3.125 for DX7.
+
+The values in the tables above are the default values in MDX_PerfConv if no external settings file is used.
+I took the AMS values from DXConvert by Martin Tarenskeen.
+For PEGR conversion, Martin uses the factors of 50, 32, 16 and 8. I trust Martin's experience, but this gave for me too much "slide" effect for many voices.
+Some voices are also sliding with my settings, but far less compared to the Martin's factors. Thats the reason to have this settings files, so that anyone can experiment with it's own settings.
+
+One more important thing - the decimal comma in settings file must be adapted to the OS locales (eg: 3.125 vs 3,125)

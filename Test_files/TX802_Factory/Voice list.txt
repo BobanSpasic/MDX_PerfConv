@@ -1,0 +1,34 @@
+A1 (BankA 1-32) A2(BankA 33-64) B1 (BankB 1-32) B2 (BankB 33-64)
+
+01 MellowHorn   33 Piano 1      01 SuperBass    33 Analog-X
+02 Si1vaBrass   34 Piano 2      02 StringBass   34 FMilters
+03 ReverbBras   35 KnockRoad    03 SkweekBass   35 Phasers
+04 Tuba         36 RubbaRoad    04 SmoohBass    36 Ensemble
+05 Trombone     37 HardRoads    05 BopBass      37 MalletHorn
+06 HardTrumps   38 FullTines    06 OwlBass      38 FM-Growth
+07 Trumpet A    39 ClaviStuff   07 JazzBass     39 ElectoComb
+08 SilvaTrmpt   40 Clavi        08 HardBass     40 ClariSolo
+09 Trumpet B    41 Clavecin     09 GuitarBox    41 PitchaPad
+10 FrenchHorn   42 ClaviPluck   10 PickGuitar   42 ClaviBrass
+11 Strings      43 NasalClav    11 FingaPicka   43 WhapSynth
+12 HallOrch     44 HarpsiBox    12 LeadaPicka   44 Whasers
+13 NewOrchest   45 HarpsiWire   13 YesBunk      45 Fifths
+14 Analog-Str   46 WireStrg A   14 12 Strings   46 ElecBrass
+15 LiveStrg     47 WireStrg B   15 Classipika   47 ElectroBak
+16 BowedBass    48 TouchOrgan   16 Shami        48 HarmoSynth
+17 EleCello A   49 ShOrgan      17 Maribumba    49 PianoBells
+18 EleCello B   50 TapOrgan     18 DX Marimba   50 St.Elmo's
+19 Violins      51 BriteOrgan   19 Nu Marimba   51 MilkyWays
+20 Bassoon      52 MagicOrgan   20 StonePhone   52 Pluk
+21 Clarinet     53 SoftOrgan    21 VibraPhone   53 TingVoice
+22 Oboe         54 PipeOrgan    22 Celeste      54 Plukatan
+23 Flute        55 PuffOrganl   23 Swissnare    55 OctiLate
+24 SongFlute    56 PuffPipes    24 Tom C4       56 LateDown
+25 SpitFlute    57 Puff0rgan2   25 CongaDrum    57 Glastine
+26 PanFloot     58 Harmoniuml   26 Tub Bells    58 BellWahh
+27 Piccolo      59 Harmonium2   27 Gong         59 RubberGong
+28 Sax          60 Whisper A    28 Timpani      60 Wallop
+29 Harmonica    61 Choir        29 Claves       61 Explosion
+30 Harp         62 LadyVox      30 Bells        62 KoikeCycle
+31 EbonyIvory   63 MaleChoir    31 SteelCans    63 Thunderon
+32 PianoBrite   64 Whisper B    32 Handrum      64 Science

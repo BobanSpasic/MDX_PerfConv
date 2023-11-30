@@ -1,0 +1,14 @@
+MDX Performance Converter wasn't meant to be a file-extractor, but because the whole infrastructure was already in place,
+I just went ahead and used it.
+
+Extract function can be used to extract DX-related data from various file formats used by various librarian software.
+Similar functionality is already present in MDX Tool (another tool of mine), but MDX Tool is concentrated on DX7.
+The extract functionality in MDX Performance Converter is concentrated at ripping DX7II (Mk2) data from files.
+This includes TX802, which is also Mk2-based.
+
+At the moment of writting of this text, the only supported format to extract data from, is Sound Diver 3 Library.
+More will be added in the future. DX Manager and Midi Quest are planned.
+
+Extract function does not convert directly to MiniDexed INI format, but instead it creates a couple of SysEx files.
+The files with .AV. in name are AMEM/VMEM files. The files with .P. are performances, and the files with .ALL. are All-in-One (AMEM/VMEM/PMEM) conversions.
+The last one should be usable for converting to MiniDexed INI files.

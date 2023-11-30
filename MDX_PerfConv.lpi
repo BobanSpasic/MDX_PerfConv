@@ -17,7 +17,7 @@
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <MajorVersionNr Value="1"/>
-      <RevisionNr Value="2"/>
+      <MinorVersionNr Value="4"/>
       <StringTable FileDescription="Performance converter from DX7II, TX7, DX5 to MiniDexed" LegalCopyright="Boban Spasic" ProductName="MDX Performance Converter"/>
     </VersionInfo>
     <BuildModes>
@@ -106,6 +106,18 @@
       </Unit>
       <Unit>
         <Filename Value="untConverter.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="untConvFunct.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="untExtract.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="untRenumber.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit>
     </Units>
