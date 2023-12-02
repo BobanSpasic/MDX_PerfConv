@@ -68,6 +68,7 @@ type
     fDirectory := '';
     fPerf := '';
     bVerbose := False;
+
     // quick check parameters
     CaseSensitiveOptions := True;
     ErrorMsg := CheckOptions('hica:b:A:B:p:n:vo:s:e:r:',

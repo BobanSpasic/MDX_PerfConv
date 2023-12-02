@@ -90,6 +90,15 @@ begin
       ConvertTX802ToMDX(msBank, AOutput, ANumber, AVerbose, ASettings);
     end;
   end;
+  if (PMEM802 in ms) and not ((AMEM in ms) or (VMEM in ms)) then
+  begin
+    if msBank.Size >= 11589 then
+    begin
+      WriteLn('It is a TX802 performance');
+      if AVerbose then WriteLn('Using ConvertTX802ToMDX with one stream');
+      ConvertTX802ToMDX(msBank, AOutput, ANumber, AVerbose, ASettings);
+    end;
+  end;
   msBank.Free;
 end;
 

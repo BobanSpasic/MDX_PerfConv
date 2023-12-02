@@ -95,9 +95,9 @@ begin
   if pced.PerformanceLayerMode = 2 then
   begin
     if isVoiceA then
-      sup.NoteLimitHigh := pced.SplitPoint
+      sup.NoteLimitHigh := pced.SplitPoint - 1
     else
-      sup.NoteLimitLow := pced.SplitPoint + 1;
+      sup.NoteLimitLow := pced.SplitPoint;
   end;
 
   if (pced.PerformanceLayerMode = 1) and (pced.DualDetune <> 0) then
@@ -116,6 +116,16 @@ begin
       //sup.DetuneVAL := Floor(pced.DualDetune * 3.572);
       sup.DetuneVAL := Floor(pced.DualDetune * 1.768);
     end;
+  end;
+
+  sup.Volume := pced.TotalVolume;
+
+  if pced.PanMode <> 0 then
+  begin
+    if isVoiceA then
+      sup.Pan := 0
+    else
+      sup.Pan := 127;
   end;
   Result := sup;
 end;
@@ -181,7 +191,7 @@ begin
   GetDefinedValues(MDX, fInit, sup.params);
   sup.NoteShift := par.A_PerfKeyShift;
   if par.G_KeyAssignMode = 2 then
-    sup.NoteLimitHigh := par.G_SplitPoint;
+    sup.NoteLimitHigh := par.G_SplitPoint - 1;
   if (par.G_KeyAssignMode = 1) and (par.G_DualModeDetune <> 0) then
   begin
     sup.DetuneSGN := 0;
@@ -215,7 +225,7 @@ begin
   GetDefinedValues(MDX, fInit, sup.params);
   sup.NoteShift := par.A_PerfKeyShift;
   if par.G_KeyAssignMode = 2 then
-    sup.NoteLimitLow := par.G_SplitPoint + 1;
+    sup.NoteLimitLow := par.G_SplitPoint;
   if (par.G_KeyAssignMode = 1) and (par.G_DualModeDetune <> 0) then
   begin
     sup.DetuneSGN := 1;
@@ -326,7 +336,7 @@ begin
         2: sup.Pan := 127;
         else
           sup.Pan := 64;
-        end;
+      end;
       if txp.Detune2 > 7 then
       begin
         sup.DetuneSGN := 0;
@@ -348,7 +358,7 @@ begin
         2: sup.Pan := 127;
         else
           sup.Pan := 64;
-        end;
+      end;
       if txp.Detune3 > 7 then
       begin
         sup.DetuneSGN := 0;
@@ -370,7 +380,7 @@ begin
         2: sup.Pan := 127;
         else
           sup.Pan := 64;
-        end;
+      end;
       if txp.Detune4 > 7 then
       begin
         sup.DetuneSGN := 0;
@@ -392,7 +402,7 @@ begin
         2: sup.Pan := 127;
         else
           sup.Pan := 64;
-        end;
+      end;
       if txp.Detune5 > 7 then
       begin
         sup.DetuneSGN := 0;
@@ -414,7 +424,7 @@ begin
         2: sup.Pan := 127;
         else
           sup.Pan := 64;
-        end;
+      end;
       if txp.Detune6 > 7 then
       begin
         sup.DetuneSGN := 0;
@@ -436,7 +446,7 @@ begin
         2: sup.Pan := 127;
         else
           sup.Pan := 64;
-        end;
+      end;
       if txp.Detune7 > 7 then
       begin
         sup.DetuneSGN := 0;
@@ -458,7 +468,7 @@ begin
         2: sup.Pan := 127;
         else
           sup.Pan := 64;
-        end;
+      end;
       if txp.Detune8 > 7 then
       begin
         sup.DetuneSGN := 0;
