@@ -3,7 +3,7 @@
 MiniDexed performance converter - convert TX7, DX7II, DX5 etc. function and performance banks into MiniDexed format
 
 Usage:
-``` MDX_PerfConv.exe -parameters ```
+``` MDX_PerfConv.exe -parameters
 
   Parameters (short and long form):
        -h               --help                 This help message
@@ -25,11 +25,12 @@ Usage:
 
        -r (path)        --renumber=(path)      Re-number the performance INI files in a directory
                                                To be used in combination with -n
+```
 
   Parameters are CASE-SENSITIVE
 
-  Example usage:
-  
+Example usage:
+   ```
     Get info from any kind of supported files:
        MDX_PerfConv -i -a VoiceBank.syx
 
@@ -50,6 +51,7 @@ Usage:
 
     Parameters in long form:
        MDX_PerfConv --info --voiceA1=VoiceBank.syx
+```  
 
 ## About the output files:
 - if the input file contains just single voices (e.g. TX7 Function Bank (VMEM+PMEM) or DX7II Voice Bank (VMEM+AMEM)) - the output performance files will contain 8 voices each with MIDI Channels set to 1 to 8. So, you will get 4 performance.ini files from one bank file  
