@@ -435,6 +435,9 @@ begin
   begin
     MDX.InitPerformance;
     MDX.AllMIDIChToZero;
+    MDX.FMDX_Params.General.Name := TX7.GetFunctionName(i + 32);
+    MDX.FMDX_Params.General.Category := 'Converted';
+    MDX.FMDX_Params.General.Origin := 'Conversion from DX1/DX5 Performances';
     DX7_VCED := TDX7VoiceContainer.Create;
     TX7_PCED := TTX7FunctionContainer.Create;
     MDX_TG1 := TMDXSupplementContainer.Create;
@@ -831,15 +834,17 @@ begin
         7: MDX.FMDX_Params.TG[j].MIDIChannel := Params.RXChannel7 + 1;
         8: MDX.FMDX_Params.TG[j].MIDIChannel := Params.RXChannel8 + 1;
       end;
-      //simulate linked channels
-      if params.VoiceChannelOffset2 = 0 then MDX.FMDX_Params.TG[2].MIDIChannel := 0;
-      if params.VoiceChannelOffset3 = 0 then MDX.FMDX_Params.TG[3].MIDIChannel := 0;
-      if params.VoiceChannelOffset4 = 0 then MDX.FMDX_Params.TG[4].MIDIChannel := 0;
-      if params.VoiceChannelOffset5 = 0 then MDX.FMDX_Params.TG[5].MIDIChannel := 0;
-      if params.VoiceChannelOffset6 = 0 then MDX.FMDX_Params.TG[6].MIDIChannel := 0;
-      if params.VoiceChannelOffset7 = 0 then MDX.FMDX_Params.TG[7].MIDIChannel := 0;
-      if params.VoiceChannelOffset8 = 0 then MDX.FMDX_Params.TG[8].MIDIChannel := 0;
+
     end;
+    //simulate linked channels
+    //ToDo - check this again
+    if params.VoiceChannelOffset2 <> 1 then MDX.FMDX_Params.TG[2].MIDIChannel := 0;
+    if params.VoiceChannelOffset3 <> 2 then MDX.FMDX_Params.TG[3].MIDIChannel := 0;
+    if params.VoiceChannelOffset4 <> 3 then MDX.FMDX_Params.TG[4].MIDIChannel := 0;
+    if params.VoiceChannelOffset5 <> 4 then MDX.FMDX_Params.TG[5].MIDIChannel := 0;
+    if params.VoiceChannelOffset6 <> 5 then MDX.FMDX_Params.TG[6].MIDIChannel := 0;
+    if params.VoiceChannelOffset7 <> 6 then MDX.FMDX_Params.TG[7].MIDIChannel := 0;
+    if params.VoiceChannelOffset8 <> 7 then MDX.FMDX_Params.TG[8].MIDIChannel := 0;
 
     WriteLn('Writting ' + sName + '.ini');
     MDX.SavePerformanceToFile(IncludeTrailingPathDelimiter(APath) +

@@ -202,13 +202,19 @@ begin
   if UpperCase(FExt) in FWinReservedNames then FExt := 'InvalidExtension';
   if UpperCase(FFile) in FWinReservedNames then FFile := 'InvalidName';
 
-  for i := 1 to 11 do
+  {for i := 1 to 11 do
     FFile := ReplaceStr(FFile, FWinIllegalChars[i], '(' +
       IntToHex(Ord(FWinIllegalChars[i])) + ')');
 
   for i := 1 to 11 do
     FExt := ReplaceStr(FExt, FWinIllegalChars[i], '(' +
-      IntToHex(Ord(FWinIllegalChars[i])) + ')');
+      IntToHex(Ord(FWinIllegalChars[i])) + ')');   }
+
+  for i := 1 to 11 do
+    FFile := ReplaceStr(FFile, FWinIllegalChars[i], '_');
+
+  for i := 1 to 11 do
+    FExt := ReplaceStr(FExt, FWinIllegalChars[i], '_');
 
   for i := 1 to Length(FFile) do
     if (Ord(FFile[i]) < 32) then FFile[i] := '_';

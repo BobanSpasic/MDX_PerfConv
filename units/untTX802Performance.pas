@@ -28,10 +28,10 @@ type
     case boolean of
       True: (params: TTX802_PCED_Dump);
       False: (
-        VoiceChannelOffset1: byte;        // 0-7   0 if voice is linked, "<--" on display
-        VoiceChannelOffset2: byte;        // 0-7
-        VoiceChannelOffset3: byte;        // 0-7
-        VoiceChannelOffset4: byte;        // 0-7
+        VoiceChannelOffset1: byte;        // 0-7   if voice is linked( "<--" on the display )
+        VoiceChannelOffset2: byte;        // 0-7   then here will be the number of the voice
+        VoiceChannelOffset3: byte;        // 0-7   to which it is linked (zero based)
+        VoiceChannelOffset4: byte;        // 0-7   if not linked, here is own number
         VoiceChannelOffset5: byte;        // 0-7
         VoiceChannelOffset6: byte;        // 0-7
         VoiceChannelOffset7: byte;        // 0-7
@@ -76,7 +76,7 @@ type
         OutputAssign6: byte;              // 0-3
         OutputAssign7: byte;              // 0-3
         OutputAssign8: byte;              // 0-3
-        NoteLimitLow1: byte;              // 0-127 C2-G8
+        NoteLimitLow1: byte;              // 0-127 C-2-G8
         NoteLimitLow2: byte;              // 0-127
         NoteLimitLow3: byte;              // 0-127
         NoteLimitLow4: byte;              // 0-127
@@ -84,7 +84,7 @@ type
         NoteLimitLow6: byte;              // 0-127
         NoteLimitLow7: byte;              // 0-127
         NoteLimitLow8: byte;              // 0-127
-        NoteLimitHigh1: byte;             // 0-127 C2-G8
+        NoteLimitHigh1: byte;             // 0-127 C-2-G8
         NoteLimitHigh2: byte;             // 0-127
         NoteLimitHigh3: byte;             // 0-127
         NoteLimitHigh4: byte;             // 0-127
