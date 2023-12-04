@@ -92,17 +92,19 @@
         <Filename Value="untConverter.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="5"/>
-        <TopLine Value="421"/>
-        <CursorPos X="63" Y="438"/>
+        <TopLine Value="823"/>
+        <CursorPos X="31" Y="839"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="untConvFunct.pas"/>
         <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="7"/>
-        <CursorPos X="44" Y="104"/>
-        <UsageCount Value="81"/>
+        <TopLine Value="211"/>
+        <CursorPos X="20" Y="237"/>
+        <UsageCount Value="94"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -111,7 +113,7 @@
         <EditorIndex Value="6"/>
         <TopLine Value="60"/>
         <CursorPos X="18" Y="202"/>
-        <UsageCount Value="78"/>
+        <UsageCount Value="91"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -119,12 +121,11 @@
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="1"/>
         <CursorPos X="65" Y="31"/>
-        <UsageCount Value="47"/>
+        <UsageCount Value="60"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="units\untTX802Performance.pas"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="2"/>
         <CursorPos X="54" Y="87"/>
         <UsageCount Value="100"/>
@@ -143,14 +144,14 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="142"/>
         <CursorPos X="61" Y="173"/>
-        <UsageCount Value="23"/>
+        <UsageCount Value="22"/>
       </Unit>
       <Unit>
         <Filename Value="untTX802Fraeser.pas"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="38"/>
         <CursorPos X="9" Y="62"/>
-        <UsageCount Value="42"/>
+        <UsageCount Value="41"/>
       </Unit>
       <Unit>
         <Filename Value="units\untUtils.pas"/>
@@ -186,21 +187,21 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="694"/>
         <CursorPos X="36" Y="732"/>
-        <UsageCount Value="95"/>
+        <UsageCount Value="94"/>
       </Unit>
       <Unit>
         <Filename Value="untDXUtils.pas"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="84"/>
         <CursorPos X="35" Y="103"/>
-        <UsageCount Value="13"/>
+        <UsageCount Value="12"/>
       </Unit>
       <Unit>
         <Filename Value="untDX7Voice.pas"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="11"/>
         <CursorPos X="50" Y="32"/>
-        <UsageCount Value="2"/>
+        <UsageCount Value="1"/>
       </Unit>
       <Unit>
         <Filename Value="units\untDX7Voice.pas"/>
@@ -212,8 +213,8 @@
       <Unit>
         <Filename Value="units\untTX7Function.pas"/>
         <EditorIndex Value="16"/>
-        <TopLine Value="59"/>
-        <CursorPos X="36"/>
+        <TopLine Value="143"/>
+        <CursorPos X="81" Y="155"/>
         <UsageCount Value="100"/>
         <Loaded Value="True"/>
       </Unit>
@@ -235,14 +236,16 @@
       <Unit>
         <Filename Value="units\untMDXPerformance.pas"/>
         <EditorIndex Value="15"/>
-        <CursorPos X="43"/>
+        <TopLine Value="457"/>
+        <CursorPos X="3" Y="445"/>
         <UsageCount Value="100"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="units\untMDXSupplement.pas"/>
         <EditorIndex Value="10"/>
-        <CursorPos X="18"/>
+        <TopLine Value="195"/>
+        <CursorPos X="3" Y="36"/>
         <UsageCount Value="100"/>
         <Loaded Value="True"/>
       </Unit>
@@ -258,12 +261,12 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="523"/>
         <CursorPos X="3" Y="732"/>
-        <UsageCount Value="5"/>
+        <UsageCount Value="4"/>
       </Unit>
       <Unit>
         <Filename Value="units\untMiniINI.pas"/>
         <EditorIndex Value="13"/>
-        <TopLine Value="193"/>
+        <TopLine Value="200"/>
         <CursorPos X="5"/>
         <UsageCount Value="100"/>
         <Loaded Value="True"/>
@@ -277,7 +280,7 @@
       <Unit>
         <Filename Value="units\untDX7IISupplBank.pas"/>
         <EditorIndex Value="12"/>
-        <UsageCount Value="90"/>
+        <UsageCount Value="97"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -285,28 +288,28 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="108"/>
         <CursorPos X="13" Y="120"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="8"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\objpas\sysutils\sysstr.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="833"/>
         <CursorPos X="10" Y="850"/>
-        <UsageCount Value="5"/>
+        <UsageCount Value="4"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\objpas\classes\classesh.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="954"/>
         <CursorPos X="21" Y="969"/>
-        <UsageCount Value="0"/>
+        <UsageCount Value="9"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\objpas\classes\streams.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="444"/>
         <CursorPos X="5" Y="450"/>
-        <UsageCount Value="0"/>
+        <UsageCount Value="9"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\objpas\types.pp"/>
@@ -314,56 +317,24 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="12"/>
         <CursorPos X="68" Y="33"/>
-        <UsageCount Value="8"/>
+        <UsageCount Value="7"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\win\wininc\defines.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="1273"/>
         <CursorPos X="5" Y="1291"/>
-        <UsageCount Value="8"/>
+        <UsageCount Value="7"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\win\wininc\base.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="405"/>
         <CursorPos X="5" Y="423"/>
-        <UsageCount Value="8"/>
+        <UsageCount Value="7"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="untConverter.pas"/>
-        <Caret Line="462" Column="57" TopLine="434"/>
-      </Position>
-      <Position>
-        <Filename Value="untConverter.pas"/>
-        <Caret Line="861" Column="57" TopLine="833"/>
-      </Position>
-      <Position>
-        <Filename Value="untConverter.pas"/>
-        <Caret Line="1144" Column="57" TopLine="1116"/>
-      </Position>
-      <Position>
-        <Filename Value="untConverter.pas"/>
-        <Caret Line="1480" Column="57" TopLine="1452"/>
-      </Position>
-      <Position>
-        <Filename Value="untConverter.pas"/>
-        <Caret Line="1695" Column="57" TopLine="1667"/>
-      </Position>
-      <Position>
-        <Filename Value="untConverter.pas"/>
-        <Caret Line="13" Column="94"/>
-      </Position>
-      <Position>
-        <Filename Value="untConverter.pas"/>
-        <Caret Line="690" Column="26" TopLine="662"/>
-      </Position>
-      <Position>
-        <Filename Value="untConverter.pas"/>
-        <Caret Line="691" Column="26" TopLine="663"/>
-      </Position>
       <Position>
         <Filename Value="untConverter.pas"/>
         <Caret Line="28" Column="22"/>
@@ -451,6 +422,38 @@
       <Position>
         <Filename Value="untConverter.pas"/>
         <Caret Line="27" Column="22"/>
+      </Position>
+      <Position>
+        <Filename Value="untConvFunct.pas"/>
+        <Caret Line="24" Column="20"/>
+      </Position>
+      <Position>
+        <Filename Value="units\untMDXPerformance.pas"/>
+        <Caret Line="114" Column="23" TopLine="103"/>
+      </Position>
+      <Position>
+        <Filename Value="untConverter.pas"/>
+        <Caret Line="438" Column="63" TopLine="421"/>
+      </Position>
+      <Position>
+        <Filename Value="units\untTX7Function.pas"/>
+        <Caret Line="351" Column="37"/>
+      </Position>
+      <Position>
+        <Filename Value="units\untTX7Function.pas"/>
+        <Caret Line="316" Column="55" TopLine="206"/>
+      </Position>
+      <Position>
+        <Filename Value="units\untTX7Function.pas"/>
+        <Caret Line="300" Column="43" TopLine="282"/>
+      </Position>
+      <Position>
+        <Filename Value="units\untTX7Function.pas"/>
+        <Caret Line="171" Column="27" TopLine="149"/>
+      </Position>
+      <Position>
+        <Filename Value="units\untTX7Function.pas"/>
+        <Caret Line="154" Column="43" TopLine="136"/>
       </Position>
     </JumpHistory>
     <RunParams>

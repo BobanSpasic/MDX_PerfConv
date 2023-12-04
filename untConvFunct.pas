@@ -190,8 +190,13 @@ begin
   par := aPCED.Get_PCED_Params;
   GetDefinedValues(MDX, fInit, sup.params);
   sup.NoteShift := par.A_PerfKeyShift;
+  if par.G_KeyAssignMode = 1 then
+    sup.Pan := 32;
   if par.G_KeyAssignMode = 2 then
+  begin
     sup.NoteLimitHigh := par.G_SplitPoint - 1;
+    sup.Pan := 0;
+  end;
   if (par.G_KeyAssignMode = 1) and (par.G_DualModeDetune <> 0) then
   begin
     sup.DetuneSGN := 0;
@@ -223,9 +228,14 @@ var
 begin
   par := aPCED.Get_PCED_Params;
   GetDefinedValues(MDX, fInit, sup.params);
-  sup.NoteShift := par.A_PerfKeyShift;
+  sup.NoteShift := par.B_PerfKeyShift;
+  if par.G_KeyAssignMode = 1 then
+    sup.Pan := 96;
   if par.G_KeyAssignMode = 2 then
+  begin
     sup.NoteLimitLow := par.G_SplitPoint;
+    sup.Pan := 127;
+  end;
   if (par.G_KeyAssignMode = 1) and (par.G_DualModeDetune <> 0) then
   begin
     sup.DetuneSGN := 1;

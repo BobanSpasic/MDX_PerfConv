@@ -837,7 +837,6 @@ begin
 
     end;
     //simulate linked channels
-    //ToDo - check this again
     if params.VoiceChannelOffset2 <> 1 then MDX.FMDX_Params.TG[2].MIDIChannel := 0;
     if params.VoiceChannelOffset3 <> 2 then MDX.FMDX_Params.TG[3].MIDIChannel := 0;
     if params.VoiceChannelOffset4 <> 3 then MDX.FMDX_Params.TG[4].MIDIChannel := 0;

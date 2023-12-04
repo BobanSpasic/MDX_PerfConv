@@ -63,7 +63,7 @@ type
         A_VoiceAttn: byte;                //       0-7  translates to 0-99 for DX7
         A_ProgramOutput: byte;            //DX5    0-1
         A_SustainPedal: byte;             //DX5    0-1
-        A_PerfKeyShift: byte;             //DX5    0-48  center=24
+        A_PerfKeyShift: byte;             //DX5    0-48  center=24?
 
         B_VoiceNr: byte;                  //       0-63 Undocumented: Voice Nr.
         B_Source_Select: byte;            //DX5    0-15 (MIDI channel)
@@ -94,7 +94,7 @@ type
         B_VoiceAttn: byte;                //       0-7  translates to 0-99 for DX7
         B_ProgramOutput: byte;            //DX5    0-1
         B_SustainPedal: byte;             //DX5    0-1
-        B_PerfKeyShift: byte;             //DX5    0-48  center=24
+        B_PerfKeyShift: byte;             //DX5    0-48  center=24?
 
         G_KeyAssignMode: byte;            //DX5    0-2   0,1,2 = single, dual, split
         G_VoiceMemSelFlag: byte;          //       0-1   if KMOD=0: VMS=0 > Voice A plays; VMS=1 Voice B plays
@@ -141,7 +141,7 @@ type
         A_PolyMono: byte;                 //     | PM |    Undocumented: Voice Nr.  |
         A_PBSlo_PBR: byte;                //     |    PBS Lo    |        PBR        |
         A_PortaTime: byte;                //     |  0-99                            |
-        A_PM_PGL: byte;                   //     | 0  |              | PP | M  | GL |    PortamentoPedal, source JSynthLib
+        A_PM_PGL: byte;                   //     |   Source select   | PP | M  | GL |    PortamentoPedal, source JSynthLib
         A_MWA_MWS: byte;                  //     |     MWA      |        MWS        |
         A_FCA_FCS: byte;                  //     |     FCA      |        FCS        |
         A_ATA_ATS: byte;                  //     |     ATA      |        ATS        |
@@ -150,15 +150,15 @@ type
         A_NU09: byte;
         A_NU10: byte;
         A_NU11: byte;
-        A_NU12: byte;
-        A_NU13: byte;
-        A_ATN: byte;                      //     | 0 |               |    ATN       |
-        A_PBShi: byte;                    //     | PS|                              |  PitchBendStep, Bit4
+        A_KIAT_DecayRate: byte;
+        A_KIAT_ReleaseRate: byte;         //     |    |    |    |    |    |    |    |
+        A_ATN: byte;                      //     | 0  |              |     ATN      |
+        A_PBShi: byte;                    //     | PS |            KSFT             |  PitchBendStep, Bit4 , KeyShift
 
         B_PolyMono: byte;                 //     | PM |    Undocumented: Voice Nr.  |
         B_PBSlo_PBR: byte;                //     |    PBS Lo    |        PBR        |
         B_PortaTime: byte;                //     |  0-99                            |
-        B_PM_PGL: byte;                   //     | 0  |                   | M  | GL |
+        B_PM_PGL: byte;                   //     |   Source select   | PP | M  | GL |
         B_MWA_MWS: byte;                  //     |     MWA      |        MWS        |
         B_FCA_FCS: byte;                  //     |     FCA      |        FCS        |
         B_ATA_ATS: byte;                  //     |     ATA      |        ATS        |
@@ -167,13 +167,13 @@ type
         B_NU09: byte;
         B_NU10: byte;
         B_NU11: byte;
-        B_NU12: byte;
-        B_NU13: byte;
-        B_ATN: byte;                      //     | 0 |               |    ATN       |
-        B_PBShi: byte;                    //     | PS|                              |  PitchBendStep, Bit4
+        B_KIAT_DecayRate: byte;
+        B_KIAT_ReleaseRate: byte;         //     |    |    |    |    |    |    |    |
+        B_ATN: byte;                      //     | 0  |              |     ATN      |
+        B_PBShi: byte;                    //     | PS |            KSFT             |  PitchBendStep, Bit4 , KeyShift
 
-        G_VMS_KMOD: byte;                 //     | 0 |      DMD     | VMS|   KMOD   |  DualModeDetune, source JSynthLib
-        G_SplitPoint: byte;               //       Just a blind guess
+        G_VMS_KMOD: byte;                 //     |        DMD        | VMS|  KMOD   |  DualModeDetune, source JSynthLib
+        G_SplitPoint: byte;               //     |                                  |
         G_PerfName01: byte;               //       ASCII
         G_PerfName02: byte;               //       ASCII
         G_PerfName03: byte;               //       ASCII
@@ -247,15 +247,11 @@ begin
   t.A_NU09 := 0;
   t.A_NU10 := 0;
   t.A_NU11 := 0;
-  t.A_NU12 := 0;
-  t.A_NU13 := 0;
 
   t.B_NU08 := 0;
   t.B_NU09 := 0;
   t.B_NU10 := 0;
   t.B_NU11 := 0;
-  t.B_NU12 := 0;
-  t.B_NU13 := 0;
 
   //first the parameters without conversion
   t.G_PerfName01 := aPar.G_PerfName01;
@@ -292,28 +288,32 @@ begin
   t.B_PortaTime := aPar.B_PortamentoTime;
   t.A_ATN := aPar.A_VoiceAttn;
   t.B_ATN := aPar.B_VoiceAttn;
+  t.A_KIAT_DecayRate := aPar.A_KIAT_DecayRate;
+  t.A_KIAT_ReleaseRate := aPar.A_KIAT_ReleaseRate;
+  t.B_KIAT_DecayRate := aPar.B_KIAT_DecayRate;
+  t.B_KIAT_ReleaseRate := aPar.B_KIAT_ReleaseRate;
   t.G_SplitPoint := aPar.G_SplitPoint;
 
   //now parameters with conversion
   t.A_PolyMono := (aPar.A_PolyMono shl 6) + (aPar.A_VoiceNr and 63);
   t.A_PBSlo_PBR := ((aPar.A_PitchBendStep and 7) shl 4) + aPar.A_PitchBendRange;
-  t.A_PM_PGL := (aPar.A_PortamentoPedal shl 2) + (aPar.A_PortamentoMode shl 1) +
+  t.A_PM_PGL := (aPar.A_Source_Select shl 3) + (aPar.A_PortamentoPedal shl 2) + (aPar.A_PortamentoMode shl 1) +
     aPar.A_PortaGlissando;
   t.A_MWA_MWS := (aPar.A_ModWheelAssign shl 4) + aPar.A_ModWheelSens;
   t.A_FCA_FCS := (aPar.A_FootCtrlAssign shl 4) + aPar.A_FootCtrlSens;
   t.A_ATA_ATS := (aPar.A_AfterTouchAssign shl 4) + aPar.A_AfterTouchSens;
   t.A_BCA_BCS := (aPar.A_BrthCtrlAssign shl 4) + aPar.A_BrthCtrlSens;
-  t.A_PBShi := (aPar.A_PitchBendStep and 8) shl 6;
+  t.A_PBShi := ((aPar.A_PitchBendStep and 8) shl 6) + aPar.A_PerfKeyShift;
 
   t.B_PolyMono := (aPar.B_PolyMono shl 6) + (aPar.B_VoiceNr and 63);
   t.B_PBSlo_PBR := ((aPar.B_PitchBendStep and 7) shl 4) + aPar.B_PitchBendRange;
-  t.B_PM_PGL := (aPar.B_PortamentoPedal shl 2) + (aPar.B_PortamentoMode shl 1) +
+  t.B_PM_PGL := (aPar.B_Source_Select shl 3) + (aPar.B_PortamentoPedal shl 2) + (aPar.B_PortamentoMode shl 1) +
     aPar.B_PortaGlissando;
   t.B_MWA_MWS := (aPar.B_ModWheelAssign shl 4) + aPar.B_ModWheelSens;
   t.B_FCA_FCS := (aPar.B_FootCtrlAssign shl 4) + aPar.B_FootCtrlSens;
   t.B_ATA_ATS := (aPar.B_AfterTouchAssign shl 4) + aPar.B_AfterTouchSens;
   t.B_BCA_BCS := (aPar.B_BrthCtrlAssign shl 4) + aPar.B_BrthCtrlSens;
-  t.B_PBShi := (aPar.B_PitchBendStep and 8) shl 6;
+  t.B_PBShi := ((aPar.B_PitchBendStep and 8) shl 6) + aPar.B_PerfKeyShift;
 
   t.G_VMS_KMOD := (aPar.G_DualModeDetune shl 3) + (aPar.G_VoiceMemSelFlag shl 2) +
     (aPar.G_KeyAssignMode);
@@ -335,9 +335,8 @@ begin
   t.A_KIAT_OP6_Sens := 0;
   t.A_KIAT_DecayRate := 0;
   t.A_KIAT_ReleaseRate := 0;
-  t.A_ProgramOutput := 0;
+  t.A_ProgramOutput := 0;     //ToDo
   t.A_SustainPedal := 0;
-  t.A_PerfKeyShift := 0;
 
   t.B_KeyIndividualAftTchSens := 0;
   t.B_KIAT_OP1_Sens := 0;
@@ -348,9 +347,8 @@ begin
   t.B_KIAT_OP6_Sens := 0;
   t.B_KIAT_DecayRate := 0;
   t.B_KIAT_ReleaseRate := 0;
-  t.B_ProgramOutput := 0;
+  t.B_ProgramOutput := 0;    //ToDo
   t.B_SustainPedal := 0;
-  t.B_PerfKeyShift := 0;
 
   //first the parameters without conversion
   t.G_PerfName01 := aPar.G_PerfName01;
@@ -387,6 +385,10 @@ begin
   t.B_PortamentoTime := aPar.B_PortaTime and 127;
   t.A_VoiceAttn := aPar.A_ATN and 7;
   t.B_VoiceAttn := aPar.B_ATN and 7;
+  t.A_KIAT_DecayRate := aPar.A_KIAT_DecayRate;
+  t.A_KIAT_ReleaseRate := aPar.A_KIAT_ReleaseRate;
+  t.B_KIAT_DecayRate := aPar.B_KIAT_DecayRate;
+  t.B_KIAT_ReleaseRate := aPar.B_KIAT_ReleaseRate;
   t.G_SplitPoint := aPar.G_SplitPoint;
 
   t.A_PolyMono := (aPar.A_PolyMono and 64) shr 6;
@@ -405,6 +407,8 @@ begin
   t.A_AfterTouchAssign := aPar.A_ATA_ATS shr 4;
   t.A_BrthCtrlSens := aPar.A_BCA_BCS and 15;
   t.A_BrthCtrlAssign := aPar.A_BCA_BCS shr 4;
+  t.A_Source_Select := (aPar.A_PM_PGL shr 3) and 15;
+  t.A_PerfKeyShift := aPar.A_PBShi and 63;
 
   t.B_PolyMono := (aPar.B_PolyMono and 64) shr 6;
   t.B_VoiceNr := aPar.B_PolyMono and 63;
@@ -422,6 +426,8 @@ begin
   t.B_AfterTouchAssign := aPar.B_ATA_ATS shr 4;
   t.B_BrthCtrlSens := aPar.B_BCA_BCS and 15;
   t.B_BrthCtrlAssign := aPar.B_BCA_BCS shr 4;
+  t.B_Source_Select := (aPar.B_PM_PGL shr 3) and 15;
+  t.B_PerfKeyShift := aPar.B_PBShi and 63;
 
   t.G_VoiceMemSelFlag := (aPar.G_VMS_KMOD shr 2) and 1;
   t.G_KeyAssignMode := aPar.G_VMS_KMOD and 3;
